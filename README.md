@@ -36,3 +36,7 @@ JARVIS CORE reste indépendant. Une future bibliothèque ou API pourra exposer l
 7. Vérifier le message d'erreur avec une langue ou un moteur indisponible.
 
 Les tests JVM couvrent le routage ; ils ne prouvent pas la lecture audio sur appareil.
+
+## Mission 002 : Pocket TTS sur ordinateur
+
+Le [prototype français CPU](prototype/README.md) est développé indépendamment de l'application Android. Il prépare le MP3 autorisé, l'export de profils privés et un serveur limité à l'ordinateur. Consultez son rapport pour distinguer les tests de code réussis de la génération française CPU mesurée et le clonage personnel restant à valider après configuration de l’accès aux poids et import du MP3 autorisé.
