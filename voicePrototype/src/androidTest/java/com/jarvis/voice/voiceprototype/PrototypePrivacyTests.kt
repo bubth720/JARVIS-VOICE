@@ -28,7 +28,7 @@ class PrototypePrivacyTests {
     }
     @Test fun independentPackageHasNoNetworkMicrophoneOrBackup() {
         val context=InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.jarvis.voice.voiceprototype005e",context.packageName)
+        assertTrue(context.packageName in setOf("com.jarvis.voice.voiceprototype005e","com.jarvis.voice.voiceprototype005f"))
         val info=context.packageManager.getPackageInfo(context.packageName,PackageManager.GET_PERMISSIONS)
         val permissions=info.requestedPermissions?.toSet().orEmpty()
         assertFalse(permissions.contains("android.permission.INTERNET"))

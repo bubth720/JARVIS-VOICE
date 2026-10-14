@@ -1,7 +1,7 @@
-name: Voice Prototype 005E
+name: Voice Prototype 005F
 on:
   pull_request:
-    paths: ['voicePrototype/**', 'pocketRuntime/**', 'settings.gradle.kts', 'scripts/pocket/verify_experimental_apk.py', '.github/workflows/voice-prototype.yml']
+    paths: ['voicePrototype/**', 'pocketRuntime/**', 'settings.gradle.kts', 'scripts/pocket/verify_experimental_apk.py', 'scripts/pocket/verify_stable_delivery.py', 'deliveries/mission005f/**', '.github/workflows/voice-prototype.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,17 +22,27 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Build separate experimental APK; never download private/gated models
-        run: ./gradlew :voicePrototype:assembleDebug :voicePrototype:assembleDebugAndroidTest :voicePrototype:lintDebug --no-daemon --max-workers=2
-      - run: python scripts/pocket/verify_experimental_apk.py voicePrototype/build/outputs/apk/debug/voicePrototype-debug.apk --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voicePrototype/build/apk-verification.json
+        run: ./gradlew :voicePrototype:assembleDebug :voicePrototype:assembleDebugAndroidTest :voicePrototype:lintDebug -PprototypeSidecar=true --no-daemon --max-workers=2
+      - run: python scripts/pocket/verify_experimental_apk.py voicePrototype/build/outputs/apk/debug/voicePrototype-debug.apk --application-id com.jarvis.voice.voiceprototype005f --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voicePrototype/build/apk-verification.json
       - uses: actions/upload-artifact@v4
         with:
-          name: jarvis-voice-prototype-005e-apk
+          name: jarvis-voice-prototype-005f-ci-diagnostic-apk
           retention-days: 14
           path: |
             voicePrototype/build/outputs/apk/debug/*.apk
             voicePrototype/build/outputs/apk/androidTest/debug/*.apk
             voicePrototype/build/apk-verification.json
             docs/mission005e/**
+            docs/mission005f/**
+      - name: Verify locally signed stable APK (public APK only, never a key/model/profile)
+        if: hashFiles('deliveries/mission005f/005f-stable-apk.zip') != ''
+        run: python scripts/pocket/verify_stable_delivery.py deliveries/mission005f/005f-stable-apk.zip --build-tools "$ANDROID_HOME/build-tools/35.0.0" --out voicePrototype/build/stable-delivery
+      - uses: actions/upload-artifact@v4
+        if: hashFiles('deliveries/mission005f/005f-stable-apk.zip') != ''
+        with:
+          name: jarvis-voice-prototype-005f-stable-apk
+          retention-days: 30
+          path: voicePrototype/build/stable-delivery/**
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -60,7 +70,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: ./gradlew :voicePrototype:connectedDebugAndroidTest -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+          script: ./gradlew :voicePrototype:connectedDebugAndroidTest -PprototypeTestAbi=x86_64 -PprototypeSidecar=true --no-daemon --max-workers=2
       - uses: actions/upload-artifact@v4
         if: always()
         with:

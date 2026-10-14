@@ -22,11 +22,12 @@ def main():
     p.add_argument("apk", type=Path)
     p.add_argument("--build-tools", type=Path, required=True)
     p.add_argument("--report", type=Path, required=True)
+    p.add_argument("--application-id", choices=["com.jarvis.voice.voiceprototype005e", "com.jarvis.voice.voiceprototype005f"], default="com.jarvis.voice.voiceprototype005e")
     args = p.parse_args()
     signer = run([args.build_tools / "apksigner", "verify", "--print-certs", args.apk])
     run([args.build_tools / "zipalign", "-c", "-P", "16", "4", args.apk])
     manifest = run([args.build_tools / "aapt", "dump", "badging", args.apk])
-    assert "name='com.jarvis.voice.voiceprototype005e'" in manifest
+    assert f"name='{args.application_id}'" in manifest
     assert "sdkVersion:'26'" in manifest and "targetSdkVersion:'35'" in manifest
     assert "native-code: 'arm64-v8a'" in manifest
     for permission in [
@@ -82,7 +83,7 @@ def main():
     report = {
         "apkSha256": hashlib.sha256(args.apk.read_bytes()).hexdigest(),
         "apkBytes": args.apk.stat().st_size,
-        "applicationId": "com.jarvis.voice.voiceprototype005e",
+        "applicationId": args.application_id,
         "minSdk": 26,
         "targetSdk": 35,
         "abi": ["arm64-v8a"],
