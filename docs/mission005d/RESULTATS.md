@@ -50,3 +50,16 @@ Artefacts réellement publiés pour cette exécution :
 - Rapports Android (incluant l'échec audio) : https://github.com/bubth720/JARVIS-VOICE/actions/runs/38578768025/artifacts/11901518355
 
 Rétention jusqu'au 28 octobre 2026. Le statut global du workflow est en échec à cause du test audio, malgré la réussite du job de construction et la disponibilité des APK. Les observations terminales restent à inspecter lors de l'exécution suivante. Aucune validation Xiaomi n'est revendiquée.
+
+### Livraison finale du code b7e605c
+
+Workflow : https://github.com/bubth720/JARVIS-VOICE/actions/runs/38580365074. Job build-and-inference réussi (25 tests Pocket avec modèles réels, 8 tests stables, 4 tests Python, compilation, lint, signature/permissions/ARM64/16 Ko). Émulateur : 4/5 tests réussis, même échec strict AudioTrack. Observation exacte : **count=1 frames=72000 submitted=72000**, donc compteur constaté une fois les trois secondes entièrement consommées. Aucune interruption au milieu du contenu n'est démontrée par cette observation ; elle ne valide ni zéro compteur brut ni une écoute perceptive. L'assertion n'a pas été supprimée ou affaiblie ; la CI globale reste en échec.
+
+Artefacts de cette version de code, disponibles jusqu'au 28 octobre 2026 :
+
+- APK finale et APK AndroidTest : https://github.com/bubth720/JARVIS-VOICE/actions/runs/38580365074/artifacts/11901734843
+- Pack Alba : https://github.com/bubth720/JARVIS-VOICE/actions/runs/38580365074/artifacts/11902559499
+- Rapports JVM/lint : https://github.com/bubth720/JARVIS-VOICE/actions/runs/38580365074/artifacts/11902484705
+- Rapports Android avec position à l'échec : https://github.com/bubth720/JARVIS-VOICE/actions/runs/38580365074/artifacts/11902274731
+
+La compilation locale finale (mêmes sources, certificat différent de CI) est vérifiée séparément dans `APK-FINALE-VERIFICATION.json`. Dernière vérification réseau : secret HF ready, politique enforced, domaine custom actif huggingface.co seulement ; stockage toujours refusé. Le clonage reste bloqué, sans poids téléchargés ni parité exécutée. Ce rapport clôt la livraison MP3 et documente les conditions de reprise de l'encodeur ; il ne déclare pas la totalité des critères de Mission 005D acquise.
