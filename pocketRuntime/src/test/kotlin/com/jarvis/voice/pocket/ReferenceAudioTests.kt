@@ -9,6 +9,21 @@ import java.nio.ByteOrder
 import kotlin.math.*
 
 class ReferenceAudioTests {
+    @Test fun longExcerptsStayFiniteBeyondIntMultiplicationLimit() {
+        for (rate in listOf(44100, 48000)) for (seconds in listOf(5, 10, 15)) {
+            val input = FloatArray(rate * seconds) { (.1 * sin(2 * PI * 1000 * it / rate)).toFloat() }
+            val pcm = ReferenceAudio.resample24k(input, rate)
+            assertEquals(seconds * 24000, pcm.size)
+            assertTrue(pcm.all { it.isFinite() })
+            assertEquals(-23.01, ReferenceAudio.quality(pcm).rmsDb, .05)
+            val root = Files.createTempDirectory("long-wav").toFile()
+            try {
+                val wav = java.io.File(root, "test.wav")
+                ReferenceAudio.writeWav(wav, pcm)
+                assertEquals(44L + seconds * 48000, wav.length())
+            } finally { root.deleteRecursively() }
+        }
+    }
     @Test fun convertsStereoToMonoWithoutChangingGain() {
         assertArrayEquals(floatArrayOf(0f, .5f), ReferenceAudio.mono(floatArrayOf(1f,-1f,.25f,.75f),2), 0f)
         assertThrows(IllegalArgumentException::class.java) { ReferenceAudio.mono(floatArrayOf(Float.NaN),1) }
@@ -53,6 +68,26 @@ class ReferenceAudioTests {
             }
             assertEquals(original,repo.current()!!.first)
             repo.delete(); assertNull(ReferenceRepository(root).current())
+        } finally { root.deleteRecursively() }
+    }
+    @Test fun failedOrCancelledExcerptPreservesPreviousAndLeavesNoTemporaryFile() {
+        val root = Files.createTempDirectory("atomic-excerpt").toFile()
+        try {
+            val repo = ReferenceRepository(root)
+            repo.saveExcerpt(FloatArray(120000) { .1f }, { false })
+            val previous = repo.excerpt.readBytes()
+            assertThrows(IllegalArgumentException::class.java) { repo.saveExcerpt(floatArrayOf(Float.NaN), { false }) }
+            assertArrayEquals(previous, repo.excerpt.readBytes())
+            var calls = 0
+            assertThrows(java.util.concurrent.CancellationException::class.java) {
+                repo.saveExcerpt(FloatArray(240000) { .2f }, { ++calls > 10 })
+            }
+            assertArrayEquals(previous, repo.excerpt.readBytes())
+            assertFalse(java.io.File(root, "excerpt.pending").exists())
+            assertThrows(java.util.concurrent.CancellationException::class.java) {
+                repo.import(ByteArrayInputStream(byteArrayOf(1)), { calls > 10 }) { ReferenceInfo(12000,44100,2) }
+            }
+            repo.delete(); assertFalse(repo.excerpt.exists())
         } finally { root.deleteRecursively() }
     }
     @Test fun rejectsPathTraversalInvalidFormatsAndPretendCloning() {

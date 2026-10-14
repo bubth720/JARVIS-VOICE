@@ -10,9 +10,9 @@ android {
         minSdk = 26
         targetSdk = 35
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        versionCode = 3
-        versionName = "0.3.0-reference"
-        ndk { abiFilters += "arm64-v8a" }
+        versionCode = 4
+        versionName = "0.4.0-mission005d"
+        ndk { abiFilters += providers.gradleProperty("pocketTestAbi").getOrElse("arm64-v8a") }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
