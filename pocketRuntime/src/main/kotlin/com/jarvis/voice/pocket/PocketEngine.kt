@@ -37,6 +37,11 @@ data class GenerationMetrics(
     val frames: Int,
     val tokens: Int,
     val eosReached: Boolean,
+    val onnxMainMs: Double = 0.0,
+    val onnxFlowMs: Double = 0.0,
+    val onnxDecoderMs: Double = 0.0,
+    val maxOnnxMs: Double = 0.0,
+    val maxPcmGapMs: Double = 0.0,
 ) {
     val rtf: Double get() = computeMs / (audioSeconds * 1000.0)
     val speed: Double get() = 1.0 / rtf
@@ -79,10 +84,20 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
         env.createSession(File(root, name).absolutePath, opts).also { opened.add(it) }
     }
 
-    fun generate(raw: String, cancel: CancellationToken, seed: Long = 42, onPcm: (FloatArray) -> Unit): GenerationMetrics {
+    fun generate(raw: String, cancel: CancellationToken, seed: Long = 42, wholeSentence: Boolean = false, onPcm: (FloatArray) -> Unit): GenerationMetrics {
         val started = System.nanoTime()
         val prepared = frontend.prepare(raw)
         val rng = Random(seed)
+        var mainNs = 0L; var flowNs = 0L; var decoderNs = 0L
+        var maxOnnxNs = 0L; var lastPcmNs = 0L; var maxGapNs = 0L
+        fun <T> measured(stage: Int, block: () -> T): T {
+            val begin = System.nanoTime()
+            try { return block() } finally {
+                val elapsed = System.nanoTime() - begin
+                when (stage) { 0 -> mainNs += elapsed; 1 -> flowNs += elapsed; else -> decoderNs += elapsed }
+                maxOnnxNs = maxOf(maxOnnxNs, elapsed)
+            }
+        }
         var sinkNs = 0L
         var firstPcmNs = 0L
         var samples = 0L
@@ -96,7 +111,7 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
                     longTensor(prepared.tokens, longArrayOf(1, prepared.tokens.size.toLong())).use { ids ->
                         text.run(mapOf("token_ids" to ids), options).use { encoded ->
                             floatTensor(FloatArray(0), longArrayOf(1, 0, 32)).use { empty ->
-                                lm.run(mapOf("sequence" to empty, "text_embeddings" to encoded.tensor("text_embeddings")), options)
+                                measured(0) { lm.run(mapOf("sequence" to empty, "text_embeddings" to encoded.tensor("text_embeddings")), options) }
                             }
                         }
                     }
@@ -108,7 +123,7 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
                             val latents = FloatArray(pending.size * 32)
                             pending.forEachIndexed { i, a -> a.copyInto(latents, i * 32) }
                             floatTensor(latents, longArrayOf(1, pending.size.toLong(), 32)).use { latent ->
-                                val result = mimi.run(mapOf("latent" to latent), options)
+                                val result = measured(2) { mimi.run(mapOf("latent" to latent), options) }
                                 val audio = result.tensor("audio").floatBuffer
                                 val pcm = FloatArray(audio.remaining()).also { audio.get(it) }
                                 require(pcm.all { it.isFinite() }) { "Sortie audio non finie" }
@@ -116,6 +131,8 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
                                     cancel.check()
                                     if (firstPcmNs == 0L) firstPcmNs = System.nanoTime() - started
                                     val sinkStart = System.nanoTime()
+                                    if (lastPcmNs != 0L) maxGapNs = maxOf(maxGapNs, sinkStart - lastPcmNs)
+                                    lastPcmNs = sinkStart
                                     onPcm(pcm)
                                     sinkNs += System.nanoTime() - sinkStart
                                     samples += pcm.size
@@ -127,7 +144,7 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
                             cancel.check()
                             val seq = floatTensor(previous, longArrayOf(1, 1, 32))
                             try {
-                                val result = lm.run(mapOf("sequence" to seq, "text_embeddings" to emptyText), options)
+                                val result = measured(0) { lm.run(mapOf("sequence" to seq, "text_embeddings" to emptyText), options) }
                                 val eos = result.tensor("eos_logit").floatBuffer.get(0)
                                 if (step >= bundle.getInt("min_frames_before_eos") && eos > bundle.getDouble("eos_threshold") && eosFrame == null) eosFrame = step
                                 if (eosFrame != null && step >= eosFrame!! + prepared.framesAfterEos) {
@@ -138,7 +155,7 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
                                 floatTensor(noise, longArrayOf(1, 32)).use { x ->
                                     floatTensor(floatArrayOf(0f), longArrayOf(1, 1)).use { s ->
                                         floatTensor(floatArrayOf(1f), longArrayOf(1, 1)).use { t ->
-                                            flow.run(mapOf("c" to result.tensor("conditioning"), "s" to s, "t" to t, "x" to x), options).use { f ->
+                                            measured(1) { flow.run(mapOf("c" to result.tensor("conditioning"), "s" to s, "t" to t, "x" to x), options) }.use { f ->
                                                 val direction = f.tensor("flow_dir").floatBuffer
                                                 previous = FloatArray(32) { noise[it] + direction.get(it) }
                                             }
@@ -147,7 +164,7 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
                                 }
                                 pending.add(previous)
                                 frames++
-                                if (pending.size >= if (firstPcmNs == 0L) 2 else 4) decodePending()
+                                if (!wholeSentence && pending.size >= if (firstPcmNs == 0L) 2 else 4) decodePending()
                             } finally { seq.close() }
                         }
                         require(eosFrame != null && frames < 250) { "Limite de 20 secondes atteinte sans fin de phrase fiable" }
@@ -158,7 +175,8 @@ class PocketEngine(private val root: File, val threads: Int = 1) : AutoCloseable
             require(samples > 0) { "Pocket TTS n'a produit aucun audio" }
             val wallNs = System.nanoTime() - started
             GenerationMetrics(firstPcmNs / 1e6, (wallNs - sinkNs) / 1e6, wallNs / 1e6,
-                samples / 24000.0, frames, prepared.tokens.size, eosFrame != null)
+                samples / 24000.0, frames, prepared.tokens.size, eosFrame != null,
+                mainNs / 1e6, flowNs / 1e6, decoderNs / 1e6, maxOnnxNs / 1e6, maxGapNs / 1e6)
         }
     }
 

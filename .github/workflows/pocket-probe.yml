@@ -1,7 +1,7 @@
 name: Pocket Probe
 on:
   pull_request:
-    paths: ['pocketProbe/**', 'pocketRuntime/**', 'scripts/pocket/**', 'build.gradle.kts', 'settings.gradle.kts', '.github/workflows/pocket-probe.yml']
+    paths: ['pocketProbe/**', 'pocketRuntime/**', 'scripts/pocket/**', 'build.gradle.kts', 'settings.gradle.kts', 'gradle.properties', '.github/workflows/pocket-probe.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,10 +25,16 @@ jobs:
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Prepare pinned public French preset pack (no token, recording or encoder)
         run: python scripts/pocket/prepare_model.py --work-dir "$RUNNER_TEMP/pocket-model" --output "$RUNNER_TEMP/pocket-fr-6l-alba.zip"
+      - name: Install synthetic-audio test tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: Prepare synthetic on-device MP3 test fixture (no private audio)
+        run: python scripts/pocket/prepare_test_audio.py
       - name: Real JVM inference, cancellation, unit tests and Android build
         env:
           POCKET_MODEL_DIR: ${{ runner.temp }}/pocket-model/fr
-        run: ./gradlew :pocketRuntime:test :pocketProbe:assembleDebug :pocketProbe:lintDebug :app:testDebugUnitTest --no-daemon --max-workers=2
+        run: ./gradlew :pocketRuntime:test :pocketProbe:assembleDebug :pocketProbe:assembleDebugAndroidTest :pocketProbe:lintDebug :app:testDebugUnitTest --no-daemon --max-workers=2
       - name: Verify signature, ARM64, ELF and APK alignment 16K, permissions
         run: python scripts/pocket/verify_apk.py pocketProbe/build/outputs/apk/debug/pocketProbe-debug.apk --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report pocketProbe/build/apk-verification.json
       - uses: actions/upload-artifact@v4
@@ -41,6 +47,8 @@ jobs:
             docs/pocket-probe/INSTALLATION.md
             docs/pocket-probe/TEST-PHONE.md
             docs/pocket-probe/LICENSES.md
+            docs/mission005/**
+            pocketProbe/build/outputs/apk/androidTest/debug/*.apk
       - uses: actions/upload-artifact@v4
         with:
           name: pocket-fr-6l-alba-model

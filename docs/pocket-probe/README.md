@@ -32,3 +32,7 @@ Arrêt coupe le lecteur et demande la terminaison via ONNX `RunOptions`. La cré
 Les contrats `ReferenceImporter`, `ReferenceDecoder` et `LocalProfileEncoder` préparent des traitements locaux et des profils liés au modèle. Aucune implémentation n'est active ; `CloningCapability.available=false`. Avant leur activation : vrai encodeur français autorisé, décodage MP3 local 24 kHz mono, contrôle/écoute de référence et tests de profil réutilisé hors ligne.
 
 Les changements sont proposés sur `feat/android-pocket-probe`, à partir de `feat/android-tts-foundation`. Aucun commit n'est ajouté à la branche stable et aucune fusion dans main n'est effectuée.
+
+## Mission 005
+
+La correction audio et l’import MP3 local sont décrits dans [le protocole Mission 005](../mission005/INSTALLATION-TESTS.md), avec [les résultats lot A](../mission005/LOT-A.md) et [le blocage encodeur lot B](../mission005/LOT-B.md). Le clonage reste indisponible.
