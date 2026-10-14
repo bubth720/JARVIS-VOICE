@@ -99,6 +99,45 @@ supportés**. Aucun chiffre de consommation/thermique physique n'est inventé :
 ces mesures sur téléphone ne sont pas disponibles dans le cloud. Le protocole
 [TEST-XIAOMI.md](TEST-XIAOMI.md) permet de les relever et de comparer les voix.
 
+## Livraison et CI
+
+Code compilé/testé : `bc8c84b8f25f56909b8c60f2094ba96cdf6377c7`.
+[Workflow 005E](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833) :
+build APK, APK AndroidTest, lint, signature/permissions/alignements **réussis** ;
+suite des quatre tests Android de confidentialité/lancement/premier import
+réussie sur émulateur Android 15 x86_64, sans poids gated. Ce n'est pas encore
+un test du clonage complet sur Android.
+
+- [APK 005E installable et APK AndroidTest](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833/artifacts/11925184648)
+- [Rapports Android confidentialité/import](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833/artifacts/11925199890)
+- [Rapports lint](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833/artifacts/11925964211)
+
+APK retenue jusqu'au **28 octobre 2026**. Installer `voicePrototype-debug.apk`
+après extraction de l'artefact. Les APK locale et CI utilisent des certificats
+debug différents ; choisir une même livraison pour les futures mises à jour
+005E afin de préserver les profils. Cela n'affecte pas 005D, dont l'identifiant
+et les fichiers privés sont distincts.
+
+Le workflow Android stable réussit également. Le workflow Pocket Probe 005D
+réexécuté conserve 4/5 tests codec/lecture : seul le même contrôle strict
+AudioTrack échoue, `count=1 frames=72000 submitted=72000`. Cet échec n'est ni
+masqué ni transformé en réussite ; les contrôles MP3 passent. Preuves :
+`CI-RESULTATS.json`, `APK-CI-VERIFICATION.json`.
+
+### Récupération personnelle du pack
+
+Le ZIP n'est **pas** dans l'artefact public. Il est conservé dans l'environnement
+Cloud propriétaire, à l'emplacement :
+
+`/workspace/JARVIS-VOICE/work/mission005e/JARVIS-005E-FP32-PRIVATE-REPRODUCED.zip`
+
+Récupérer ce fichier par le mécanisme privé de l'espace Cloud, puis le copier
+par USB dans le stockage local du téléphone. Si ce mécanisme de téléchargement
+n'est pas disponible dans l'interface utilisée, un canal privé doit être choisi
+avant tout transfert ; ne pas publier le ZIP pour contourner cette difficulté.
+Les outils de reproduction sont fournis ci-dessous. Aucun profil ou MP3 personnel
+n'est requis pour préparer ce pack.
+
 ## Pack privé et licences
 
 Le pack est construit et reproduit dans l'espace privé, environ 225 Mio ZIP et

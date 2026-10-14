@@ -44,6 +44,9 @@ téléphone pour contourner ce contrôle.
 5. Choisir **Référence publique Alba — recalculée FP32**, générer et écouter.
    Puis choisir **Mon profil personnel — EXPÉRIMENTAL** et générer le même texte
    avec la même graine. Aucune voix n'est substituée automatiquement.
+   Lire ensuite cette nouvelle phrase vous-même à haute voix et comparer votre
+   timbre au rendu synthétique. Ne pas remplacer l'extrait par cette phrase cible :
+   le test doit porter sur un texte qui n'a pas servi à créer le profil.
 6. Refaire la comparaison avec les graines 0 et 123 et une seconde phrase courte.
    Pour la référence publique Selfie, le contrôle ASR a relevé des phrases moins
    intelligibles selon la graine : une seule réussite ne suffit pas à valider le

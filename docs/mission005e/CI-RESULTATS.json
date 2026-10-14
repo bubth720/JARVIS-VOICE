@@ -1,0 +1,40 @@
+{
+  "codeCommit": "bc8c84b8f25f56909b8c60f2094ba96cdf6377c7",
+  "workflowRun": 38631470833,
+  "prototypeBuild": "success",
+  "privacyAndFirstImportAndroid": "success",
+  "androidTestsDeclared": 4,
+  "platform": "Android 15 x86_64 emulator",
+  "gatedWeightsUsedOnCI": false,
+  "personalRecordingUsed": false,
+  "fullAndroidFP32GenerationValidated": false,
+  "physicalXiaomiValidated": false,
+  "stableAndroidWorkflow": {
+    "id": 38631470849,
+    "conclusion": "success"
+  },
+  "legacy005D": {
+    "run": 38631470871,
+    "build": "success",
+    "codec": "failure",
+    "knownFailure": "AudioTrack [count=1 frames=72000 submitted=72000] expected:<0> but was:<1>"
+  },
+  "artifacts": [
+    {
+      "name": "APK + AndroidTest",
+      "id": 11925184648,
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833/artifacts/11925184648",
+      "expires": "2026-10-28"
+    },
+    {
+      "name": "Android privacy/import reports",
+      "id": 11925199890,
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833/artifacts/11925199890"
+    },
+    {
+      "name": "lint",
+      "id": 11925964211,
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38631470833/artifacts/11925964211"
+    }
+  ]
+}
