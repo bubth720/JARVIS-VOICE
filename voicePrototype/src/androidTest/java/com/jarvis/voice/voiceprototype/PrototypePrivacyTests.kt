@@ -67,7 +67,11 @@ class PrototypePrivacyTests {
         ZipOutputStream(zip.outputStream()).use { out -> out.putNextEntry(ZipEntry("wrong-model.txt")); out.write(byteArrayOf(1)); out.closeEntry() }
         val activity=instrumentation.startActivitySync(Intent(context,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) as MainActivity
         try {
-            instrumentation.runOnMainSync { activity.onActivityResult(200,Activity.RESULT_OK,Intent().setData(Uri.fromFile(zip))) }
+            instrumentation.runOnMainSync {
+                val callback=MainActivity::class.java.getDeclaredMethod("onActivityResult",Integer.TYPE,Integer.TYPE,Intent::class.java)
+                callback.isAccessible=true // our application callback, not a hidden Android API
+                callback.invoke(activity,200,Activity.RESULT_OK,Intent().setData(Uri.fromFile(zip)))
+            }
             var observed=false
             val deadline=System.currentTimeMillis()+10000
             while(!observed && System.currentTimeMillis()<deadline) {
