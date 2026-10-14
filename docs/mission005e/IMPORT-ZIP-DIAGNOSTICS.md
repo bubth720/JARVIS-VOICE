@@ -76,3 +76,25 @@ même clé de signature que l'APK 005E installée. Les builds debug GitHub sur d
 runners éphémères ne garantissent pas cette continuité ; en cas de conflit de
 signature, ne jamais désinstaller 005D. Aucune suppression de données 005E n'est
 effectuée automatiquement.
+
+## Résultats de livraison
+
+Commit vérifié : `0aa253ea37839ffa81cb0654949aa27864c220f7`.
+25 tests JVM réussis, 11 tests nécessitant d'autres modèles/fixtures sautés,
+zéro échec (36 au total). Les quatre tests d'import ciblés, dont le ZIP privé
+original, ne sont pas sautés. Build, lint et contrôles APK réussis.
+Six tests instrumentés réussis sur Android 15 x86_64, sans poids privés.
+L'ancienne APK **effectivement livrée** (artefact 11925184648) a été téléchargée
+et son manifeste est identique au source et au ZIP privé. Aucun essai physique
+Xiaomi n'a été effectué dans cette session.
+
+[APK 0.1.1 et rapports](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38639491087/artifacts/11930315013),
+accessible jusqu'au 28 octobre 2026. Installer `voicePrototype-debug.apk`, pas
+l'APK `androidTest`. SHA256 de l'APK principale :
+`63102c11cf56d99d213e3ab0d73ca94abde289b917dce25c021fafdc1010fe10`.
+
+La signature CI précédente et celle-ci sont effectivement différentes.
+La mise à jour directe de l'ancienne APK CI est donc impossible : essayer cette
+APK exige une réinstallation **005E seulement**, avec perte des données locales
+005E. Le ZIP dans Téléchargements et l'application 005D restent indépendants.
+L'ancienne clé CI n'est pas disponible pour signer une mise à jour compatible.
