@@ -1,7 +1,5 @@
 name: Pocket Probe
 on:
-  push:
-    branches: [feat/android-pocket-probe]
   pull_request:
     paths: ['pocketProbe/**', 'pocketRuntime/**', 'scripts/pocket/**', 'build.gradle.kts', 'settings.gradle.kts', '.github/workflows/pocket-probe.yml']
   workflow_dispatch:
