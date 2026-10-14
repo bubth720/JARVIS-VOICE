@@ -122,7 +122,13 @@ class MainActivity : Activity() {
         val uri=data?.data ?: return
         if(code==200) task("Import privé et contrôle SHA256 du pack FP32…",false) { cancel ->
             require(noBackupFilesDir.usableSpace>=1200L*1048576) { "Au moins 1,2 Gio de stockage disponible requis" }
-            ExperimentalModelPack.install(requireNotNull(contentResolver.openInputStream(uri)), modelRoot, cancel::isCancelled)
+            val source=try { contentResolver.openInputStream(uri) } catch(_: Exception) {
+                throw FP32ImportException("DOCUMENT_INACCESSIBLE", "le fournisseur de fichiers ne permet pas la lecture ; télécharger le ZIP localement puis le sélectionner")
+            } ?: throw FP32ImportException("DOCUMENT_INACCESSIBLE", "aucun flux fourni par le sélecteur")
+            try { source.use { ExperimentalModelPack.install(it, modelRoot, cancel::isCancelled) } }
+            catch(_: java.io.IOException) {
+                throw FP32ImportException("LECTURE", "lecture du document ou stockage local indisponible")
+            }
             "Pack FP32 vérifié. Prototype expérimental prêt à créer un profil local."
         }
         if(code==201) {

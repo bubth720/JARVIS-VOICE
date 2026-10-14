@@ -75,11 +75,47 @@ class PrototypePrivacyTests {
             var observed=false
             val deadline=System.currentTimeMillis()+10000
             while(!observed && System.currentTimeMillis()<deadline) {
-                instrumentation.runOnMainSync { observed=text(activity.window.decorView).any { it.contains("Entrée ZIP FP32 inconnue") } }
+                instrumentation.runOnMainSync { observed=text(activity.window.decorView).any { it.contains("[NOM_INCONNU]") && it.contains("wrong-model.txt") } }
                 if(!observed) Thread.sleep(50)
             }
             assertTrue("Private import did not reach strict ZIP validation",observed)
             assertFalse(File(context.noBackupFilesDir,"models/fp32").exists())
         } finally { zip.delete(); instrumentation.runOnMainSync { activity.finish() } }
+    }
+    @Test fun androidJsonManifestAndStreamingZipAcceptEveryOfficialName() {
+        val context=InstrumentationRegistry.getInstrumentation().targetContext
+        assertEquals(10,ExperimentalModelPack.files.size)
+        val seen=mutableSetOf<String>()
+        for(name in ExperimentalModelPack.files) {
+            val bytes=java.io.ByteArrayOutputStream()
+            ZipOutputStream(bytes).use { out -> out.putNextEntry(ZipEntry(name)); out.closeEntry() }
+            java.util.zip.ZipInputStream(bytes.toByteArray().inputStream()).use { zip ->
+                val entry=zip.nextEntry!!
+                assertEquals(name,entry.name)
+                ExperimentalModelPack.validateEntry(entry.name,entry.isDirectory,seen)
+            }
+        }
+        assertEquals(ExperimentalModelPack.files,seen)
+    }
+    @Test fun androidImportClassifiesWrongDocumentDirectoryDuplicateAndTruncation() {
+        val context=InstrumentationRegistry.getInstrumentation().targetContext
+        val root=File(context.noBackupFilesDir,"synthetic-zip-classification")
+        fun rejected(bytes: ByteArray, reason: String) {
+            try { ExperimentalModelPack.install(bytes.inputStream(),root) { false }; fail("Invalid pack accepted") }
+            catch(error: FP32ImportException) { assertEquals(reason,error.reason); assertFalse(error.message!!.contains(context.noBackupFilesDir.path)) }
+            assertFalse(File(root,"fp32").exists())
+            assertTrue(root.listFiles().orEmpty().isEmpty())
+        }
+        try {
+            rejected("not a zip".toByteArray(),"DOCUMENT_NON_ZIP")
+            for((name,reason) in listOf("folder/" to "REPERTOIRE","wrong-model.txt" to "NOM_INCONNU","pack-identity.txt" to "TAILLE")) {
+                val bytes=java.io.ByteArrayOutputStream()
+                ZipOutputStream(bytes).use { out -> out.putNextEntry(ZipEntry(name)); out.closeEntry() }
+                rejected(bytes.toByteArray(),reason)
+            }
+            val seen=mutableSetOf("pack-identity.txt")
+            try { ExperimentalModelPack.validateEntry("pack-identity.txt",false,seen); fail("Duplicate accepted") }
+            catch(error: FP32ImportException) { assertEquals("DOUBLON",error.reason) }
+        } finally { root.deleteRecursively() }
     }
 }

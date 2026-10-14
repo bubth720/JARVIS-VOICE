@@ -12,6 +12,19 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 class ExperimentalProfileTests {
+    @Test fun originalPrivateZipInstallsWithEmbeddedManifest() {
+        val path=System.getenv("POCKET_EXPERIMENTAL_ZIP").orEmpty()
+        assumeTrue("Private ZIP required; never downloaded by public CI",path.isNotBlank())
+        val zip=File(path)
+        assertEquals(234932686L,zip.length())
+        assertEquals("9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd",ExperimentalModelPack.sha256(zip))
+        val root=Files.createTempDirectory("original-fp32-import").toFile()
+        try {
+            val installed=ExperimentalModelPack.install(zip.inputStream(),root) { false }
+            assertEquals(ExperimentalModelPack.files,installed.listFiles()!!.map { it.name }.toSet())
+            ExperimentalModelPack.verify(installed)
+        } finally { root.deleteRecursively() }
+    }
     private fun synthetic(value: Float = 0.01f): PersonalVoiceProfile {
         val tensors = linkedMapOf<String, VoiceTensor>()
         for (layer in 0 until 6) {
