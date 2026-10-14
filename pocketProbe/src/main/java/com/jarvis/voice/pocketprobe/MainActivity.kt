@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.InputFilter
 import android.widget.*
+import android.view.View
 import com.jarvis.voice.pocket.*
 import java.io.File
 import java.util.Locale
@@ -36,6 +37,15 @@ class MainActivity : Activity() {
     private lateinit var engines: RadioGroup
     private lateinit var androidChoice: RadioButton
     private lateinit var fallback: AndroidFallback
+    private lateinit var mp3Import: Button
+    private lateinit var extractReference: Button
+    private lateinit var previewReference: Button
+    private lateinit var deleteReference: Button
+    private lateinit var referenceInfo: TextView
+    private lateinit var excerptStart: EditText
+    private lateinit var excerptDuration: EditText
+    private lateinit var progress: ProgressBar
+    private val references get() = ReferenceRepository(File(noBackupFilesDir, "voice-reference"))
     private val pack get() = File(filesDir, "models/fr")
     private val supported get() = "arm64-v8a" in Build.SUPPORTED_ABIS
 
@@ -49,7 +59,7 @@ class MainActivity : Activity() {
         fun label(s: String) = TextView(this).apply { setText(s); textSize = 16f; layout.addView(this) }
         label("JARVIS Pocket Probe").textSize = 26f
         label("Diagnostic indépendant • français local • voix prédéfinie Alba")
-        label("Pas de clonage dans cette version. Votre APK JARVIS VOICE reste indépendant.")
+        label("Votre APK JARVIS VOICE reste indépendant. Le clonage attend un encodeur compatible validé.")
         import = Button(this).apply { setText("Importer le pack français (.zip)"); layout.addView(this) }
         engines = RadioGroup(this).apply { layout.addView(this) }
         val pocket = RadioButton(this).apply { id = android.view.View.generateViewId(); setText("Pocket TTS français — CPU"); engines.addView(this) }
@@ -68,7 +78,23 @@ class MainActivity : Activity() {
         stop = Button(this).apply { setText("Arrêt"); layout.addView(this) }
         status = label(if (pack.isDirectory) "Pack présent : il sera vérifié avant lecture." else "Importer le pack français avant de choisir Lecture.")
         diagnostics = label(DeviceMetrics.summary(this)).apply { setTextIsSelectable(true) }
-        label("MP3 : architecture prévue, import et création de profil désactivés jusqu'à validation du moteur.")
+        label("Voix Pocket")
+        RadioGroup(this).apply {
+            val alba = RadioButton(this@MainActivity).apply { id = android.view.View.generateViewId(); setText("Alba — disponible hors ligne") }
+            addView(alba); check(alba.id)
+            addView(RadioButton(this@MainActivity).apply { setText("Profil personnalisé — indisponible : encodeur non validé"); isEnabled = false })
+            layout.addView(this)
+        }
+        referenceInfo = label(referenceSummary())
+        mp3Import = Button(this).apply { setText("Importer un MP3 autorisé (local uniquement)"); layout.addView(this) }
+        excerptStart = EditText(this).apply { hint = "Début de l'extrait, secondes"; inputType = android.text.InputType.TYPE_CLASS_NUMBER; setText(getPreferences(0).getString("excerptStart", "0")); layout.addView(this) }
+        excerptDuration = EditText(this).apply { hint = "Durée, 5 à 15 secondes"; inputType = android.text.InputType.TYPE_CLASS_NUMBER; setText(getPreferences(0).getString("excerptDuration", "10")); layout.addView(this) }
+        extractReference = Button(this).apply { setText("Convertir et analyser l'extrait WAV mono 24 kHz"); layout.addView(this) }
+        previewReference = Button(this).apply { setText("Écouter l'extrait local"); layout.addView(this) }
+        Button(this).apply { setText("Créer le profil vocal — encodeur non validé"); isEnabled = false; layout.addView(this) }
+        label(CloningCapability.reason + ". L'extrait WAV n'est pas un profil vocal. Aucun envoi réseau.")
+        deleteReference = Button(this).apply { setText("Supprimer ma référence et mon extrait privés"); layout.addView(this) }
+        progress = ProgressBar(this).apply { isIndeterminate = true; visibility = android.view.View.GONE; layout.addView(this) }
         Button(this).apply {
             setText("Licences et origine du modèle"); layout.addView(this)
             setOnClickListener { android.app.AlertDialog.Builder(this@MainActivity).setTitle("Modèle et licences")
@@ -90,6 +116,21 @@ class MainActivity : Activity() {
                 putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-zip-compressed", "application/octet-stream"))
             }, 100)
         }
+        mp3Import.setOnClickListener {
+            android.app.AlertDialog.Builder(this).setTitle("Autorisation de la voix")
+                .setMessage("Sélectionnez uniquement un MP3 dont la reproduction vocale est autorisée. Il sera copié dans l'espace privé du téléphone, sans serveur ni publication.")
+                .setPositiveButton("Je confirme et je sélectionne") { _, _ ->
+                    startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        type = "audio/mpeg"; addCategory(Intent.CATEGORY_OPENABLE)
+                        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("audio/mpeg", "audio/mp3", "application/octet-stream"))
+                    }, 101)
+                }.setNegativeButton("Annuler", null).show()
+        }
+        extractReference.setOnClickListener { makeExcerpt(false) }
+        previewReference.setOnClickListener { makeExcerpt(true) }
+        deleteReference.setOnClickListener {
+            references.delete(); referenceInfo.text = referenceSummary(); status.text = "Référence privée supprimée. Aucun profil vocal n'avait été créé."; refresh()
+        }
         engines.setOnCheckedChangeListener { _, _ -> refresh() }
         read.setOnClickListener { speak() }
         stop.setOnClickListener { requestStop() }
@@ -104,6 +145,13 @@ class MainActivity : Activity() {
         economy.isEnabled = !busy && !androidSpeaking && !android
         for (i in 0 until engines.childCount) engines.getChildAt(i).isEnabled = !busy && !androidSpeaking &&
             (engines.getChildAt(i) != androidChoice || fallback.ready)
+        val unlocked = !busy && !androidSpeaking
+        mp3Import.isEnabled = unlocked
+        extractReference.isEnabled = unlocked && runCatching { references.current() != null }.getOrDefault(false)
+        previewReference.isEnabled = extractReference.isEnabled
+        deleteReference.isEnabled = unlocked
+        excerptStart.isEnabled = unlocked; excerptDuration.isEnabled = unlocked
+        progress.visibility = if (busy) View.VISIBLE else View.GONE
         stop.isEnabled = busy || androidSpeaking
     }
 
@@ -125,14 +173,14 @@ class MainActivity : Activity() {
         status.text = "Pocket TTS : vérification et chargement, puis génération…"
         refresh()
         worker.execute {
-            val memory = MemorySampler(this)
+            val thermalPause = java.util.concurrent.atomic.AtomicBoolean(false)
+            val memory = MemorySampler(this) { thermalPause.set(true); current.cancel() }
             val audio = PcmPlayer(current)
             player.set(audio)
             val delivery = PcmDelivery(current::isCancelled, adaptive, { pcm ->
                 post { status.text = "Pocket TTS : lecture audio…" }; audio.write(pcm)
             }, audio::rebuffer)
             var firstMs = 0.0
-            var thermalPause = false
             try {
                 current.check()
                 val cold = engine == null || engine?.threads != threads
@@ -140,7 +188,7 @@ class MainActivity : Activity() {
                 current.check()
                 val active = requireNotNull(engine)
                 val metrics = active.generate(raw, current, wholeSentence = !adaptive) { pcm ->
-                    if (DeviceMetrics.isThermallySevere(this)) { thermalPause = true; current.cancel(); current.check() }
+                    if (DeviceMetrics.isThermallySevere(this)) { thermalPause.set(true); current.cancel(); current.check() }
                     if (firstMs == 0.0) firstMs = (System.nanoTime() - pressed) / 1e6
                     delivery.offer(pcm)
                 }
@@ -148,7 +196,7 @@ class MainActivity : Activity() {
                 post { status.text = "Génération terminée ; restitution audio…" }
                 delivery.await(); audio.drain()
                 val output = String.format(Locale.FRENCH,
-                    "Moteur : Pocket TTS français, voix prédéfinie Alba\nCPU : %d thread(s)\nChargement : %s\nPremier PCM depuis Lecture : %.0f ms\nPremier PCM après chargement : %.0f ms\nLancement AudioTrack depuis Lecture : %.0f ms\nGénération hors attente de lecture : %.0f ms\nAudio : %.2f s ; RTF : %.3f ; vitesse : %.2f×\nPSS maximal observé (250 ms) : %.1f Mio\nFin de phrase détectée : oui\n\n%s",
+                    "Moteur : Pocket TTS français, voix prédéfinie Alba\nCPU : %d thread(s)\nChargement : %s\nPremier PCM depuis Lecture : %.0f ms\nPremier PCM après chargement : %.0f ms\nLancement AudioTrack depuis Lecture : %.0f ms\nGénération totale hors dépôt PCM : %.0f ms\nAudio : %.2f s ; RTF : %.3f ; vitesse : %.2f×\nPSS maximal observé (250 ms) : %.1f Mio\nFin de phrase détectée : oui\n\n%s",
                     threads, if (cold) "%.0f ms".format(Locale.FRENCH, active.modelLoadMs) else "modèle réutilisé",
                     firstMs, metrics.firstPcmMs, (audio.launchNs - pressed) / 1e6,
                     metrics.computeMs, metrics.audioSeconds, metrics.rtf, metrics.speed, memory.peakPssMiB, DeviceMetrics.summary(this))
@@ -156,7 +204,7 @@ class MainActivity : Activity() {
                     "\nONNX main/flow/décodeur : %.0f / %.0f / %.0f ms".format(Locale.FRENCH, metrics.onnxMainMs, metrics.onnxFlowMs, metrics.onnxDecoderMs) +
                     "\nAppel ONNX maximal : %.0f ms ; intervalle PCM maximal : %.0f ms".format(Locale.FRENCH, metrics.maxOnnxMs, metrics.maxPcmGapMs) +
                     "\nSous-alimentations AudioTrack : ${audio.underruns} ; attentes de recharge : ${delivery.rebufferCount}" +
-                    "\nBuffer matériel : ${audio.bufferFrames} échantillons ; file PCM max : ${delivery.peakSamples}" +
+                    "\nBuffer matériel : ${audio.bufferFrames} échantillons ; file PCM max : ${delivery.peakSamples} ; réserve adaptative : ${delivery.requiredSamples}" +
                     "\nPremier avancement matériel depuis Lecture : %.0f ms (estimation, pas mesure acoustique)".format(Locale.FRENCH, (audio.firstFrameNs - pressed) / 1e6) +
                     "\nÉtat thermique max/final : ${memory.peakThermal}/${DeviceMetrics.thermal(this)} (0 normal, 1 léger, 2 modéré, ≥3 arrêt)"
                 post { status.text = "Lecture Pocket terminée."; diagnostics.text = output + detail }
@@ -165,7 +213,7 @@ class MainActivity : Activity() {
                 post {
                     if (current.isCancelled()) {
                         val stopped = if (stopNs != 0L) "\nCalcul arrêté après %.0f ms.".format(Locale.FRENCH, (computeStoppedNs - stopNs) / 1e6) else ""
-                        status.text = if (thermalPause) "Pocket arrêté : état thermique sévère. Attendre ou choisir Android TTS." else "Pocket TTS arrêté.$stopped"
+                        status.text = if (thermalPause.get()) "Pocket arrêté : état thermique sévère. Attendre ou choisir Android TTS." else "Pocket TTS arrêté.$stopped"
                     } else status.text = "Échec Pocket TTS : ${t.javaClass.simpleName} — ${t.message.orEmpty().take(350)}\nAucun remplacement automatique. Vous pouvez choisir le secours Android."
                 }
             } finally {
@@ -187,7 +235,9 @@ class MainActivity : Activity() {
     @Deprecated("Activity result API")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != 100 || resultCode != RESULT_OK) return
+        if (resultCode != RESULT_OK) return
+        if (requestCode == 101) { data?.data?.let { importMp3(it) }; return }
+        if (requestCode != 100) return
         val uri = data?.data ?: return
         val current = CancellationToken(); token = current; stopNs = 0; busy = true
         status.text = "Import du pack et vérification des empreintes…"; refresh()
@@ -200,6 +250,67 @@ class MainActivity : Activity() {
             } catch (t: Throwable) {
                 post { status.text = if (current.isCancelled()) "Import annulé." else "Import refusé : ${t.message.orEmpty().take(250)}" }
             } finally { post { busy = false; token = null; refresh() } }
+        }
+    }
+
+    private fun referenceSummary(): String = runCatching {
+        references.current()?.second?.let {
+            "MP3 privé rechargé : ${it.durationMs / 1000} s, ${it.sampleRate} Hz, ${it.channels} canal(aux). Aucun profil vocal créé."
+        } ?: "Aucune référence privée importée."
+    }.getOrDefault("Référence locale invalide : supprimer puis réimporter.")
+
+    private fun importMp3(uri: android.net.Uri) {
+        val current = CancellationToken(); token = current; stopNs = 0; busy = true
+        status.text = "Import privé et vérification locale du MP3…"; refresh()
+        worker.execute {
+            try {
+                references.import(contentResolver.openInputStream(uri) ?: error("Fichier inaccessible"), current::isCancelled) { file ->
+                    val info = LocalMp3.inspect(file)
+                    LocalMp3.decode(file, 0, 5000, current) // reject malformed bitstreams before replacing prior reference
+                    info
+                }
+                post { referenceInfo.text = referenceSummary(); status.text = "MP3 importé localement. Choisir un extrait propre, sans musique ni autres voix." }
+            } catch (t: Throwable) {
+                post { status.text = if (current.isCancelled()) "Import MP3 annulé." else "MP3 refusé : fichier invalide, durée hors limites ou décodage impossible. La référence précédente est conservée." }
+            } finally { post { busy = false; token = null; refresh() } }
+        }
+    }
+
+    private fun makeExcerpt(preview: Boolean) {
+        val start = excerptStart.text.toString().toLongOrNull()
+        val duration = excerptDuration.text.toString().toLongOrNull()
+        if (start == null || start !in 0..175 || duration == null || duration !in 5..15) {
+            status.text = "Début entre 0 et 175 s ; durée entre 5 et 15 s."; return
+        }
+        getPreferences(0).edit().putString("excerptStart", start.toString()).putString("excerptDuration", duration.toString()).apply()
+        val current = CancellationToken(); token = current; stopNs = 0; busy = true
+        status.text = "Décodage MP3 et conversion locale de l'extrait…"; refresh()
+        worker.execute {
+            var audio: PcmPlayer? = null
+            try {
+                val source = requireNotNull(references.current()).first
+                val pcm = LocalMp3.decode(source, start * 1000, duration * 1000, current)
+                val quality = ReferenceAudio.quality(pcm)
+                current.check()
+                val staged = File(references.excerpt.parentFile, "excerpt.pending")
+                try {
+                    ReferenceAudio.writeWav(staged, pcm); current.check()
+                    check(staged.renameTo(references.excerpt))
+                } finally { staged.delete() }
+                post { referenceInfo.text = referenceSummary() + "\nExtrait : %.2f s ; RMS %.1f dBFS ; écrêtage %.2f %% ; silence %.1f %%\n%s".format(Locale.FRENCH,
+                    quality.seconds, quality.rmsDb, quality.clippedFraction * 100, quality.quietFraction * 100, quality.warning) }
+                if (preview) {
+                    audio = PcmPlayer(current); player.set(audio)
+                    post { status.text = "Écoute de l'extrait privé…" }
+                    audio.write(pcm); audio.drain()
+                }
+                post { status.text = "Extrait privé prêt. Le clonage reste indisponible tant que l'encodeur n'est pas validé." }
+            } catch (t: Throwable) {
+                post { status.text = if (current.isCancelled()) "Traitement de l'extrait arrêté." else "Extrait refusé : vérifier le début, la durée et l'intégrité du MP3." }
+            } finally {
+                audio?.close(); player.set(null)
+                post { busy = false; token = null; refresh() }
+            }
         }
     }
 

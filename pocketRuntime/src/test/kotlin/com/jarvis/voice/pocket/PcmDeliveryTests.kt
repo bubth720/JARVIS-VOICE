@@ -27,6 +27,18 @@ class PcmDeliveryTests {
             q.offer(FloatArray(48000)); q.finish(); release.countDown(); q.await()
         }
     }
+    @Test fun slowProducerDefersPlaybackAndRaisesAdaptiveReserve() {
+        val clock = java.util.concurrent.atomic.AtomicLong(1)
+        val sound = CountDownLatch(1)
+        PcmDelivery({ false }, true, { sound.countDown() }, nanoTime = clock::get).use { q ->
+            clock.set(3_000_000_001L); q.offer(FloatArray(48000))
+            assertFalse(sound.await(50, TimeUnit.MILLISECONDS)) // RTF 1.5; streaming must wait
+            clock.set(6_000_000_001L); q.offer(FloatArray(24000))
+            assertEquals(144000, q.requiredSamples) // twice the three-second producer stall
+            assertFalse(sound.await(50, TimeUnit.MILLISECONDS))
+            q.finish(); q.await(); assertEquals(0, sound.count)
+        }
+    }
     @Test fun stopDuringDeferredGenerationProducesNoSound() {
         val cancelled = AtomicBoolean(false); val played = AtomicBoolean(false)
         PcmDelivery(cancelled::get, sink = { played.set(true) }).use { q ->

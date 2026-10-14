@@ -1,6 +1,6 @@
 package com.jarvis.voice.pocket
 
-/** Future on-device import boundary. No decoder, encoder or clone is implemented in Mission 004. */
+/** On-device interfaces. MP3 decoding is available; profile encoding remains unavailable. */
 interface ReferenceImporter {
     fun inspectLocalReference(source: LocalReferenceSource): ReferenceInspection
 }
@@ -19,5 +19,5 @@ sealed interface VoiceProfile {
 }
 object CloningCapability {
     const val available = false
-    const val reason = "Encodeur vocal absent du pack de diagnostic ; clonage non implémenté"
+    const val reason = "Pack actuel sans encodeur ; encodeur candidat non validé contre le modèle français 6 couches. Clonage indisponible"
 }

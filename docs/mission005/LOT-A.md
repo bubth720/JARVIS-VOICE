@@ -12,7 +12,7 @@ Un contrôle CPU sur 14 latents synthétiques compare le décodeur INT8 en une p
 
 Le mode par défaut génère tous les latents et décode la phrase complète **avant** restitution. Une file PCM bornée à 20 s (~1,83 Mio) et un thread audio indépendant préservent chaque échantillon. AudioTrack dispose de 2 s minimum et démarre après 1 s préchargée (ou à la fin pour une phrase courte). Aucun silence artificiel, saut ou remplacement Android TTS n'est ajouté.
 
-La lecture progressive reste explicitement expérimentale : départ avec 2 s de réserve et production mesurée RTF ≤ 0,75 ; si la file se vide, pause et rechargement. Une sous-alimentation reste possible si la vitesse se dégrade après le départ. Pour la stabilité, utiliser le mode différé.
+La lecture progressive reste explicitement expérimentale : départ avec 2 s de réserve et production mesurée RTF ≤ 0,75 ; si la file se vide, pause et rechargement. Une sous-alimentation reste possible si la vitesse se dégrade après le départ. Pour la stabilité, utiliser le mode différé. Dans la version Reference, la réserve adaptative augmente jusqu’à 10 s selon deux fois le pire intervalle de production observé ; l’annulation thermique est également échantillonnée pendant ONNX.
 
 Arrêt annule ONNX via RunOptions, la file PCM et AudioTrack pendant chargement/génération/lecture. Les sessions sont réutilisées à thread constant et libérées en arrière-plan. Le mode économique reste 1 thread ; le mode normal utilise 2 threads, sans changement de modèle ni qualité de quantification. L'état thermique sévère interrompt la génération.
 

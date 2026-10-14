@@ -11,7 +11,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-class MemorySampler(private val context: Context) : AutoCloseable {
+class MemorySampler(private val context: Context, private val onSevere: () -> Unit = {}) : AutoCloseable {
     private val executor = Executors.newSingleThreadScheduledExecutor()
     private val peak = AtomicInteger(0)
     private val thermalPeak = AtomicInteger(-1)
@@ -19,7 +19,9 @@ class MemorySampler(private val context: Context) : AutoCloseable {
         val info = Debug.MemoryInfo()
         Debug.getMemoryInfo(info)
         peak.accumulateAndGet(info.totalPss, ::maxOf)
-        thermalPeak.accumulateAndGet(DeviceMetrics.thermal(context), ::maxOf)
+        val thermal = DeviceMetrics.thermal(context)
+        thermalPeak.accumulateAndGet(thermal, ::maxOf)
+        if (thermal >= 3) onSevere()
     }, 0, 250, TimeUnit.MILLISECONDS) }
     val peakThermal get() = thermalPeak.get()
     val peakPssMiB: Double get() = peak.get() / 1024.0

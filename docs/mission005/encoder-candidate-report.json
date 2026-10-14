@@ -1,0 +1,145 @@
+{
+  "candidateRevision": "b291531fa4d9a036679d6b5176308fb613687aa7",
+  "encoderSha256": "c1a28913f671f3d6734336dd5ec1b96d184db496753400cb8ee7fab261d4432b",
+  "publicReference": "kyutai/tts-voices/alba-mackenna/casual.wav",
+  "promptShape": [
+    1,
+    126,
+    1024
+  ],
+  "presetComparison": [
+    {
+      "key": "transformer.layers.0.self_attn/offset",
+      "expected": [
+        126
+      ],
+      "actual": [
+        126
+      ]
+    },
+    {
+      "key": "transformer.layers.0.self_attn/pad",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ]
+    },
+    {
+      "key": "transformer.layers.0.self_attn/cache",
+      "relativeL2": 0.4689798355102539
+    },
+    {
+      "key": "transformer.layers.1.self_attn/offset",
+      "expected": [
+        126
+      ],
+      "actual": [
+        126
+      ]
+    },
+    {
+      "key": "transformer.layers.1.self_attn/pad",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ]
+    },
+    {
+      "key": "transformer.layers.1.self_attn/cache",
+      "relativeL2": 0.47299909591674805
+    },
+    {
+      "key": "transformer.layers.2.self_attn/offset",
+      "expected": [
+        126
+      ],
+      "actual": [
+        126
+      ]
+    },
+    {
+      "key": "transformer.layers.2.self_attn/pad",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ]
+    },
+    {
+      "key": "transformer.layers.2.self_attn/cache",
+      "relativeL2": 0.6266224980354309
+    },
+    {
+      "key": "transformer.layers.3.self_attn/offset",
+      "expected": [
+        126
+      ],
+      "actual": [
+        126
+      ]
+    },
+    {
+      "key": "transformer.layers.3.self_attn/pad",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ]
+    },
+    {
+      "key": "transformer.layers.3.self_attn/cache",
+      "relativeL2": 1.0805116891860962
+    },
+    {
+      "key": "transformer.layers.4.self_attn/offset",
+      "expected": [
+        126
+      ],
+      "actual": [
+        126
+      ]
+    },
+    {
+      "key": "transformer.layers.4.self_attn/pad",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ]
+    },
+    {
+      "key": "transformer.layers.4.self_attn/cache",
+      "relativeL2": 0.8913477063179016
+    },
+    {
+      "key": "transformer.layers.5.self_attn/offset",
+      "expected": [
+        126
+      ],
+      "actual": [
+        126
+      ]
+    },
+    {
+      "key": "transformer.layers.5.self_attn/pad",
+      "expected": [
+        0
+      ],
+      "actual": [
+        0
+      ]
+    },
+    {
+      "key": "transformer.layers.5.self_attn/cache",
+      "relativeL2": 0.887518584728241
+    }
+  ],
+  "validated": false
+}

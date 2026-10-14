@@ -9,15 +9,19 @@ class PcmDelivery(
     private val adaptive: Boolean = false,
     private val sink: (FloatArray) -> Unit,
     private val onRebuffer: () -> Unit = {},
+    private val nanoTime: () -> Long = System::nanoTime,
 ) : AutoCloseable {
     private val lock = Object()
     private val queue = ArrayDeque<FloatArray>()
     private var buffered = 0
     private var total = 0
+    private var lastOfferNs = 0L
+    private var maxGapNs = 0L
+    @Volatile var requiredSamples = 48000; private set
     private var finished = false
     @Volatile private var closed = false
     private var error: Throwable? = null
-    private val started = System.nanoTime()
+    private val started = nanoTime()
     @Volatile var rebufferCount = 0; private set
     @Volatile var peakSamples = 0; private set
     @Volatile var firstDeliveryNs = 0L; private set
@@ -26,6 +30,11 @@ class PcmDelivery(
         checkOpen()
         require(pcm.isNotEmpty() && pcm.all { it.isFinite() })
         require(total + pcm.size <= 480_000) { "Limite audio de 20 secondes dépassée" }
+        val now = nanoTime()
+        if (lastOfferNs != 0L) maxGapNs = maxOf(maxGapNs, now - lastOfferNs)
+        lastOfferNs = now
+        // Reserve at least two seconds, or twice the worst observed producer gap.
+        requiredSamples = maxOf(48000, minOf(240000, (maxGapNs / 1e9 * 48000).toInt()))
         queue.addLast(pcm); buffered += pcm.size; total += pcm.size
         peakSamples = maxOf(peakSamples, buffered); lock.notifyAll()
     }
@@ -39,8 +48,8 @@ class PcmDelivery(
     private fun ready(): Boolean {
         if (finished) return true
         // Experimental streaming only when production is demonstrably faster than playback.
-        val rtf = (System.nanoTime() - started) / 1e9 / (total / 24000.0)
-        return adaptive && buffered >= 48_000 && rtf <= 0.75
+        val rtf = (nanoTime() - started) / 1e9 / (total / 24000.0)
+        return adaptive && buffered >= requiredSamples && rtf <= 0.75
     }
     private fun consume() {
         try {
@@ -55,7 +64,7 @@ class PcmDelivery(
                     if (queue.isEmpty() && finished) null else queue.removeFirst().also { buffered -= it.size }
                 } ?: break
                 checkCancelled()
-                if (firstDeliveryNs == 0L) firstDeliveryNs = System.nanoTime()
+                if (firstDeliveryNs == 0L) firstDeliveryNs = nanoTime()
                 sink(next)
             }
         } catch (t: Throwable) { synchronized(lock) { error = t; lock.notifyAll() } }
