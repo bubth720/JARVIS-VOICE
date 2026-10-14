@@ -72,7 +72,11 @@ class MainActivity : Activity() {
                 .setMessage(assets.open("THIRD_PARTY_NOTICES.txt").bufferedReader().use { it.readText() })
                 .setPositiveButton("Fermer", null).show() }
         }
-        setContentView(ScrollView(this).apply { addView(layout) })
+        setContentView(ScrollView(this).apply {
+            // Android 15 enforces edge-to-edge for target 35: keep controls outside system bars.
+            fitsSystemWindows = true
+            addView(layout)
+        })
         text.setText(savedInstanceState?.getString("text") ?: text.text.toString())
         fallback = AndroidFallback(this, { ready, message ->
             if (!destroyed) { androidChoice.isEnabled = ready && !busy; fallbackInfo.text = message; refresh() }
