@@ -1,0 +1,248 @@
+{
+  "language": "fr",
+  "config": "french",
+  "tokenizerSha256": "6211acffe9cb95172f71f0051f18e26ea305b2b32ea00b331ee976551c70887f",
+  "tokenizerKind": "tokenizers",
+  "upstreamCommit": "3dbee45d343d7dddd0d105468d17f8dcba14db3e",
+  "settings": {
+    "flow_lm": {
+      "dtype": "float32",
+      "flow": {
+        "dim": 512,
+        "depth": 6,
+        "type": "lsd"
+      },
+      "transformer": {
+        "hidden_scale": 4,
+        "max_period": 10000,
+        "d_model": 1024,
+        "num_heads": 16,
+        "num_layers": 6
+      },
+      "lookup_table": {
+        "dim": 1024,
+        "n_bins": 4000,
+        "tokenizer": "tokenizers",
+        "tokenizer_path": "hf://kyutai/pocket-tts-without-voice-cloning/languages/french/tokenizer.json@8843db76457a91db32077edf8dfcd1c0e3e755fd"
+      },
+      "weights_path": null,
+      "insert_bos_before_voice": true
+    },
+    "mimi": {
+      "dtype": "float32",
+      "sample_rate": 24000,
+      "channels": 1,
+      "frame_rate": 12.5,
+      "seanet": {
+        "dimension": 512,
+        "channels": 1,
+        "n_filters": 64,
+        "n_residual_layers": 1,
+        "ratios": [
+          6,
+          5,
+          4
+        ],
+        "kernel_size": 7,
+        "residual_kernel_size": 3,
+        "last_kernel_size": 3,
+        "dilation_base": 2,
+        "pad_mode": "constant",
+        "compress": 2
+      },
+      "transformer": {
+        "d_model": 512,
+        "input_dimension": 512,
+        "output_dimensions": [
+          512
+        ],
+        "num_heads": 8,
+        "num_layers": 2,
+        "layer_scale": 0.01,
+        "context": 250,
+        "max_period": 10000.0,
+        "dim_feedforward": 2048
+      },
+      "quantizer": {
+        "dimension": 32,
+        "output_dimension": 512
+      },
+      "weights_path": null,
+      "inner_dim": 32,
+      "outer_dim": 512
+    },
+    "weights_path": "hf://kyutai/pocket-tts/languages/french/model.safetensors@d0ebc5deb50bc6b225f686782f124dd37e2dca0a",
+    "weights_path_without_voice_cloning": "hf://kyutai/pocket-tts-without-voice-cloning/languages/french/model.safetensors@8843db76457a91db32077edf8dfcd1c0e3e755fd",
+    "pad_with_spaces_for_short_inputs": false,
+    "remove_semicolons": true,
+    "append_terminal_punctuation": true,
+    "capitalize_first_letter": true,
+    "replace_characters": {
+      "\"": "",
+      "“": "",
+      "”": "",
+      "„": "",
+      "«": "",
+      "»": "",
+      "’": "'",
+      "‘": "'",
+      ":": ",",
+      "(": "",
+      ")": "",
+      "[": "",
+      "]": ""
+    },
+    "model_recommended_frames_after_eos": null,
+    "default_temperature": 0.3
+  },
+  "fixtures": [
+    {
+      "kind": "preview",
+      "input": "Ton histoire t'attend, voyageur.",
+      "chunks": [
+        {
+          "text": "Ton histoire t'attend, voyageur.",
+          "tokenIds": [
+            515,
+            315,
+            2038,
+            917,
+            386,
+            262,
+            706,
+            261,
+            1183,
+            335,
+            263
+          ],
+          "framesAfterEos": 5
+        }
+      ]
+    },
+    {
+      "kind": "long",
+      "input": "Le voyageur s’arrêta devant la vieille porte. Une voix douce murmura : « Attends » ; puis trois cloches sonnèrent, et la brume révéla lentement un pont étroit, une barque en bois et une lanterne allumée sous la pluie.",
+      "chunks": [
+        {
+          "text": "Le voyageur s'arrêta devant la vieille porte.",
+          "tokenIds": [
+            347,
+            1183,
+            335,
+            285,
+            262,
+            1887,
+            260,
+            711,
+            267,
+            400,
+            505,
+            516,
+            263
+          ],
+          "framesAfterEos": 3
+        },
+        {
+          "text": "Une voix douce murmura , Attends , puis trois cloches sonnèrent, et la brume révéla lentement un pont étroit, une barque en bois et une lanterne allumée sous la pluie.",
+          "tokenIds": [
+            602,
+            612,
+            1130,
+            308,
+            2702,
+            260,
+            261,
+            260,
+            3860,
+            264,
+            260,
+            261,
+            545,
+            526,
+            3065,
+            283,
+            307,
+            356,
+            416,
+            261,
+            269,
+            267,
+            3679,
+            2720,
+            278,
+            2660,
+            304,
+            280,
+            2353,
+            260,
+            2169,
+            261,
+            298,
+            260,
+            3751,
+            276,
+            920,
+            269,
+            298,
+            267,
+            3901,
+            260,
+            2099,
+            330,
+            456,
+            267,
+            2776,
+            263
+          ],
+          "framesAfterEos": 3
+        }
+      ]
+    },
+    {
+      "kind": "edge",
+      "input": "  bonjour\n‘l’ami’; (attends) [ici] pendant 3.14 minutes... Puis demande : « Pourquoi ? »  ",
+      "chunks": [
+        {
+          "text": "Bonjour 'l'ami', attends ici pendant 3.14 minutes... Puis demande , Pourquoi ?",
+          "tokenIds": [
+            1450,
+            3527,
+            260,
+            262,
+            382,
+            262,
+            2788,
+            262,
+            261,
+            260,
+            706,
+            264,
+            808,
+            319,
+            417,
+            260,
+            55,
+            263,
+            53,
+            56,
+            1486,
+            283,
+            263,
+            263,
+            263,
+            767,
+            265,
+            1112,
+            260,
+            261,
+            573,
+            747,
+            260,
+            306
+          ],
+          "framesAfterEos": 3
+        }
+      ]
+    }
+  ]
+}

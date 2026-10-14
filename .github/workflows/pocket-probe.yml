@@ -1,0 +1,58 @@
+name: Pocket Probe
+on:
+  pull_request:
+    paths: ['pocketProbe/**', 'pocketRuntime/**', 'scripts/pocket/**', 'build.gradle.kts', 'settings.gradle.kts', '.github/workflows/pocket-probe.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pocket-probe-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  build-and-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Prepare pinned public French preset pack (no token, recording or encoder)
+        run: python scripts/pocket/prepare_model.py --work-dir "$RUNNER_TEMP/pocket-model" --output "$RUNNER_TEMP/pocket-fr-6l-alba.zip"
+      - name: Real JVM inference, cancellation, unit tests and Android build
+        env:
+          POCKET_MODEL_DIR: ${{ runner.temp }}/pocket-model/fr
+        run: ./gradlew :pocketRuntime:test :pocketProbe:assembleDebug :pocketProbe:lintDebug :app:testDebugUnitTest --no-daemon --max-workers=2
+      - name: Verify signature, ARM64, ELF and APK alignment 16K, permissions
+        run: python scripts/pocket/verify_apk.py pocketProbe/build/outputs/apk/debug/pocketProbe-debug.apk --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report pocketProbe/build/apk-verification.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-pocket-probe-apk
+          retention-days: 14
+          path: |
+            pocketProbe/build/outputs/apk/debug/pocketProbe-debug.apk
+            pocketProbe/build/apk-verification.json
+            docs/pocket-probe/INSTALLATION.md
+            docs/pocket-probe/TEST-PHONE.md
+            docs/pocket-probe/LICENSES.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pocket-fr-6l-alba-model
+          retention-days: 14
+          compression-level: 0
+          path: ${{ runner.temp }}/pocket-fr-6l-alba.zip
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pocket-probe-test-reports
+          retention-days: 14
+          path: |
+            pocketRuntime/build/test-results/test/*.xml
+            pocketRuntime/build/reports/tests/test/**
+            pocketProbe/build/reports/lint-results-debug.*
