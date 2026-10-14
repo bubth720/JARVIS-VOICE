@@ -1,0 +1,7 @@
+JARVIS VOICE 005E EXPERIMENTAL FP32
+Pocket TTS by Kyutai, code 3.3.0 MIT. Official French checkpoint d0ebc5deb50bc6b225f686782f124dd37e2dca0a. Weights and derived ONNX: CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ .
+https://huggingface.co/kyutai/pocket-tts
+Modifications: private FP32 ONNX conversion, explicit streaming state adapters, BOS included once, no INT8 quantization. Public reference state newly encoded from Alba MacKenna casual.wav (CC BY 4.0), Kyutai tts-voices revision 323332d33f997de8394f24a193e1a76df720e01a. No recording included.
+Authors: Manu Orsini, Simon Rouard, Gabriel De Marmiesse, Vaclav Volhejn, Neil Zeghidour, Alexandre Defossez.
+Explicit lawful consent is required for cloning. Prohibited: unlawful, harmful, deceptive, fraudulent, unauthorized or privacy-invasive use; presenting synthesis as a genuine recording. Other personality rights may apply. No endorsement. Experimental, no personal similarity or device validation claimed.
+This private research pack must not be uploaded to public Actions or shared as unrestricted gated weights.

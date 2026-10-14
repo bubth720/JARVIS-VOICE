@@ -6,3 +6,4 @@ dependencyResolutionManagement {
 rootProject.name = "JARVIS VOICE"
 include(":app")
 include(":pocketRuntime", ":pocketProbe")
+include(":voicePrototype")

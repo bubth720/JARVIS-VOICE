@@ -1,0 +1,197 @@
+{
+  "tool": "Systran/faster-whisper-small",
+  "automaticProxyOnly": true,
+  "humanIntelligibilityValidated": false,
+  "speakerSimilarityValidated": false,
+  "cases": [
+    {
+      "reference": "alba",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "seed": 0,
+      "transcript": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "seed": 42,
+      "transcript": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "seed": 123,
+      "transcript": "Bonjour, cette nouvelle phrase fonctionne en ligne.",
+      "wordErrors": 1,
+      "referenceWords": 7,
+      "wer": 0.14285714285714285
+    },
+    {
+      "reference": "alba",
+      "phrase": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "seed": 0,
+      "transcript": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "wordErrors": 0,
+      "referenceWords": 10,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "seed": 42,
+      "transcript": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "wordErrors": 0,
+      "referenceWords": 10,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "seed": 123,
+      "transcript": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "wordErrors": 0,
+      "referenceWords": 10,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "seed": 0,
+      "transcript": "Demain, nous prendrons le train pour Paris.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "seed": 42,
+      "transcript": "Demain, nous prendrons le train pour Paris.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "alba",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "seed": 123,
+      "transcript": "Demain, nous prendrons le train pour parler.",
+      "wordErrors": 1,
+      "referenceWords": 7,
+      "wer": 0.14285714285714285
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "seed": 0,
+      "transcript": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "seed": 42,
+      "transcript": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "seed": 123,
+      "transcript": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "seed": 0,
+      "transcript": "je garde ma voix et mes fichiers sur mon téléphone.",
+      "wordErrors": 0,
+      "referenceWords": 10,
+      "wer": 0.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "seed": 42,
+      "transcript": "je garde ma voix et mes fichiers sur mon téléphone.",
+      "wordErrors": 0,
+      "referenceWords": 10,
+      "wer": 0.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "seed": 123,
+      "transcript": "Je garde ma voix et mes fichiers sur mon téléphone.",
+      "wordErrors": 0,
+      "referenceWords": 10,
+      "wer": 0.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "seed": 0,
+      "transcript": "Le main nous prendra le temps pour Paris.",
+      "wordErrors": 4,
+      "referenceWords": 7,
+      "wer": 0.5714285714285714
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "seed": 42,
+      "transcript": "le panneau de Trampe-au-Barrie.",
+      "wordErrors": 7,
+      "referenceWords": 7,
+      "wer": 1.0
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "seed": 123,
+      "transcript": "Demain, nous prendrons le train pour Paris.",
+      "wordErrors": 0,
+      "referenceWords": 7,
+      "wer": 0.0
+    }
+  ],
+  "asrProvenance": {
+    "repository": "Systran/faster-whisper-small",
+    "revision": "536b0662742c02347bc0e980a01041f333bce120",
+    "files": [
+      {
+        "file": "model.bin",
+        "sha256": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671",
+        "bytes": 483546902
+      },
+      {
+        "file": "config.json",
+        "sha256": "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828",
+        "bytes": 2370
+      },
+      {
+        "file": "tokenizer.json",
+        "sha256": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab",
+        "bytes": 2203239
+      },
+      {
+        "file": "vocabulary.txt",
+        "sha256": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913",
+        "bytes": 459861
+      }
+    ]
+  },
+  "aggregateWer": 0.09027777777777778
+}

@@ -1,0 +1,1017 @@
+{
+  "experimental": true,
+  "strictTolerances": {
+    "atol": 0.0002,
+    "rtol": 0.0002
+  },
+  "references": [
+    {
+      "id": "alba",
+      "repository": "kyutai/tts-voices",
+      "revision": "323332d33f997de8394f24a193e1a76df720e01a",
+      "file": "alba-mackenna/casual.wav",
+      "license": "CC-BY-4.0",
+      "sha256": "46264e83cb99115c3d210260e029117566d9c64f20266d10daa78107759ede3e",
+      "bytes": 958542
+    },
+    {
+      "id": "selfie",
+      "repository": "kyutai/tts-voices",
+      "revision": "323332d33f997de8394f24a193e1a76df720e01a",
+      "file": "voice-donations/Selfie.wav",
+      "license": "CC0",
+      "sha256": "076968c3122520f3412eb7090e8c1c3f75fe57be1e24a2f96465583d84c71e16",
+      "bytes": 480044
+    }
+  ],
+  "seeds": [
+    0,
+    42,
+    123
+  ],
+  "cases": [
+    {
+      "reference": "alba",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "phraseIndex": 0,
+      "seed": 0,
+      "audioFile": "alba_p0_s0_synthetic.wav",
+      "eosPyTorch": 27,
+      "eosOnnx": 27,
+      "framesPyTorch": 30,
+      "framesOnnx": 30,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 57600,
+        "seconds": 2.4,
+        "peak": 0.630289614200592,
+        "rms": 0.11115606874227524,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 115.94202898550725
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0017347335815429688,
+        "relativeL2": 0.0007049651467241347,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0011591911315917969,
+        "relativeL2": 9.759395470609888e-05,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 2.492837227000564,
+        "onnxRtf": 1.0386821779169018,
+        "comparisonWallSeconds": 3.463598225000169,
+        "comparisonCpuSeconds": 3.463385645999999
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "phraseIndex": 0,
+      "seed": 42,
+      "audioFile": "alba_p0_s42_synthetic.wav",
+      "eosPyTorch": 32,
+      "eosOnnx": 32,
+      "framesPyTorch": 35,
+      "framesOnnx": 35,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 67200,
+        "seconds": 2.8,
+        "peak": 0.633114755153656,
+        "rms": 0.12851956486701965,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 173.287456990929
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0009142756462097168,
+        "relativeL2": 0.000258374260738492,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0009859800338745117,
+        "relativeL2": 4.1112278267974034e-05,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 2.2864446560015494,
+        "onnxRtf": 0.8165873771434106,
+        "comparisonWallSeconds": 3.2819964770023944,
+        "comparisonCpuSeconds": 3.2813572530000013
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "phraseIndex": 0,
+      "seed": 123,
+      "audioFile": "alba_p0_s123_synthetic.wav",
+      "eosPyTorch": 31,
+      "eosOnnx": 31,
+      "framesPyTorch": 34,
+      "framesOnnx": 34,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 65280,
+        "seconds": 2.72,
+        "peak": 0.7619226574897766,
+        "rms": 0.1348116397857666,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 150.9493670886076
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.011412739753723145,
+        "relativeL2": 0.005124179180711508,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.005841374397277832,
+        "relativeL2": 0.0006176785100251436,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 2.218559141001606,
+        "onnxRtf": 0.8156467430152963,
+        "comparisonWallSeconds": 3.14639519100092,
+        "comparisonCpuSeconds": 3.145897217
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Je garde ma voix et mes fichiers sur mon t\u00e9l\u00e9phone.",
+      "phraseIndex": 1,
+      "seed": 0,
+      "audioFile": "alba_p1_s0_synthetic.wav",
+      "eosPyTorch": 28,
+      "eosOnnx": 28,
+      "framesPyTorch": 31,
+      "framesOnnx": 31,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 59520,
+        "seconds": 2.48,
+        "peak": 0.5729952454566956,
+        "rms": 0.12199101597070694,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 117.6470588235294
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.01932665705680847,
+        "relativeL2": 0.009656454436480999,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.011658966541290283,
+        "relativeL2": 0.0010117375059053302,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 2.072381358997518,
+        "onnxRtf": 0.8356376447570637,
+        "comparisonWallSeconds": 2.9130147050018422,
+        "comparisonCpuSeconds": 2.912554478999999
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Je garde ma voix et mes fichiers sur mon t\u00e9l\u00e9phone.",
+      "phraseIndex": 1,
+      "seed": 42,
+      "audioFile": "alba_p1_s42_synthetic.wav",
+      "eosPyTorch": 25,
+      "eosOnnx": 25,
+      "framesPyTorch": 28,
+      "framesOnnx": 28,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 53760,
+        "seconds": 2.24,
+        "peak": 0.6888555884361267,
+        "rms": 0.1320781111717224,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 158.94039735099338
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.00011718273162841797,
+        "relativeL2": 5.914536086493172e-05,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 4.214048385620117e-05,
+        "relativeL2": 3.901380750903627e-06,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 1.8845066219982982,
+        "onnxRtf": 0.841297599106383,
+        "comparisonWallSeconds": 2.6124642830000084,
+        "comparisonCpuSeconds": 2.612034313999999
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Je garde ma voix et mes fichiers sur mon t\u00e9l\u00e9phone.",
+      "phraseIndex": 1,
+      "seed": 123,
+      "audioFile": "alba_p1_s123_synthetic.wav",
+      "eosPyTorch": 28,
+      "eosOnnx": 28,
+      "framesPyTorch": 31,
+      "framesOnnx": 31,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 59520,
+        "seconds": 2.48,
+        "peak": 0.7098162770271301,
+        "rms": 0.14645008742809296,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 134.45483648233005
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0009430516511201859,
+        "relativeL2": 0.00031891721300780773,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0008291006088256836,
+        "relativeL2": 4.356920180725865e-05,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 2.0626379850000376,
+        "onnxRtf": 0.83170886491937,
+        "comparisonWallSeconds": 2.8883639800005767,
+        "comparisonCpuSeconds": 2.8879488160000015
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "phraseIndex": 2,
+      "seed": 0,
+      "audioFile": "alba_p2_s0_synthetic.wav",
+      "eosPyTorch": 23,
+      "eosOnnx": 23,
+      "framesPyTorch": 26,
+      "framesOnnx": 26,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 49920,
+        "seconds": 2.08,
+        "peak": 0.6483004093170166,
+        "rms": 0.13389627635478973,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 143.7125748502994
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0013737976551055908,
+        "relativeL2": 0.0009109867969527841,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0019865036010742188,
+        "relativeL2": 0.000219277324504219,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 1.7798676420025004,
+        "onnxRtf": 0.8557055971165867,
+        "comparisonWallSeconds": 2.5089439220028,
+        "comparisonCpuSeconds": 2.5079062599999986
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "phraseIndex": 2,
+      "seed": 42,
+      "audioFile": "alba_p2_s42_synthetic.wav",
+      "eosPyTorch": 23,
+      "eosOnnx": 23,
+      "framesPyTorch": 26,
+      "framesOnnx": 26,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 49920,
+        "seconds": 2.08,
+        "peak": 0.5732943415641785,
+        "rms": 0.13763028383255005,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 166.66666666666666
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0023047029972076416,
+        "relativeL2": 0.0006283907569013536,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0006224513053894043,
+        "relativeL2": 4.221839481033385e-05,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 1.7492168099997798,
+        "onnxRtf": 0.8409696201922018,
+        "comparisonWallSeconds": 2.414581424000062,
+        "comparisonCpuSeconds": 2.4142419140000015
+      }
+    },
+    {
+      "reference": "alba",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "phraseIndex": 2,
+      "seed": 123,
+      "audioFile": "alba_p2_s123_synthetic.wav",
+      "eosPyTorch": 24,
+      "eosOnnx": 24,
+      "framesPyTorch": 27,
+      "framesOnnx": 27,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 51840,
+        "seconds": 2.16,
+        "peak": 0.6097092032432556,
+        "rms": 0.13447986543178558,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 184.626309249068
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0020575225353240967,
+        "relativeL2": 0.0010158518562093377,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0018763542175292969,
+        "relativeL2": 0.00012533245899248868,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 1.8546391269992455,
+        "onnxRtf": 0.8586292254626136,
+        "comparisonWallSeconds": 2.5541767640024773,
+        "comparisonCpuSeconds": 2.553742715000002
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "phraseIndex": 0,
+      "seed": 0,
+      "audioFile": "selfie_p0_s0_synthetic.wav",
+      "eosPyTorch": 28,
+      "eosOnnx": 28,
+      "framesPyTorch": 31,
+      "framesOnnx": 31,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 59520,
+        "seconds": 2.48,
+        "peak": 0.3877353072166443,
+        "rms": 0.0423218309879303,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 138.72832369942196
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.00011212378740310669,
+        "relativeL2": 0.00013241899432614446,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.00010651350021362305,
+        "relativeL2": 1.844986945798155e-05,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 2.0365714079998725,
+        "onnxRtf": 0.8211981483870453,
+        "comparisonWallSeconds": 2.856534955000825,
+        "comparisonCpuSeconds": 2.8550056310000045
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "phraseIndex": 0,
+      "seed": 42,
+      "audioFile": "selfie_p0_s42_synthetic.wav",
+      "eosPyTorch": 26,
+      "eosOnnx": 26,
+      "framesPyTorch": 29,
+      "framesOnnx": 29,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 55680,
+        "seconds": 2.32,
+        "peak": 0.18054218590259552,
+        "rms": 0.02130179852247238,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 289.1566265060241
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0001093447208404541,
+        "relativeL2": 0.0003121986810583621,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.00022077560424804688,
+        "relativeL2": 3.015281617990695e-05,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 1.927419794999878,
+        "onnxRtf": 0.8307843943964992,
+        "comparisonWallSeconds": 2.7156262470016372,
+        "comparisonCpuSeconds": 2.7146319119999944
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Bonjour, cette nouvelle phrase fonctionne hors ligne.",
+      "phraseIndex": 0,
+      "seed": 123,
+      "audioFile": "selfie_p0_s123_synthetic.wav",
+      "eosPyTorch": 28,
+      "eosOnnx": 28,
+      "framesPyTorch": 31,
+      "framesOnnx": 31,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 59520,
+        "seconds": 2.48,
+        "peak": 0.3207605183124542,
+        "rms": 0.02864697389304638,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 153.84615384615384
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 7.160007953643799e-06,
+        "relativeL2": 1.270810935238842e-05,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 5.245208740234375e-06,
+        "relativeL2": 1.3082039913570043e-06,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 2.038630856000964,
+        "onnxRtf": 0.8220285709681305,
+        "comparisonWallSeconds": 2.8006913770004758,
+        "comparisonCpuSeconds": 2.7997674109999977
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Je garde ma voix et mes fichiers sur mon t\u00e9l\u00e9phone.",
+      "phraseIndex": 1,
+      "seed": 0,
+      "audioFile": "selfie_p1_s0_synthetic.wav",
+      "eosPyTorch": 25,
+      "eosOnnx": 25,
+      "framesPyTorch": 28,
+      "framesOnnx": 28,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 53760,
+        "seconds": 2.24,
+        "peak": 0.2392599880695343,
+        "rms": 0.026747198775410652,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 294.48961156278233
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 8.266419172286987e-05,
+        "relativeL2": 0.0001348257646895945,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 6.151199340820312e-05,
+        "relativeL2": 1.0903224392677657e-05,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 1.8637517249990196,
+        "onnxRtf": 0.832032020088848,
+        "comparisonWallSeconds": 2.590022140000656,
+        "comparisonCpuSeconds": 2.5886829250000005
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Je garde ma voix et mes fichiers sur mon t\u00e9l\u00e9phone.",
+      "phraseIndex": 1,
+      "seed": 42,
+      "audioFile": "selfie_p1_s42_synthetic.wav",
+      "eosPyTorch": 25,
+      "eosOnnx": 25,
+      "framesPyTorch": 28,
+      "framesOnnx": 28,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 53760,
+        "seconds": 2.24,
+        "peak": 0.36095744371414185,
+        "rms": 0.04251117631793022,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 129.03225806451613
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 2.4121254682540894e-05,
+        "relativeL2": 4.141411045566201e-05,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 3.0040740966796875e-05,
+        "relativeL2": 5.154928658157587e-06,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 1.8797582570005034,
+        "onnxRtf": 0.839177793303796,
+        "comparisonWallSeconds": 2.6180159030009236,
+        "comparisonCpuSeconds": 2.6171130379999994
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Je garde ma voix et mes fichiers sur mon t\u00e9l\u00e9phone.",
+      "phraseIndex": 1,
+      "seed": 123,
+      "audioFile": "selfie_p1_s123_synthetic.wav",
+      "eosPyTorch": 27,
+      "eosOnnx": 27,
+      "framesPyTorch": 30,
+      "framesOnnx": 30,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 57600,
+        "seconds": 2.4,
+        "peak": 0.32966551184654236,
+        "rms": 0.03664932772517204,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 250.0
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0003671199083328247,
+        "relativeL2": 0.0007636111113242805,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0011973381042480469,
+        "relativeL2": 0.00020645189215429127,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 1.9868312809994677,
+        "onnxRtf": 0.8278463670831115,
+        "comparisonWallSeconds": 2.7438347009992867,
+        "comparisonCpuSeconds": 2.7428020100000055
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "phraseIndex": 2,
+      "seed": 0,
+      "audioFile": "selfie_p2_s0_synthetic.wav",
+      "eosPyTorch": 20,
+      "eosOnnx": 20,
+      "framesPyTorch": 23,
+      "framesOnnx": 23,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 44160,
+        "seconds": 1.84,
+        "peak": 0.17015959322452545,
+        "rms": 0.02398476004600525,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 141.19601328903656
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.024587858468294144,
+        "relativeL2": 0.05688057094812393,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.14071452617645264,
+        "relativeL2": 0.023559730499982834,
+        "strictParity": false
+      },
+      "timing": {
+        "onnxWallSeconds": 1.54115286799788,
+        "onnxRtf": 0.8375830804336305,
+        "comparisonWallSeconds": 2.125188848000107,
+        "comparisonCpuSeconds": 2.1244880839999993
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "phraseIndex": 2,
+      "seed": 42,
+      "audioFile": "selfie_p2_s42_synthetic.wav",
+      "eosPyTorch": 15,
+      "eosOnnx": 15,
+      "framesPyTorch": 18,
+      "framesOnnx": 18,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 34560,
+        "seconds": 1.44,
+        "peak": 0.08071691542863846,
+        "rms": 0.009089261293411255,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 311.7408906882591
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 1.1995434761047363e-06,
+        "relativeL2": 1.2897643500764389e-05,
+        "strictParity": true
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 2.300739288330078e-05,
+        "relativeL2": 4.4210046326043084e-06,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 1.2796206229977543,
+        "onnxRtf": 0.8886254326373294,
+        "comparisonWallSeconds": 1.7450459799983946,
+        "comparisonCpuSeconds": 1.7444433340000032
+      }
+    },
+    {
+      "reference": "selfie",
+      "phrase": "Demain, nous prendrons le train pour Paris.",
+      "phraseIndex": 2,
+      "seed": 123,
+      "audioFile": "selfie_p2_s123_synthetic.wav",
+      "eosPyTorch": 23,
+      "eosOnnx": 23,
+      "framesPyTorch": 26,
+      "framesOnnx": 26,
+      "functional": {
+        "finite": true,
+        "nonSilent": true,
+        "eosReached": true
+      },
+      "acoustic": {
+        "finite": true,
+        "samples": 49920,
+        "seconds": 2.08,
+        "peak": 0.2724461853504181,
+        "rms": 0.028794387355446815,
+        "clippedFraction": 0.0,
+        "pitchProxyHz": 254.03225806451613
+      },
+      "strictAudio": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.0003123488277196884,
+        "relativeL2": 0.0004847333184443414,
+        "strictParity": false
+      },
+      "strictLatents": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 0.00032711029052734375,
+        "relativeL2": 5.538583354791626e-05,
+        "strictParity": true
+      },
+      "timing": {
+        "onnxWallSeconds": 1.8174818580009742,
+        "onnxRtf": 0.8737893548081607,
+        "comparisonWallSeconds": 2.527796679001767,
+        "comparisonCpuSeconds": 2.5268769869999943
+      }
+    }
+  ],
+  "personalRecordingUsed": false,
+  "perceptualValidation": false,
+  "deviceValidation": false,
+  "energyMeasuredOnCloud": false,
+  "referenceEffects": [
+    {
+      "phraseIndex": 0,
+      "seed": 0,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          30,
+          32
+        ],
+        "actual": [
+          1,
+          31,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 0,
+      "seed": 42,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          35,
+          32
+        ],
+        "actual": [
+          1,
+          29,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 0,
+      "seed": 123,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          34,
+          32
+        ],
+        "actual": [
+          1,
+          31,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 1,
+      "seed": 0,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          31,
+          32
+        ],
+        "actual": [
+          1,
+          28,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 1,
+      "seed": 42,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": true,
+        "finiteMaskMatch": true,
+        "maxAbs": 5.464487552642822,
+        "relativeL2": 1.219509482383728,
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 1,
+      "seed": 123,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          31,
+          32
+        ],
+        "actual": [
+          1,
+          30,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 2,
+      "seed": 0,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          26,
+          32
+        ],
+        "actual": [
+          1,
+          23,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 2,
+      "seed": 42,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          26,
+          32
+        ],
+        "actual": [
+          1,
+          18,
+          32
+        ],
+        "strictParity": false
+      }
+    },
+    {
+      "phraseIndex": 2,
+      "seed": 123,
+      "differentLatents": true,
+      "comparison": {
+        "shapeMatch": false,
+        "expected": [
+          1,
+          27,
+          32
+        ],
+        "actual": [
+          1,
+          26,
+          32
+        ],
+        "strictParity": false
+      }
+    }
+  ],
+  "functionalCasesPassed": 18,
+  "strictAudioCasesPassed": 7,
+  "linuxPeakRssMiB": 2861.43359375
+}
