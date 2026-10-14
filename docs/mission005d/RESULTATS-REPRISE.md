@@ -124,10 +124,35 @@ La propriété MP3 personnelle et les exclusions de sauvegarde restent sur tél�
   et du refus de checkpoints invalides, sans poids gated ni réseau.
 - APK ARM64 et APK AndroidTest compilées ; lint réussi.
 - Signature APK, permissions, alignements ZIP/ELF 16 Ko vérifiés ; aucune permission INTERNET.
-- Aucun émulateur ni téléphone attaché : les tests instrumentés ne sont pas exécutés
-  dans cette reprise. La validation Xiaomi du MP3 est celle rapportée par l'utilisateur.
+- Aucun émulateur ni téléphone attaché au cloud privé : ces mesures locales ne
+  comprennent pas de tests instrumentés. La validation Xiaomi du MP3 est celle
+  rapportée par l'utilisateur. La CI publique a ensuite exécuté les tests ci-dessous.
 
 Preuves : `TESTS-REPRISE.json`, `APK-REPRISE-VERIFICATION.json`.
+
+### CI publique et artefacts disponibles
+
+Code testé : commit `065476b524eadc2cb391f5cefb1d2b3cd7f60795`.
+[Workflow Pocket Probe](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375) :
+build/inférence/lint/vérification APK réussis ; 26 tests Pocket passent et le test
+gated réel est volontairement ignoré en CI (27/27 réussi dans le cloud privé).
+Le workflow Android stable réussit également.
+
+Émulateur Android 15 x86_64 : **5 tests exécutés, 4 réussis, 1 échoué**.
+L'échec est celui déjà observé avant cette reprise :
+`testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns`,
+`AudioTrack [count=1 frames=72000 submitted=72000] expected:<0> but was:<1>`.
+Le compteur brut indique un événement à la fin du contenu ; il reste conservé,
+sans affaiblissement de l'assertion. Les quatre tests MP3 passent. Le workflow
+global reste donc en échec malgré la réussite du build. Aucun nouveau test Xiaomi.
+
+- [APK diagnostique et APK AndroidTest](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11922721599)
+- [Pack Alba compatible](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11922646933)
+- [Rapports JVM/lint](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11922661721)
+- [Rapports Android, dont l'échec conservé](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11921729310)
+
+Rétention jusqu'au 28 octobre 2026. Preuves : `CI-REPRISE.json` et
+`APK-CI-REPRISE-VERIFICATION.json`. Aucun poids gated ni enregistrement n'est inclus.
 
 **Conserver l'APK Xiaomi déjà validée.** L'APK compilée localement dans cette
 reprise est diagnostique, garde la création/sélection de profil désactivée, et

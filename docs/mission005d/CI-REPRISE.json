@@ -1,0 +1,65 @@
+{
+  "codeCommit": "065476b524eadc2cb391f5cefb1d2b3cd7f60795",
+  "workflowRun": 38622463375,
+  "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375",
+  "stableAndroidWorkflow": {
+    "runId": 38622463326,
+    "conclusion": "success"
+  },
+  "buildAndInference": "success",
+  "syntheticAndroidCodec": {
+    "conclusion": "failure",
+    "tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "platform": "Android 15 x86_64 emulator",
+    "test": "testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns",
+    "assertion": "AudioTrack [count=1 frames=72000 submitted=72000] expected:<0> but was:<1>",
+    "mp3RegressionObserved": false,
+    "assertionWeakened": false
+  },
+  "publicPocketJvm": {
+    "tests": 27,
+    "passed": 26,
+    "skipped": 1,
+    "skippedReason": "Gated candidate+golden fixture tested in private cloud only",
+    "failures": 0
+  },
+  "localPocketJvm": {
+    "tests": 27,
+    "passed": 27,
+    "skipped": 0
+  },
+  "physicalDeviceExecuted": false,
+  "cloningEnabled": false,
+  "artifacts": [
+    {
+      "id": 11922721599,
+      "name": "jarvis-pocket-probe-apk",
+      "digest": "sha256:47c4cc26b11aa142291cfbb671e29781db19d9c9b34f8117666bab73dc913a3e",
+      "expiresAt": "2026-10-28T19:20:37Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11922721599"
+    },
+    {
+      "id": 11922661721,
+      "name": "pocket-probe-test-reports",
+      "digest": "sha256:9c4e8ca5daf4e0ed7b2a0a32feeed8275a64296c9e24437c482cc361b116c4f8",
+      "expiresAt": "2026-10-28T19:20:40Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11922661721"
+    },
+    {
+      "id": 11922646933,
+      "name": "pocket-fr-6l-alba-model",
+      "digest": "sha256:6b59f98c4fbc5825474cebeaa5ff1ab416129c968e79a6009cfebd309db753e9",
+      "expiresAt": "2026-10-28T19:20:38Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11922646933"
+    },
+    {
+      "id": 11921729310,
+      "name": "mission005d-android-codec-tests",
+      "digest": "sha256:146774d4dc4e580b4a81ac6416f1a81c28e30cbab407ff203de3733ecb0c1183",
+      "expiresAt": "2026-10-28T19:20:52Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38622463375/artifacts/11921729310"
+    }
+  ]
+}
