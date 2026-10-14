@@ -6,45 +6,63 @@ import android.media.AudioTrack
 import com.jarvis.voice.pocket.CancellationToken
 import java.util.concurrent.atomic.AtomicReference
 
-/** Worker owns release; UI stops playback immediately without waiting for an ONNX call. */
+/** Playback thread owns writes and release; UI may pause/flush immediately. */
 class PcmPlayer(private val token: CancellationToken) : AutoCloseable {
     private val active = AtomicReference<AudioTrack?>()
     private var submitted = 0L
-    var launchNs: Long = 0
-        private set
+    private var playing = false
+    var launchNs = 0L; private set
+    var firstFrameNs = 0L; private set
+    var zeroWrites = 0; private set
+    var maxWriteGapMs = 0.0; private set
+    private var lastWriteNs = 0L
+    val underruns get() = active.get()?.underrunCount ?: 0
+    val bufferFrames get() = active.get()?.bufferSizeInFrames ?: 0
     fun write(pcm: FloatArray) {
         token.check()
-        val safe = FloatArray(pcm.size) { pcm[it].coerceIn(-1f, 1f) }
         val track = active.get() ?: AudioTrack.Builder()
             .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
             .setAudioFormat(AudioFormat.Builder().setSampleRate(24000).setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
                 .setEncoding(AudioFormat.ENCODING_PCM_FLOAT).build())
-            .setBufferSizeInBytes(maxOf(24000, AudioTrack.getMinBufferSize(24000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT)))
+            .setBufferSizeInBytes(maxOf(192000, AudioTrack.getMinBufferSize(24000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT)))
             .setTransferMode(AudioTrack.MODE_STREAM).build().also {
                 check(it.state == AudioTrack.STATE_INITIALIZED) { "AudioTrack indisponible" }
-                active.set(it)
-                token.check()
-                it.play(); launchNs = System.nanoTime()
+                active.set(it); token.check()
             }
+        // PCM is already owned by the queue; clamp in place rather than allocate a second block.
+        for (i in pcm.indices) pcm[i] = pcm[i].coerceIn(-1f, 1f)
         var offset = 0
         while (offset < pcm.size) {
             token.check()
-            val n = track.write(safe, offset, safe.size - offset, AudioTrack.WRITE_NON_BLOCKING)
+            val n = track.write(pcm, offset, pcm.size - offset, AudioTrack.WRITE_NON_BLOCKING)
             check(n >= 0) { "Échec AudioTrack : $n" }
             offset += n; submitted += n
-            if (n == 0) Thread.sleep(5)
+            val now = System.nanoTime()
+            if (n > 0) {
+                if (lastWriteNs != 0L) maxWriteGapMs = maxOf(maxWriteGapMs, (now - lastWriteNs) / 1e6)
+                lastWriteNs = now
+            }
+            // Preload one second before starting; for shorter phrases drain() starts after all data is queued.
+            if (!playing && submitted - Integer.toUnsignedLong(track.playbackHeadPosition) >= 24000) start(track)
+            observe(track)
+            if (n == 0) { zeroWrites++; Thread.sleep(3) }
         }
     }
+    @Synchronized private fun start(track: AudioTrack) { token.check(); track.play(); playing = true; if (launchNs == 0L) launchNs = System.nanoTime() }
+    private fun observe(track: AudioTrack) { if (firstFrameNs == 0L && track.playbackHeadPosition != 0) firstFrameNs = System.nanoTime() }
+    @Synchronized fun rebuffer() { active.get()?.pause(); playing = false }
     fun drain() {
         val track = active.get() ?: return
+        if (!playing) start(track)
         val deadline = System.nanoTime() + 25_000_000_000L
         while (Integer.toUnsignedLong(track.playbackHeadPosition) < submitted) {
-            token.check()
+            token.check(); observe(track)
             check(System.nanoTime() < deadline) { "Délai de lecture audio dépassé" }
-            Thread.sleep(10)
+            Thread.sleep(5)
         }
+        observe(track)
     }
-    fun stop() { active.get()?.let { runCatching { it.pause(); it.flush() } } }
+    @Synchronized fun stop() { active.get()?.let { runCatching { it.pause(); it.flush() } } }
     override fun close() { active.getAndSet(null)?.let { runCatching { it.stop() }; it.release() } }
 }

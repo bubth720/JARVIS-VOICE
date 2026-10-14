@@ -32,6 +32,7 @@ class MainActivity : Activity() {
     private lateinit var stop: Button
     private lateinit var import: Button
     private lateinit var economy: Switch
+    private lateinit var streaming: Switch
     private lateinit var engines: RadioGroup
     private lateinit var androidChoice: RadioButton
     private lateinit var fallback: AndroidFallback
@@ -56,6 +57,8 @@ class MainActivity : Activity() {
         engines.check(pocket.id)
         fallbackInfo = label("Initialisation du secours Android…")
         economy = Switch(this).apply { setText("Mode économique : 1 thread (sinon 2)"); isChecked = true; layout.addView(this) }
+        streaming = Switch(this).apply { setText("Lecture progressive adaptative (expérimentale)"); isChecked = false; layout.addView(this) }
+        label("Par défaut : phrase entièrement générée, puis lecture fluide. Aucun remplacement automatique.")
         text = EditText(this).apply {
             hint = "Saisir une courte phrase française"
             setText("Bonjour, je suis JARVIS. Cette voix fonctionne sur ce téléphone.")
@@ -97,6 +100,7 @@ class MainActivity : Activity() {
         val android = engines.checkedRadioButtonId == androidChoice.id
         read.isEnabled = !busy && !androidSpeaking && if (android) fallback.ready else supported && pack.isDirectory
         import.isEnabled = !busy && !androidSpeaking && supported
+        streaming.isEnabled = !busy && !androidSpeaking
         economy.isEnabled = !busy && !androidSpeaking && !android
         for (i in 0 until engines.childCount) engines.getChildAt(i).isEnabled = !busy && !androidSpeaking &&
             (engines.getChildAt(i) != androidChoice || fallback.ready)
@@ -113,6 +117,7 @@ class MainActivity : Activity() {
             refresh(); return
         }
         if (DeviceMetrics.isThermallySevere(this)) { status.text = "Téléphone trop chaud : attendre ou choisir Android TTS."; return }
+        val adaptive = streaming.isChecked
         val threads = if (economy.isChecked) 1 else 2
         val current = CancellationToken()
         token = current; stopNs = 0; busy = true
@@ -120,9 +125,12 @@ class MainActivity : Activity() {
         status.text = "Pocket TTS : vérification et chargement, puis génération…"
         refresh()
         worker.execute {
-            val memory = MemorySampler()
+            val memory = MemorySampler(this)
             val audio = PcmPlayer(current)
             player.set(audio)
+            val delivery = PcmDelivery(current::isCancelled, adaptive, { pcm ->
+                post { status.text = "Pocket TTS : lecture audio…" }; audio.write(pcm)
+            }, audio::rebuffer)
             var firstMs = 0.0
             var thermalPause = false
             try {
@@ -131,19 +139,27 @@ class MainActivity : Activity() {
                 if (cold) { engine?.close(); engine = null; engine = PocketEngine(pack, threads) }
                 current.check()
                 val active = requireNotNull(engine)
-                val metrics = active.generate(raw, current) { pcm ->
+                val metrics = active.generate(raw, current, wholeSentence = !adaptive) { pcm ->
                     if (DeviceMetrics.isThermallySevere(this)) { thermalPause = true; current.cancel(); current.check() }
                     if (firstMs == 0.0) firstMs = (System.nanoTime() - pressed) / 1e6
-                    audio.write(pcm)
+                    delivery.offer(pcm)
                 }
-                post { status.text = "Pocket TTS : fin de lecture audio…" }
-                audio.drain()
+                delivery.finish()
+                post { status.text = "Génération terminée ; restitution audio…" }
+                delivery.await(); audio.drain()
                 val output = String.format(Locale.FRENCH,
                     "Moteur : Pocket TTS français, voix prédéfinie Alba\nCPU : %d thread(s)\nChargement : %s\nPremier PCM depuis Lecture : %.0f ms\nPremier PCM après chargement : %.0f ms\nLancement AudioTrack depuis Lecture : %.0f ms\nGénération hors attente de lecture : %.0f ms\nAudio : %.2f s ; RTF : %.3f ; vitesse : %.2f×\nPSS maximal observé (250 ms) : %.1f Mio\nFin de phrase détectée : oui\n\n%s",
                     threads, if (cold) "%.0f ms".format(Locale.FRENCH, active.modelLoadMs) else "modèle réutilisé",
                     firstMs, metrics.firstPcmMs, (audio.launchNs - pressed) / 1e6,
                     metrics.computeMs, metrics.audioSeconds, metrics.rtf, metrics.speed, memory.peakPssMiB, DeviceMetrics.summary(this))
-                post { status.text = "Lecture Pocket terminée."; diagnostics.text = output }
+                val detail = "\nMode : ${if (adaptive) "progressif adaptatif" else "différé complet"}" +
+                    "\nONNX main/flow/décodeur : %.0f / %.0f / %.0f ms".format(Locale.FRENCH, metrics.onnxMainMs, metrics.onnxFlowMs, metrics.onnxDecoderMs) +
+                    "\nAppel ONNX maximal : %.0f ms ; intervalle PCM maximal : %.0f ms".format(Locale.FRENCH, metrics.maxOnnxMs, metrics.maxPcmGapMs) +
+                    "\nSous-alimentations AudioTrack : ${audio.underruns} ; attentes de recharge : ${delivery.rebufferCount}" +
+                    "\nBuffer matériel : ${audio.bufferFrames} échantillons ; file PCM max : ${delivery.peakSamples}" +
+                    "\nPremier avancement matériel depuis Lecture : %.0f ms (estimation, pas mesure acoustique)".format(Locale.FRENCH, (audio.firstFrameNs - pressed) / 1e6) +
+                    "\nÉtat thermique max/final : ${memory.peakThermal}/${DeviceMetrics.thermal(this)} (0 normal, 1 léger, 2 modéré, ≥3 arrêt)"
+                post { status.text = "Lecture Pocket terminée."; diagnostics.text = output + detail }
             } catch (t: Throwable) {
                 val computeStoppedNs = System.nanoTime()
                 post {
@@ -153,7 +169,7 @@ class MainActivity : Activity() {
                     } else status.text = "Échec Pocket TTS : ${t.javaClass.simpleName} — ${t.message.orEmpty().take(350)}\nAucun remplacement automatique. Vous pouvez choisir le secours Android."
                 }
             } finally {
-                audio.close(); player.compareAndSet(audio, null); memory.close()
+                delivery.close(); audio.close(); player.compareAndSet(audio, null); memory.close()
                 post { busy = false; token = null; refresh() }
             }
         }
