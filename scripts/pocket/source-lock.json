@@ -1,0 +1,50 @@
+{
+  "repository": "Alias-Alias/pocket-3-3-0-tts-onnx",
+  "revision": "71a4d6d11a76e26b98709fa163477c77d16bdbdb",
+  "upstreamCommit": "3dbee45d343d7dddd0d105468d17f8dcba14db3e",
+  "language": "fr",
+  "layers": 6,
+  "encoderIncluded": false,
+  "files": {
+    "bundle.json": {
+      "sizeBytes": 13638,
+      "sha256": "0894c2fc533b0a94d1f120fa9f959f4125ccff2443ac5362925989a5fcdd7fae"
+    },
+    "tokenizer.json": {
+      "sizeBytes": 246403,
+      "sha256": "6211acffe9cb95172f71f0051f18e26ea305b2b32ea00b331ee976551c70887f"
+    },
+    "voices.bin": {
+      "sizeBytes": 52404520,
+      "sha256": "a43532290caa733c6670bc52427f0ed9f709c43867049f3e511f85568fcf9c5c"
+    },
+    "text_conditioner_int8.onnx": {
+      "sizeBytes": 16388338,
+      "sha256": "6127b51df140da0123123aa929a9453fc9a63a7cfebdc33f8a1f3fb46c5f2139"
+    },
+    "flow_lm_main_int8.onnx": {
+      "sizeBytes": 76397201,
+      "sha256": "1c6611cc3d524843e990e3abfdc15ce84f16f7a9250b5970b0255df4759fe70b"
+    },
+    "flow_lm_flow_int8.onnx": {
+      "sizeBytes": 10040048,
+      "sha256": "8c72996bdcae9ea4a981b6afc0a40986523525aaa5491c09ef9546c14becd272"
+    },
+    "mimi_decoder_int8.onnx": {
+      "sizeBytes": 22638621,
+      "sha256": "d7b00abae02b2916f0be6d42bfbe14e87e0b4f1aaa25b1d5778a1f128edb6bb6"
+    },
+    "frontend-fixtures.json": {
+      "sizeBytes": 6063,
+      "sha256": "a75d39a1598e3fed4618e9f0de8743b6ed372f79a98379bbada8a661ec3229bc"
+    },
+    "validation.json": {
+      "sizeBytes": 9815,
+      "sha256": "b1cf9dfa1f2656bfc94aa7e0bc3a92d0cd7ec8b6e624792850037c4765d2c2f9"
+    },
+    "LICENSE-upstream.txt": {
+      "sizeBytes": 1023,
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "text": {
+    "maxAbs": 0.0,
+    "relativeL2": 0.0
+  },
+  "main_conditioning": {
+    "maxAbs": 0.10659310221672058,
+    "relativeL2": 0.08209721744060516
+  },
+  "main_eos": {
+    "maxAbs": 0.08349609375,
+    "relativeL2": 0.010246356017887592
+  },
+  "flow": {
+    "maxAbs": 0.03576040267944336,
+    "relativeL2": 0.01692998595535755
+  },
+  "decoder": {
+    "maxAbs": 0.009517628699541092,
+    "relativeL2": 0.08137639611959457
+  },
+  "officialVoiceCloningAvailable": false
+}

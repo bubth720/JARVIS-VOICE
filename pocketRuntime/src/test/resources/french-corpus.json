@@ -1,0 +1,338 @@
+[
+  {
+    "raw": "Bonjour, je suis JARVIS.",
+    "prepared": "Bonjour, je suis JARVIS.",
+    "tokens": [
+      1450,
+      3527,
+      261,
+      302,
+      494,
+      428,
+      879,
+      2389,
+      3260,
+      1107,
+      2445,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Oui.",
+    "prepared": "Oui.",
+    "tokens": [
+      778,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Non.",
+    "prepared": "Non.",
+    "tokens": [
+      911,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Arrêt.",
+    "prepared": "Arrêt.",
+    "tokens": [
+      260,
+      910,
+      314,
+      1694,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "L’été arrive à Saint-Étienne.",
+    "prepared": "L'été arrive à Saint-Étienne.",
+    "tokens": [
+      362,
+      262,
+      2025,
+      637,
+      266,
+      271,
+      812,
+      277,
+      2220,
+      1762,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Il est 21 h 18, le 13 octobre 2026.",
+    "prepared": "Il est 21 h 18, le 13 octobre 2026.",
+    "tokens": [
+      321,
+      333,
+      260,
+      54,
+      53,
+      742,
+      260,
+      53,
+      60,
+      261,
+      268,
+      260,
+      53,
+      55,
+      260,
+      883,
+      1521,
+      1250,
+      260,
+      54,
+      52,
+      54,
+      58,
+      263
+    ],
+    "framesAfterEos": 3
+  },
+  {
+    "raw": "J’ai payé 12,50 € pour ce MP3.",
+    "prepared": "J'ai payé 12,50 € pour ce MP3.",
+    "tokens": [
+      428,
+      262,
+      331,
+      3336,
+      260,
+      53,
+      54,
+      261,
+      57,
+      52,
+      260,
+      230,
+      134,
+      176,
+      296,
+      303,
+      351,
+      2558,
+      55,
+      263
+    ],
+    "framesAfterEos": 3
+  },
+  {
+    "raw": "Une voix française entièrement locale.",
+    "prepared": "Une voix française entièrement locale.",
+    "tokens": [
+      602,
+      612,
+      1097,
+      1745,
+      266,
+      276,
+      1053,
+      304,
+      270,
+      883,
+      657,
+      263
+    ],
+    "framesAfterEos": 3
+  },
+  {
+    "raw": "Café déjà prêt, Noël bientôt.",
+    "prepared": "Café déjà prêt, Noël bientôt.",
+    "tokens": [
+      1951,
+      458,
+      281,
+      697,
+      1177,
+      261,
+      1826,
+      199,
+      175,
+      382,
+      338,
+      713,
+      263
+    ],
+    "framesAfterEos": 3
+  },
+  {
+    "raw": "Bonjour 👋, comment allez-vous ?",
+    "prepared": "Bonjour 👋, comment allez-vous ?",
+    "tokens": [
+      1450,
+      3527,
+      260,
+      244,
+      163,
+      149,
+      143,
+      261,
+      519,
+      304,
+      2064,
+      277,
+      469,
+      260,
+      306
+    ],
+    "framesAfterEos": 3
+  },
+  {
+    "raw": "Crème brûlée, cœur, œuf et façade.",
+    "prepared": "Crème brûlée, cœur, œuf et façade.",
+    "tokens": [
+      346,
+      314,
+      2565,
+      1623,
+      330,
+      261,
+      784,
+      261,
+      260,
+      3516,
+      269,
+      860,
+      944,
+      999,
+      263
+    ],
+    "framesAfterEos": 3
+  },
+  {
+    "raw": "你好, bonjour à tous.",
+    "prepared": "你好, bonjour à tous.",
+    "tokens": [
+      260,
+      232,
+      193,
+      164,
+      233,
+      169,
+      193,
+      261,
+      536,
+      3527,
+      271,
+      414,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Trois\tvoix\nfrançaises.",
+    "prepared": "Trois voix françaises.",
+    "tokens": [
+      3127,
+      612,
+      1097,
+      1745,
+      283,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "« Oui ? », dit-il.",
+    "prepared": "Oui ? dit-il.",
+    "tokens": [
+      778,
+      260,
+      306,
+      327,
+      277,
+      289,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Attends : pourquoi ?",
+    "prepared": "Attends , pourquoi ?",
+    "tokens": [
+      260,
+      3860,
+      264,
+      260,
+      261,
+      296,
+      747,
+      260,
+      306
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Bonjour...",
+    "prepared": "Bonjour...",
+    "tokens": [
+      1450,
+      3527,
+      263,
+      263,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "42",
+    "prepared": "42.",
+    "tokens": [
+      260,
+      56,
+      54,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Bonjour,",
+    "prepared": "Bonjour.",
+    "tokens": [
+      1450,
+      3527,
+      263
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Où êtes-vous ?",
+    "prepared": "Où êtes-vous ?",
+    "tokens": [
+      1559,
+      816,
+      277,
+      469,
+      260,
+      306
+    ],
+    "framesAfterEos": 5
+  },
+  {
+    "raw": "Je n’ai rien envoyé sur Internet.",
+    "prepared": "Je n'ai rien envoyé sur Internet.",
+    "tokens": [
+      350,
+      297,
+      262,
+      331,
+      444,
+      260,
+      2512,
+      311,
+      1179,
+      3901,
+      305,
+      263
+    ],
+    "framesAfterEos": 3
+  }
+]

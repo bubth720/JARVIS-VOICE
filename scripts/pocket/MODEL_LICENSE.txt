@@ -1,0 +1,33 @@
+JARVIS Pocket Probe — public French preset pack
+
+Pocket TTS model by Kyutai: Manu Orsini, Simon Rouard, Gabriel De Marmiesse,
+Vaclav Volhejn, Neil Zeghidour, Alexandre Defossez.
+Model weights and ONNX derivatives: Creative Commons Attribution 4.0 International.
+License: https://creativecommons.org/licenses/by/4.0/
+Project: https://github.com/kyutai-labs/pocket-tts
+Official public weights: https://huggingface.co/kyutai/pocket-tts-without-voice-cloning
+French weights revision: 8843db76457a91db32077edf8dfcd1c0e3e755fd
+Code version: Pocket TTS 3.3.0, commit 3dbee45d343d7dddd0d105468d17f8dcba14db3e
+
+Unofficial ONNX conversion and dynamic MatMul INT8 quantization by Alias-Alias:
+https://huggingface.co/Alias-Alias/pocket-3-3-0-tts-onnx
+Revision: 71a4d6d11a76e26b98709fa163477c77d16bdbdb
+The graphs and French tokenizer in this pack are unchanged from that export.
+
+Voice performance: Alba MacKenna. Source reference: alba-mackenna/casual.wav
+from https://huggingface.co/kyutai/tts-voices ; CC BY 4.0.
+French predefined state originated from Kyutai at revision
+4e1e0a3e611c51c0b4ed8174fc10f32a54644303, languages/french/embeddings/alba.safetensors.
+The original recording is not included. Only its public model-specific state is included.
+
+Changes for JARVIS Pocket Probe: keep only the Alba preset in voices.bin,
+update the bundle's voice list accordingly, and add this attribution.
+No encoder, private recording, personal voice profile or training is included.
+No endorsement by Kyutai, Alias-Alias or Alba MacKenna is implied.
+Other rights including consent, privacy and personality rights may apply.
+
+Upstream conditions prohibit unauthorized voice cloning and unlawful or deceptive use.
+This diagnostic cannot clone a recording. Its files must not be confused with
+an authorized complete voice-cloning model.
+
+The MIT license of upstream software is reproduced in LICENSE-upstream.txt.
