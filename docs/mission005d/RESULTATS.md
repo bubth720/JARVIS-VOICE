@@ -1,5 +1,12 @@
 # Mission 005D — résultats d'ingénierie
 
+## Actualisation après republication
+
+La correction MP3 a été validée sur Xiaomi par l'utilisateur. La reprise du
+14 octobre 2026 a réellement téléchargé et exporté l'encodeur officiel ; ses
+résultats et limites actuels figurent dans [RESULTATS-REPRISE.md](RESULTATS-REPRISE.md).
+Les résultats ci-dessous concernent la livraison précédente.
+
 ## Livré
 
 Branche dédiée dérivée de `feat/android-pocket-cloning` à a5e2c056a3e98bee7132aa8e50dcf0d5ec18d387. PR brouillon : https://github.com/bubth720/JARVIS-VOICE/pull/5. Aucun merge, modification stable `app/` ou JARVIS CORE.

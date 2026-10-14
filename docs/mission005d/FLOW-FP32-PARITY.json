@@ -1,0 +1,127 @@
+{
+  "checkpointSha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "modelSha256": "a4e874a3126e63724eed12dc0dc94524c891068b966f16375705e07ee53ae19b",
+  "stateCount": 18,
+  "dtype": "float32",
+  "strictParity": true,
+  "tolerances": {
+    "atol": 0.0002,
+    "rtol": 0.0002
+  },
+  "cases": [
+    {
+      "promptLength": 64,
+      "pad": 0,
+      "step": 0,
+      "maxCacheAbs": 9.298324584960938e-06,
+      "maxConditioningAbs": 1.3113021850585938e-06
+    },
+    {
+      "promptLength": 64,
+      "pad": 0,
+      "step": 1,
+      "maxCacheAbs": 9.298324584960938e-06,
+      "maxConditioningAbs": 1.430511474609375e-06
+    },
+    {
+      "promptLength": 64,
+      "pad": 0,
+      "step": 2,
+      "maxCacheAbs": 9.298324584960938e-06,
+      "maxConditioningAbs": 1.1622905731201172e-06
+    },
+    {
+      "promptLength": 64,
+      "pad": 0,
+      "step": 3,
+      "maxCacheAbs": 9.298324584960938e-06,
+      "maxConditioningAbs": 1.1026859283447266e-06
+    },
+    {
+      "promptLength": 127,
+      "pad": 0,
+      "step": 0,
+      "maxCacheAbs": 1.9550323486328125e-05,
+      "maxConditioningAbs": 9.834766387939453e-07
+    },
+    {
+      "promptLength": 127,
+      "pad": 0,
+      "step": 1,
+      "maxCacheAbs": 1.9550323486328125e-05,
+      "maxConditioningAbs": 1.430511474609375e-06
+    },
+    {
+      "promptLength": 127,
+      "pad": 0,
+      "step": 2,
+      "maxCacheAbs": 1.9550323486328125e-05,
+      "maxConditioningAbs": 1.6093254089355469e-06
+    },
+    {
+      "promptLength": 127,
+      "pad": 0,
+      "step": 3,
+      "maxCacheAbs": 1.9550323486328125e-05,
+      "maxConditioningAbs": 1.0728836059570312e-06
+    },
+    {
+      "promptLength": 189,
+      "pad": 0,
+      "step": 0,
+      "maxCacheAbs": 3.7670135498046875e-05,
+      "maxConditioningAbs": 1.1324882507324219e-06
+    },
+    {
+      "promptLength": 189,
+      "pad": 0,
+      "step": 1,
+      "maxCacheAbs": 3.7670135498046875e-05,
+      "maxConditioningAbs": 1.430511474609375e-06
+    },
+    {
+      "promptLength": 189,
+      "pad": 0,
+      "step": 2,
+      "maxCacheAbs": 3.7670135498046875e-05,
+      "maxConditioningAbs": 1.1324882507324219e-06
+    },
+    {
+      "promptLength": 189,
+      "pad": 0,
+      "step": 3,
+      "maxCacheAbs": 3.7670135498046875e-05,
+      "maxConditioningAbs": 1.3476237654685974e-06
+    },
+    {
+      "promptLength": 64,
+      "pad": 3,
+      "step": 0,
+      "maxCacheAbs": 9.059906005859375e-06,
+      "maxConditioningAbs": 9.834766387939453e-07
+    },
+    {
+      "promptLength": 64,
+      "pad": 3,
+      "step": 1,
+      "maxCacheAbs": 9.059906005859375e-06,
+      "maxConditioningAbs": 1.4901161193847656e-06
+    },
+    {
+      "promptLength": 64,
+      "pad": 3,
+      "step": 2,
+      "maxCacheAbs": 9.894371032714844e-06,
+      "maxConditioningAbs": 1.6689300537109375e-06
+    },
+    {
+      "promptLength": 64,
+      "pad": 3,
+      "step": 3,
+      "maxCacheAbs": 9.894371032714844e-06,
+      "maxConditioningAbs": 1.3560056686401367e-06
+    }
+  ],
+  "androidImportEnabled": false,
+  "endToEndVoiceValidated": false
+}

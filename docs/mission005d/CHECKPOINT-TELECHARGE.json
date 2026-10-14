@@ -1,0 +1,9 @@
+{
+  "repository": "kyutai/pocket-tts",
+  "revision": "d0ebc5deb50bc6b225f686782f124dd37e2dca0a",
+  "file": "languages/french/model.safetensors",
+  "bytes": 219029196,
+  "sha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "hfAuthorizationForwarded": false,
+  "redistributionApproved": false
+}

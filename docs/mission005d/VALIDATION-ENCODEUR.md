@@ -1,5 +1,16 @@
 # Encodeur officiel — preuves et limites
 
+**Actualisation du 14 octobre 2026 après republication :** le CDN est accessible,
+le checkpoint complet a été téléchargé et son SHA256 mesuré est conforme. Les
+neuf parités de l'encodeur+BOS, les 18 états FP32, FlowLM, Flow et le décodeur
+français passent. La comparaison supplémentaire de générations indépendantes
+dépasse la tolérance stricte sur deux phrases ; les mêmes entrées intermédiaires
+passent sur les trois phrases. Le candidat Android reste désactivé dans l'UI.
+Voir [RESULTATS-REPRISE.md](RESULTATS-REPRISE.md) et ses rapports JSON.
+
+Les sections ci-dessous conservent les preuves **antérieures à cette reprise** ;
+le refus du CDN et l'absence d'export qu'elles décrivent sont historiques.
+
 ## Accès sécurisé
 
 Le secret réseau HF_TOKEN est présent et fonctionne par substitution du proxy. `whoami-v2` authentifié : HTTP 200, sans publication de l'identité. Métadonnées à la révision demandée : HTTP 200, dépôt gated auto, licence CC-BY-4.0. Le téléchargement léger authentifié README.md avec huggingface_hub 2.2.0 a réussi sans persistance du jeton. Le secret reste limité à huggingface.co.
