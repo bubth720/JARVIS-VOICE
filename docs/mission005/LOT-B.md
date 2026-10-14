@@ -37,4 +37,6 @@ Le modèle officiel et les dérivés sont CC-BY-4.0 avec conditions officielles 
 
 23 tests JVM Pocket passent sans saut (11 antérieurs avec modèles réels, 6 file PCM, 1 benchmark et 5 conversion/qualité/persistance privée), plus 8 tests du moteur stable. Les tests de rééchantillonnage contrôlent le gain à 1 kHz et le rejet d'une composante 18 kHz avant passage à 24 kHz. Les tests de stockage vérifient le redémarrage, le remplacement corrompu/annulé et la suppression ; ils utilisent des octets synthétiques et un inspecteur simulé, pas un vrai décodeur MP3.
 
+Une reconnaissance CPU Whisper tiny int8 des sorties de phrase complète à 1 et 2 threads retrouve le texte français initial ; cela vérifie un signal intelligible automatiquement, pas la fluidité perceptive, la ressemblance ou une exécution Android.
+
 Quatre tests instrumentés Android sont **compilés mais non exécutés** : vrai décodage d'un MP3 synthétique généré par FFmpeg, corruption/annulation, lecture différée de 3 s sans sous-alimentation, arrêt et permissions hors ligne. La CI ne possède pas de téléphone. Les tests création/rechargement d'un profil et génération clonée restent bloqués par l'encodeur ; le test de capacité vérifie qu'ils restent indisponibles. Le protocole manuel sur Xiaomi doit précéder toute annonce de fluidité ou de clonage fonctionnel.

@@ -25,6 +25,10 @@ jobs:
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Prepare pinned public French preset pack (no token, recording or encoder)
         run: python scripts/pocket/prepare_model.py --work-dir "$RUNNER_TEMP/pocket-model" --output "$RUNNER_TEMP/pocket-fr-6l-alba.zip"
+      - name: Install synthetic-audio test tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
       - name: Prepare synthetic on-device MP3 test fixture (no private audio)
         run: python scripts/pocket/prepare_test_audio.py
       - name: Real JVM inference, cancellation, unit tests and Android build
