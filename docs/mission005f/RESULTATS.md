@@ -97,3 +97,32 @@ seconde de PCM, et consigne aussi le seuil initial de l'émulateur.
 Le pack FP32 original n'est pas reconstruit. 005D, son lecteur, son encodeur,
 la génération FP32 et les formats des 18 états ne sont pas modifiés. Les tests
 sur appareil Xiaomi et l'évaluation perceptive restent à effectuer.
+
+## Résultats vérifiés de livraison
+
+29/41 tests JVM réussis ; 12 nécessitant d'autres modèles/fixtures privées sautés,
+zéro échec. Les cinq nouveaux tests ciblés 005F réussissent séparément.
+10/10 tests Android 15 x86_64 réussissent, sans saut, sur deux passages.
+L'émulateur annonce initialement STREAM threshold=48000 frames et buffer=48000.
+Avec 24000 frames chargées, le compteur reste à zéro après play. En STATIC, les
+120, 2400, 24000 et 72000 frames sont toutes présentées, avec zéro underrun. Les
+preuves synthétiques exactes sont dans AUDIO-EMULATEUR.txt ; aucune voix privée.
+
+La CI 005F [38647931807](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38647931807)
+est entièrement réussie (build, lint, audit de l'APK stable, Android). La CI
+Android stable réussit. Build/inférence 005D réussissent ; son test AudioTrack
+sur émulateur déjà connu échoue encore (4/5, underrun=1, 72000 frames envoyées
+et soumises). Aucune modification de ce lecteur ni de la génération n'est faite.
+
+[Livraison **stable**](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38647931807/artifacts/11933028756) :
+extraire `JARVIS-VOICE-005F-stable.apk`. Ne pas installer l'APK CI diagnostic.
+L'artefact final a été téléchargé et le SHA256 de son APK comparé au build local :
+`af9f1b3974163c8c255f551c88bdb65a9e9bd67adf75f43d75b0edd1755bf083`,
+29156604 octets, certificat stable
+`aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e`.
+Les clés privées restent dans `work/signing/voice-prototype-stable/`, permissions
+0600, hors Git, hors APK et hors artefacts. Pour les futures livraisons, définir
+JARVIS_PROTOTYPE_KEYSTORE et JARVIS_PROTOTYPE_PASSWORD_FILE vers les fichiers
+privés existants et construire avec `-PprototypeSidecar=true`. Vérifier exactement
+ce certificat ; ne pas générer une nouvelle clé si les fichiers sont absents.
+La migration et l'audibilité du profil réel sur Xiaomi restent à valider.
