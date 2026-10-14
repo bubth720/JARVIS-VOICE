@@ -98,3 +98,8 @@ La mise à jour directe de l'ancienne APK CI est donc impossible : essayer cette
 APK exige une réinstallation **005E seulement**, avec perte des données locales
 005E. Le ZIP dans Téléchargements et l'application 005D restent indépendants.
 L'ancienne clé CI n'est pas disponible pour signer une mise à jour compatible.
+
+CI Android stable réussie ; build/inférence Pocket Probe réussis. Le test
+AudioTrack 005D déjà signalé en 005E reste en échec sur émulateur : 4/5 tests
+réussis, compteur d'underrun 1 pour 72000 frames envoyées et soumises. Aucune
+modification des sources 005D ou de la lecture audio n'est incluse ici.
