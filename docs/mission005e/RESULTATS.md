@@ -90,7 +90,7 @@ CPU cloud, pas des performances Xiaomi. Voir `MESURES-JVM.json`.
   traversée ZIP, WAV privé et sélection sont testés.
 - APK ARM64 et APK AndroidTest compilées ; lint réussi ; intégrité/signature,
   alignements ELF/ZIP 16 Ko et absence de permissions réseau/micro sont vérifiés.
-- Les tests Android de confidentialité/lancement sont prévus en CI sans poids
+- Quatre tests Android de confidentialité/lancement et du premier import sont prévus en CI sans poids
   gated ; la chaîne complète avec modèles sur Android et le Xiaomi reste à tester.
 
 L'APK affiche des mesures réelles de durée, CPU processus, PSS échantillonné,

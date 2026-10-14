@@ -121,7 +121,7 @@ class MainActivity : Activity() {
         if(result!=RESULT_OK) return
         val uri=data?.data ?: return
         if(code==200) task("Import privé et contrôle SHA256 du pack FP32…",false) { cancel ->
-            require(modelRoot.usableSpace>=1200L*1048576) { "Au moins 1,2 Gio de stockage disponible requis" }
+            require(noBackupFilesDir.usableSpace>=1200L*1048576) { "Au moins 1,2 Gio de stockage disponible requis" }
             ExperimentalModelPack.install(requireNotNull(contentResolver.openInputStream(uri)), modelRoot, cancel::isCancelled)
             "Pack FP32 vérifié. Prototype expérimental prêt à créer un profil local."
         }

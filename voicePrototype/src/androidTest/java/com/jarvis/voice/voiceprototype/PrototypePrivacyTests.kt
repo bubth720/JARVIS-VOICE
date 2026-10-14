@@ -1,6 +1,8 @@
 package com.jarvis.voice.voiceprototype
 
 import android.content.Intent
+import android.app.Activity
+import android.net.Uri
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.view.View
@@ -13,10 +15,17 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /** Platform/privacy tests use synthetic PCM only, no gated weights or voice impersonation. */
 @RunWith(AndroidJUnit4::class)
 class PrototypePrivacyTests {
+    private fun text(view: View): List<String> = when(view) {
+        is TextView -> listOf(view.text.toString())
+        is ViewGroup -> (0 until view.childCount).flatMap { text(view.getChildAt(it)) }
+        else -> emptyList()
+    }
     @Test fun independentPackageHasNoNetworkMicrophoneOrBackup() {
         val context=InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.jarvis.voice.voiceprototype005e",context.packageName)
@@ -32,11 +41,6 @@ class PrototypePrivacyTests {
         val activity=instrumentation.startActivitySync(Intent(instrumentation.targetContext,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         try {
             instrumentation.runOnMainSync {
-                fun text(view: View): List<String> = when(view) {
-                    is TextView -> listOf(view.text.toString())
-                    is ViewGroup -> (0 until view.childCount).flatMap { text(view.getChildAt(it)) }
-                    else -> emptyList()
-                }
                 val labels=text(activity.window.decorView)
                 assertTrue(labels.any { it.contains("EXPÉRIMENTAL") })
                 assertTrue(labels.any { it.contains("005D") })
@@ -54,5 +58,24 @@ class PrototypePrivacyTests {
             assertTrue(file.canonicalPath.startsWith(context.noBackupFilesDir.canonicalPath+File.separator))
             assertTrue(file.delete()); assertFalse(file.exists())
         } finally { file.delete() }
+    }
+    @Test fun firstPrivateImportReachesZipValidationInsteadOfCheckingANonexistentFolder() {
+        val instrumentation=InstrumentationRegistry.getInstrumentation()
+        val context=instrumentation.targetContext
+        org.junit.Assume.assumeTrue(context.noBackupFilesDir.usableSpace>=1200L*1048576)
+        val zip=File(context.noBackupFilesDir,"synthetic-invalid-pack.zip")
+        ZipOutputStream(zip.outputStream()).use { out -> out.putNextEntry(ZipEntry("wrong-model.txt")); out.write(byteArrayOf(1)); out.closeEntry() }
+        val activity=instrumentation.startActivitySync(Intent(context,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) as MainActivity
+        try {
+            instrumentation.runOnMainSync { activity.onActivityResult(200,Activity.RESULT_OK,Intent().setData(Uri.fromFile(zip))) }
+            var observed=false
+            val deadline=System.currentTimeMillis()+10000
+            while(!observed && System.currentTimeMillis()<deadline) {
+                instrumentation.runOnMainSync { observed=text(activity.window.decorView).any { it.contains("Entrée ZIP FP32 inconnue") } }
+                if(!observed) Thread.sleep(50)
+            }
+            assertTrue("Private import did not reach strict ZIP validation",observed)
+            assertFalse(File(context.noBackupFilesDir,"models/fp32").exists())
+        } finally { zip.delete(); instrumentation.runOnMainSync { activity.finish() } }
     }
 }

@@ -1,6 +1,6 @@
 {
-  "apkSha256": "94ae8235512f8a251a30fabaa2a9bf05dfe8c6058393d90d5592d16da60214e6",
-  "apkBytes": 29161855,
+  "apkSha256": "5b970e4d5ed8910d45265fd20e3970d3b3b338cce2cc8a24a742d91596199110",
+  "apkBytes": 29162030,
   "applicationId": "com.jarvis.voice.voiceprototype005e",
   "minSdk": 26,
   "targetSdk": 35,
