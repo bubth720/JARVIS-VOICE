@@ -65,7 +65,7 @@ class DeviceAudioTests {
             PcmDelivery(token::isCancelled, sink = player::write).use { queue ->
                 repeat(10) { chunk -> queue.offer(FloatArray(7200) { i -> (sin((chunk*7200+i)*2*Math.PI*440/24000)*.03).toFloat() }) }
                 queue.finish(); queue.await(); player.drain()
-                assertEquals(0,queue.rebufferCount); assertEquals(0,player.underruns)
+                assertEquals(0,queue.rebufferCount); assertEquals("AudioTrack ${player.underrunObservations}", 0,player.underruns)
                 assertTrue(player.firstFrameNs > 0)
             }
         }

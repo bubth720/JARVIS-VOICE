@@ -1,0 +1,27 @@
+{
+  "revision": "d0ebc5deb50bc6b225f686782f124dd37e2dca0a",
+  "protectedBindingPresent": true,
+  "checks": [
+    {
+      "check": "authentication",
+      "httpStatus": 200,
+      "errorCode": null
+    },
+    {
+      "check": "metadata",
+      "httpStatus": 200,
+      "errorCode": null,
+      "revision": "d0ebc5deb50bc6b225f686782f124dd37e2dca0a",
+      "gated": "auto",
+      "license": "cc-by-4.0"
+    },
+    {
+      "check": "checkpoint",
+      "httpStatus": 302,
+      "errorCode": null,
+      "redirectHost": "us.aws.cdn.hf.co",
+      "storageFailure": "proxy_destination_denied",
+      "hfAuthorizationForwarded": false
+    }
+  ]
+}

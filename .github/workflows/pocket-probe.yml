@@ -23,6 +23,10 @@ jobs:
           packages: platform-tools
       - uses: gradle/actions/setup-gradle@v4
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Test protected downloader with synthetic HTTP responses (no secret)
+        run: |
+          python -m pip install requests
+          python -m unittest discover -s scripts/pocket/tests -v
       - name: Prepare pinned public French preset pack (no token, recording or encoder)
         run: python scripts/pocket/prepare_model.py --work-dir "$RUNNER_TEMP/pocket-model" --output "$RUNNER_TEMP/pocket-fr-6l-alba.zip"
       - name: Install synthetic-audio test tool

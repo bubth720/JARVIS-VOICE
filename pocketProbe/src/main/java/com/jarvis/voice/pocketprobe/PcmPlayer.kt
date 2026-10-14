@@ -16,6 +16,8 @@ class PcmPlayer(private val token: CancellationToken) : AutoCloseable {
     var zeroWrites = 0; private set
     var maxWriteGapMs = 0.0; private set
     private var lastWriteNs = 0L
+    private var observedUnderruns = 0
+    val underrunObservations = mutableListOf<String>()
     val underruns get() = active.get()?.underrunCount ?: 0
     val bufferFrames get() = active.get()?.bufferSizeInFrames ?: 0
     fun write(pcm: FloatArray) {
@@ -50,7 +52,16 @@ class PcmPlayer(private val token: CancellationToken) : AutoCloseable {
         }
     }
     @Synchronized private fun start(track: AudioTrack) { token.check(); track.play(); playing = true; if (launchNs == 0L) launchNs = System.nanoTime() }
-    private fun observe(track: AudioTrack) { if (firstFrameNs == 0L && track.playbackHeadPosition != 0) firstFrameNs = System.nanoTime() }
+    private fun observe(track: AudioTrack) {
+        val head = Integer.toUnsignedLong(track.playbackHeadPosition)
+        if (firstFrameNs == 0L && head != 0L) firstFrameNs = System.nanoTime()
+        val count = track.underrunCount
+        if (count > observedUnderruns) {
+            // Counts are preserved, including terminal events; never suppress a failed check.
+            underrunObservations.add("count=$count frames=$head submitted=$submitted")
+            observedUnderruns = count
+        }
+    }
     @Synchronized fun rebuffer() { active.get()?.pause(); playing = false }
     fun drain() {
         val track = active.get() ?: return
