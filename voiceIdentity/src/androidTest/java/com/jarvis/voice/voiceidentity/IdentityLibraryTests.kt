@@ -110,6 +110,9 @@ class IdentityLibraryTests {
         instrumentation.context.assets.open("jvm-synthetic.jvi").use { archive.restore(dest,"synthetic-password-005h".toCharArray(),it,CancellationToken()) }
         assertEquals(1,dest.list().size);assertEquals(2,dest.list().single().profiles.size);assertEquals(2,dest.list().single().references.count { it.retained })
         assertNotNull(dest.binding().resolve(dest.selected()!!,cancel=CancellationToken()))
+        val unicode=VoiceIdentityVault(File(root,"unicode-dest"))
+        instrumentation.context.assets.open("jvm-synthetic-unicode.jvi").use { archive.restore(unicode,"mot-de-passe-étoilé-005h🔒".toCharArray(),it,CancellationToken()) }
+        assertEquals(dest.list(),unicode.list())
     }
     @Test fun androidCacheActuallyKeepsDifferentPcmAndRefusesChangedIdentityAndSeed()=work { root ->
         val v=VoiceIdentityVault(File(root,"vault"));val id=SyntheticVault.identity(v);val r=SyntheticVault.reference(v,id)

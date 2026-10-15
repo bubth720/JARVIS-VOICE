@@ -59,10 +59,12 @@ jobs:
       - uses: android-actions/setup-android@v3
         with: { packages: 'platform-tools', log-accepted-android-sdk-licenses: false }
       - uses: gradle/actions/setup-gradle@v4
+      - name: Install synthetic-audio fixture encoder
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
       - name: Prepare synthetic MP3/WAV and encrypted JVM interoperability fixture
         run: |
           python scripts/pocket/prepare_identity_test_audio.py
-          IDENTITY_ARCHIVE_FIXTURE_OUT="$PWD/voiceIdentity/build/generated/androidTestAssets/jvm-synthetic.jvi" ./gradlew :identityRuntime:test --tests '*VoiceIdentityArchiveTests.authenticatedRoundTrip*' --no-daemon --max-workers=2
+          IDENTITY_ARCHIVE_FIXTURE_OUT="$PWD/voiceIdentity/build/generated/androidTestAssets/jvm-synthetic.jvi" ./gradlew :identityRuntime:test --tests '*VoiceIdentityArchiveTests.authenticatedRoundTrip*' --rerun-tasks --no-daemon --max-workers=2
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules

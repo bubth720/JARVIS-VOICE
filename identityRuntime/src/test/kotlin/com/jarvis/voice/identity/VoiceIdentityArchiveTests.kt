@@ -22,7 +22,11 @@ class VoiceIdentityArchiveTests {
     @Test fun authenticatedRoundTripPreservesLogicalIdsProfilesReferencesAndActiveChoice()=work { root ->
         val (v,id)=source(File(root,"source"));val archive=VoiceIdentityArchive(File(root,"private-work"))
         val a=encrypted(archive,v,id);val b=encrypted(archive,v,id)
-        System.getenv("IDENTITY_ARCHIVE_FIXTURE_OUT")?.takeIf { it.isNotBlank() }?.let { File(it).apply { parentFile.mkdirs();writeBytes(a) } }
+        System.getenv("IDENTITY_ARCHIVE_FIXTURE_OUT")?.takeIf { it.isNotBlank() }?.let { path ->
+            File(path).apply { parentFile.mkdirs();writeBytes(a) }
+            val unicode=ByteArrayOutputStream();archive.export(v,id,"mot-de-passe-étoilé-005h🔒".toCharArray(),true,unicode,CancellationToken())
+            File(File(path).parentFile,"jvm-synthetic-unicode.jvi").writeBytes(unicode.toByteArray())
+        }
         assertFalse(a.contentEquals(b));assertEquals("JVIENC01",a.copyOfRange(0,8).toString(Charsets.US_ASCII))
         assertFalse(a.toString(Charsets.ISO_8859_1).contains("PRIVATE-SYNTHETIC-IDENTITY"))
         val dest=VoiceIdentityVault(File(root,"dest"));assertEquals(id,archive.restore(dest,password.copyOf(),a.inputStream(),CancellationToken()))
