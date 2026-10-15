@@ -1,0 +1,587 @@
+{
+  "checkpointSha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "bosIncludedExactlyOnce": true,
+  "cacheCases": [
+    {
+      "samples": 120000,
+      "framesWithBos": 64,
+      "states": [
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.027323752641677856,
+          "relativeL2": 0.0034059477038681507,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.2515444755554199,
+          "relativeL2": 0.03484947234392166,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.2942454218864441,
+          "relativeL2": 0.05126331001520157,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.7095634937286377,
+          "relativeL2": 0.1598047912120819,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.6837506890296936,
+          "relativeL2": 0.1312970668077469,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.6772804260253906,
+          "relativeL2": 0.10050413757562637,
+          "strictParity": false
+        }
+      ]
+    },
+    {
+      "samples": 240017,
+      "framesWithBos": 127,
+      "states": [
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.024112462997436523,
+          "relativeL2": 0.0033077592961490154,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.18637651205062866,
+          "relativeL2": 0.03356832638382912,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.3075469732284546,
+          "relativeL2": 0.049852363765239716,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.8157253265380859,
+          "relativeL2": 0.15787972509860992,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.6698344349861145,
+          "relativeL2": 0.12887516617774963,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.6801128387451172,
+          "relativeL2": 0.09847571700811386,
+          "strictParity": false
+        }
+      ]
+    },
+    {
+      "samples": 360000,
+      "framesWithBos": 189,
+      "states": [
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.0.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.02820540964603424,
+          "relativeL2": 0.0033556371927261353,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.1.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.1961808204650879,
+          "relativeL2": 0.03309927135705948,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.2.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.3352909982204437,
+          "relativeL2": 0.048500265926122665,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.3.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.8223205804824829,
+          "relativeL2": 0.15457528829574585,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.4.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.7362897396087646,
+          "relativeL2": 0.12644103169441223,
+          "strictParity": false
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "offset",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "pad",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.0,
+          "relativeL2": 0.0,
+          "strictParity": true,
+          "exactIntegerParity": true
+        },
+        {
+          "module": "transformer.layers.5.self_attn",
+          "key": "cache",
+          "shapeMatch": true,
+          "finiteMaskMatch": true,
+          "maxAbs": 0.6896904706954956,
+          "relativeL2": 0.09579327702522278,
+          "strictParity": false
+        }
+      ]
+    }
+  ],
+  "components": {
+    "text": {
+      "shapeMatch": true,
+      "finiteMaskMatch": true,
+      "maxAbs": 0.0,
+      "relativeL2": 0.0,
+      "strictParity": true
+    },
+    "main": {
+      "shapeMatch": true,
+      "finiteMaskMatch": true,
+      "maxAbs": 0.07525825500488281,
+      "relativeL2": 0.06382319331169128,
+      "strictParity": false
+    },
+    "eos": {
+      "shapeMatch": true,
+      "finiteMaskMatch": true,
+      "maxAbs": 0.34302330017089844,
+      "relativeL2": 0.04895440489053726,
+      "strictParity": false
+    },
+    "flow": {
+      "shapeMatch": true,
+      "finiteMaskMatch": true,
+      "maxAbs": 0.04962301254272461,
+      "relativeL2": 0.017819110304117203,
+      "strictParity": false
+    },
+    "decoder": {
+      "shapeMatch": true,
+      "finiteMaskMatch": true,
+      "maxAbs": 0.009517643600702286,
+      "relativeL2": 0.08137635886669159,
+      "strictParity": false
+    }
+  },
+  "androidImportEnabled": false,
+  "endToEndVoiceValidated": false,
+  "strictCacheParity": false,
+  "strictComponentParity": false
+}

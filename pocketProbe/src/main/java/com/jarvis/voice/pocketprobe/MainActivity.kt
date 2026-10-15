@@ -271,7 +271,11 @@ class MainActivity : Activity() {
                 }
                 post { referenceInfo.text = referenceSummary(); status.text = "MP3 importé localement. Choisir un extrait propre, sans musique ni autres voix." }
             } catch (t: Throwable) {
-                post { status.text = if (current.isCancelled()) "Import MP3 annulé." else "MP3 refusé : fichier invalide, durée hors limites ou décodage impossible. La référence précédente est conservée." }
+                post { status.text = if (current.isCancelled()) "Import MP3 annulé." else {
+                    val failure = t as? ReferenceFailure ?: ReferenceFailure("MP02", t.javaClass.simpleName)
+                    diagnostics.text = failure.diagnostic()
+                    "MP3 refusé (${failure.stage}) : contrôle local échoué. La référence précédente est conservée."
+                } }
             } finally { post { busy = false; token = null; refresh() } }
         }
     }
@@ -287,28 +291,44 @@ class MainActivity : Activity() {
         status.text = "Décodage MP3 et conversion locale de l'extrait…"; refresh()
         worker.execute {
             var audio: PcmPlayer? = null
+            var stage = "MP02"
+            val began = System.nanoTime()
+            val thermalPause = java.util.concurrent.atomic.AtomicBoolean(false)
+            val memory = MemorySampler(this) { thermalPause.set(true); current.cancel() }
             try {
+                if (DeviceMetrics.isThermallySevere(this)) { thermalPause.set(true); current.cancel() }
+                current.check()
                 val source = requireNotNull(references.current()).first
                 val pcm = LocalMp3.decode(source, start * 1000, duration * 1000, current)
+                stage = "MP09"
                 val quality = ReferenceAudio.quality(pcm)
                 current.check()
-                val staged = File(references.excerpt.parentFile, "excerpt.pending")
-                try {
-                    ReferenceAudio.writeWav(staged, pcm); current.check()
-                    check(staged.renameTo(references.excerpt))
-                } finally { staged.delete() }
+                references.saveExcerpt(pcm, current::isCancelled) { stage = it }
                 post { referenceInfo.text = referenceSummary() + "\nExtrait : %.2f s ; RMS %.1f dBFS ; écrêtage %.2f %% ; silence %.1f %%\n%s".format(Locale.FRENCH,
                     quality.seconds, quality.rmsDb, quality.clippedFraction * 100, quality.quietFraction * 100, quality.warning) }
                 if (preview) {
+                    stage = "MP12"
                     audio = PcmPlayer(current); player.set(audio)
                     post { status.text = "Écoute de l'extrait privé…" }
                     audio.write(pcm); audio.drain()
                 }
+                post { diagnostics.text = "Conversion : ${(System.nanoTime() - began) / 1_000_000} ms ; PSS max %.1f Mio ; thermique max ${memory.peakThermal}".format(Locale.FRENCH, memory.peakPssMiB) }
                 post { status.text = "Extrait privé prêt. Le clonage reste indisponible tant que l'encodeur n'est pas validé." }
             } catch (t: Throwable) {
-                post { status.text = if (current.isCancelled()) "Traitement de l'extrait arrêté." else "Extrait refusé : vérifier le début, la durée et l'intégrité du MP3." }
+                post { status.text = if (current.isCancelled()) { if (thermalPause.get()) "Conversion arrêtée : téléphone trop chaud. Attendre le refroidissement." else "Traitement de l'extrait arrêté." } else {
+                        val failure = t as? ReferenceFailure ?: ReferenceFailure(stage, t.javaClass.simpleName)
+                        diagnostics.text = failure.diagnostic()
+                        "Extrait refusé (${failure.stage}) : " + when (failure.stage) {
+                            "MP01" -> "vérifier le début et la durée."
+                            "MP08" -> "conversion 24 kHz impossible."
+                            "MP09" -> "signal audio invalide."
+                            "MP10", "MP11" -> "enregistrement local impossible ; ancien extrait conservé."
+                            "MP12" -> "lecture audio indisponible ; extrait conservé."
+                            else -> "décodage local impossible."
+                        }
+                    } }
             } finally {
-                audio?.close(); player.set(null)
+                audio?.close(); player.set(null); memory.close()
                 post { busy = false; token = null; refresh() }
             }
         }

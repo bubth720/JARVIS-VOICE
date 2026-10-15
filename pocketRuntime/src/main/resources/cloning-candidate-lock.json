@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "checkpointSha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "androidImportEnabled": false,
+  "independentGenerationStrictParity": false,
+  "files": {
+    "mimi_encoder_with_bos.onnx": {
+      "sizeBytes": 39253611,
+      "sha256": "c24fcfa5ef01ab2d941f8563a7b49fcddd65353e337948f91e4bb26e8b2e8b07"
+    },
+    "flow_lm_main_fp32.onnx": {
+      "sizeBytes": 352812159,
+      "sha256": "a4e874a3126e63724eed12dc0dc94524c891068b966f16375705e07ee53ae19b"
+    }
+  }
+}

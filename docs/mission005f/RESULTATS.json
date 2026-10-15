@@ -1,0 +1,85 @@
+{
+  "codeCommit": "17e7f9c83d2e6a253cdfb2b523e4842ce984efb7",
+  "deliveryCommit": "d6999376ecf44fe2aa5e426c7e9f4bfe1bb7b7db",
+  "jvm": {
+    "tests": 41,
+    "passed": 29,
+    "skipped": 12,
+    "failed": 0,
+    "targetedTests": 5,
+    "targetedPassed": 5
+  },
+  "android": {
+    "api": 35,
+    "abi": "x86_64",
+    "passed": 10,
+    "failed": 0,
+    "privateWeightsIncluded": false,
+    "streamDefaultThresholdFrames": 48000,
+    "streamOneSecondSubmitted": 24000,
+    "streamHeadAfterPlay": 0,
+    "staticCompletedFrames": [
+      120,
+      2400,
+      24000,
+      72000
+    ],
+    "staticUnderruns": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "xiaomiValidated": false,
+  "xiaomiReportedNoSound": true,
+  "candidateCause": "STREAM start threshold larger than complete short utterance; acoustic PCM unknown until device diagnostics",
+  "generationModelChanged": false,
+  "privatePackRebuilt": false,
+  "privatePackBytes": 234932686,
+  "privatePackSha256": "9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd",
+  "originalProfileOnXiaomiPreserved": true,
+  "existing005eSignatureKeyAvailable": false,
+  "migrationRequiresLocalDeviceAccess": true,
+  "stableApk": {
+    "apkSha256": "af9f1b3974163c8c255f551c88bdb65a9e9bd67adf75f43d75b0edd1755bf083",
+    "apkBytes": 29156604,
+    "applicationId": "com.jarvis.voice.voiceprototype005f",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "firstRunDeliveryAudit": "APK passed; history lookup failed due shallow checkout; workflow corrected",
+  "validatedBranchCommit": "878ced3412ab78073bcd88b256682b5fdf06017a",
+  "workflowRun": 38647931807,
+  "workflowConclusion": "success",
+  "stableArtifact": 11933028756,
+  "androidReportArtifact": 11932534738,
+  "deliveredStableApkSha256Verified": true,
+  "stableKeyPrivateInWorkspace": true,
+  "keyUploadedExternally": false,
+  "stableAndroidCI": "success",
+  "existing005dBuildInferenceCI": "success",
+  "existing005dAndroidAudioTest": "4/5; known terminal underrun count=1 frames=72000 submitted=72000"
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "experimental": true,
+  "precision": "float32",
+  "packId": "3470a01f4784b528da7899042af757de14f1f4f8017cb8789587465d39199570",
+  "checkpointSha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "strictIndependentParity": false,
+  "files": {
+    "flow_lm_main_fp32.onnx": {
+      "sizeBytes": 352812159,
+      "sha256": "a4e874a3126e63724eed12dc0dc94524c891068b966f16375705e07ee53ae19b"
+    },
+    "pack-identity.txt": {
+      "sizeBytes": 65,
+      "sha256": "f90946d31abaccd846e8a2b3161b31f3ed14bf22880814506a51e01aebbcc60d"
+    },
+    "public-alba-fp32.bin": {
+      "sizeBytes": 6194279,
+      "sha256": "76387c997b679bfd4b623edb0e98dbfdf31f6268a94f620690d98232c072c711"
+    },
+    "bundle.json": {
+      "sizeBytes": 13028,
+      "sha256": "7063e02f4fc9849f30e41c8ffdc1f323d8cb6e3db38e48f19687f1510e157e34"
+    },
+    "text_conditioner_fp32.onnx": {
+      "sizeBytes": 16388315,
+      "sha256": "eafa32d48b16c9598df65bfb4159abb8e81939c6ec2f27bbb13a681da0f2010c"
+    },
+    "MODEL_LICENSE.txt": {
+      "sizeBytes": 1083,
+      "sha256": "f192132c77816a0ce23196e9b4e8772f760be56677788954a9ad6b1ff9411f72"
+    },
+    "tokenizer.json": {
+      "sizeBytes": 246403,
+      "sha256": "6211acffe9cb95172f71f0051f18e26ea305b2b32ea00b331ee976551c70887f"
+    },
+    "flow_lm_flow_fp32.onnx": {
+      "sizeBytes": 39091998,
+      "sha256": "5772f23044581fb635ad6ba484d39b6ee4d1e2452902fda58eaab8f49d9e7c7e"
+    },
+    "mimi_encoder_with_bos.onnx": {
+      "sizeBytes": 39253611,
+      "sha256": "c24fcfa5ef01ab2d941f8563a7b49fcddd65353e337948f91e4bb26e8b2e8b07"
+    },
+    "mimi_decoder_fp32.onnx": {
+      "sizeBytes": 117168201,
+      "sha256": "5714f08394977e24e88673e638572cb8ae05045fa113f3ebc28ee2e9b5777586"
+    }
+  }
+}

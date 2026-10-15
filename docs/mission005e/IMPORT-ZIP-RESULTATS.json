@@ -1,0 +1,66 @@
+{
+  "originalZipBytes": 234932686,
+  "originalZipSha256": "9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd",
+  "originalZipPreserved": true,
+  "previousCodePrivateImport": "passed JVM",
+  "xiaomiFailureReproduced": false,
+  "manifestSha256": "4afe48a1616af4ddbe0fe8cb1d71c690477e171b860880790e91fff6777d1fa3",
+  "jvmTests": {
+    "total": 36,
+    "passed": 25,
+    "skipped": 11,
+    "failed": 0
+  },
+  "privateOriginalZipInstall": "passed",
+  "build": "passed",
+  "lint": "passed",
+  "physicalXiaomiValidated": false,
+  "androidInstrumentation": {
+    "api": 35,
+    "abi": "x86_64",
+    "passed": 6,
+    "failed": 0,
+    "privateWeightsIncluded": false
+  },
+  "apkContainsWeights": false,
+  "previousDeliveredApkManifestMatches": true,
+  "validatedCommit": "0aa253ea37839ffa81cb0654949aa27864c220f7",
+  "workflowRun": 38639491087,
+  "apkArtifact": 11930315013,
+  "ciApk": {
+    "apkSha256": "63102c11cf56d99d213e3ab0d73ca94abde289b917dce25c021fafdc1010fe10",
+    "apkBytes": 29140236,
+    "applicationId": "com.jarvis.voice.voiceprototype005e",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "152c7bd6684521a92d85a638115ce8696f5b8c500339095b01d72f338f6b515e",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "previousCiCertificateSha256": "51129bad3e77f1cd0ace3a41145236725f7e0561e2c9504ef2af2e6fe797618e",
+  "inPlaceUpdateFromPreviousCiApkPossible": false,
+  "otherWorkflows": {
+    "stableAndroid": "success",
+    "pocketProbeBuildInference": "success",
+    "pocketProbeSyntheticAndroid": "4/5 pass; existing AudioTrack underrun assertion count=1 frames=72000 submitted=72000"
+  }
+}

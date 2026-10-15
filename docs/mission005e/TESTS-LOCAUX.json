@@ -1,0 +1,29 @@
+{
+  "pocketRuntime": {
+    "tests": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "app": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "physicalAndroidDeviceExecuted": false,
+  "androidInstrumentationExecutedLocally": false,
+  "experimentalApkBuilt": true,
+  "androidTestApkBuilt": true,
+  "lintPassed": true,
+  "personalDataUsed": false,
+  "strictIndependentTolerancesUnchanged": true,
+  "protectedDownloadPython": {
+    "tests": 4,
+    "failures": 0
+  },
+  "privateExporterRegressionPython": {
+    "tests": 3,
+    "failures": 0
+  }
+}

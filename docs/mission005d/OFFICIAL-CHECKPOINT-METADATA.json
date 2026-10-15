@@ -1,0 +1,12 @@
+[
+  {
+    "rfilename": "languages/french/model.safetensors",
+    "blobId": "0c902b9e35cf9a7ee0669534592f6e4888cc7722",
+    "size": 219029196,
+    "lfs": {
+      "sha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+      "size": 219029196,
+      "pointerSize": 134
+    }
+  }
+]

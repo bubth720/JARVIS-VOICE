@@ -1,0 +1,30 @@
+{
+  "pocketRuntime": {
+    "tests": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "app": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "protectedDownloadPython": {
+    "tests": 4,
+    "failures": 0
+  },
+  "privateExportRegressionPython": {
+    "tests": 3,
+    "failures": 0
+  },
+  "androidBuild": true,
+  "androidTestApkBuild": true,
+  "lint": true,
+  "androidInstrumentationExecuted": false,
+  "physicalDeviceExecuted": false,
+  "userReportedXiaomiMp3Validated": true,
+  "apkCloningEnabled": false,
+  "modelPackCloningEnabled": false
+}

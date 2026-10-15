@@ -1,0 +1,124 @@
+{
+  "source": "hf://kyutai/pocket-tts/languages/french/model.safetensors@d0ebc5deb50bc6b225f686782f124dd37e2dca0a",
+  "checkpointSha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "versions": {
+    "pocket-tts": "3.3.0",
+    "torch": "2.6.0+cpu",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.27.0"
+  },
+  "tolerances": {
+    "atol": 0.0002,
+    "rtol": 0.0002
+  },
+  "dtype": "float32",
+  "packCompatibilityValidated": false,
+  "cacheParityValidated": false,
+  "tokenizerSource": "hf://kyutai/pocket-tts-without-voice-cloning/languages/french/tokenizer.json@8843db76457a91db32077edf8dfcd1c0e3e755fd",
+  "encoderSha256": "c24fcfa5ef01ab2d941f8563a7b49fcddd65353e337948f91e4bb26e8b2e8b07",
+  "bosIncluded": true,
+  "syntheticParity": [
+    {
+      "samples": 120000,
+      "signal": "silence",
+      "shape": [
+        1,
+        64,
+        1024
+      ],
+      "maxAbs": 5.960464477539062e-07,
+      "relativeL2": 7.51439756641048e-07
+    },
+    {
+      "samples": 120000,
+      "signal": "sine",
+      "shape": [
+        1,
+        64,
+        1024
+      ],
+      "maxAbs": 7.152557373046875e-07,
+      "relativeL2": 4.5293779749044916e-07
+    },
+    {
+      "samples": 120000,
+      "signal": "noise",
+      "shape": [
+        1,
+        64,
+        1024
+      ],
+      "maxAbs": 4.76837158203125e-07,
+      "relativeL2": 4.903909598397149e-07
+    },
+    {
+      "samples": 240017,
+      "signal": "silence",
+      "shape": [
+        1,
+        127,
+        1024
+      ],
+      "maxAbs": 5.960464477539062e-07,
+      "relativeL2": 6.907487204443896e-07
+    },
+    {
+      "samples": 240017,
+      "signal": "sine",
+      "shape": [
+        1,
+        127,
+        1024
+      ],
+      "maxAbs": 6.556510925292969e-07,
+      "relativeL2": 4.5368284418145777e-07
+    },
+    {
+      "samples": 240017,
+      "signal": "noise",
+      "shape": [
+        1,
+        127,
+        1024
+      ],
+      "maxAbs": 5.960464477539062e-07,
+      "relativeL2": 4.975611318513984e-07
+    },
+    {
+      "samples": 360000,
+      "signal": "silence",
+      "shape": [
+        1,
+        189,
+        1024
+      ],
+      "maxAbs": 5.960464477539062e-07,
+      "relativeL2": 6.887862582516391e-07
+    },
+    {
+      "samples": 360000,
+      "signal": "sine",
+      "shape": [
+        1,
+        189,
+        1024
+      ],
+      "maxAbs": 6.556510925292969e-07,
+      "relativeL2": 4.5665979087061714e-07
+    },
+    {
+      "samples": 360000,
+      "signal": "noise",
+      "shape": [
+        1,
+        189,
+        1024
+      ],
+      "maxAbs": 5.960464477539062e-07,
+      "relativeL2": 5.157968416824588e-07
+    }
+  ],
+  "endToEndVoiceValidated": false,
+  "androidImportEnabled": false,
+  "license": "CC-BY-4.0; official additional conditions apply"
+}

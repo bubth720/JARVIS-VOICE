@@ -1,0 +1,20 @@
+[
+  {
+    "id": "alba",
+    "repository": "kyutai/tts-voices",
+    "revision": "323332d33f997de8394f24a193e1a76df720e01a",
+    "file": "alba-mackenna/casual.wav",
+    "license": "CC-BY-4.0",
+    "sha256": "46264e83cb99115c3d210260e029117566d9c64f20266d10daa78107759ede3e",
+    "bytes": 958542
+  },
+  {
+    "id": "selfie",
+    "repository": "kyutai/tts-voices",
+    "revision": "323332d33f997de8394f24a193e1a76df720e01a",
+    "file": "voice-donations/Selfie.wav",
+    "license": "CC0",
+    "sha256": "076968c3122520f3412eb7090e8c1c3f75fe57be1e24a2f96465583d84c71e16",
+    "bytes": 480044
+  }
+]

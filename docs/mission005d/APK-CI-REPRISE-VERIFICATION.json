@@ -1,0 +1,27 @@
+{
+  "apkSha256": "ff8de044e24bf59c45f407dbb52f66de20d31c1873d4876c235a59b511d31714",
+  "apkBytes": 29124007,
+  "applicationId": "com.jarvis.voice.pocketprobe",
+  "minSdk": 26,
+  "targetSdk": 35,
+  "abi": [
+    "arm64-v8a"
+  ],
+  "signatureVerified": true,
+  "certificateSha256": "a30afbb0e7fcd031a1a311bb425a58e70cfc682dc83cc721618e9ef3e5bb530b",
+  "zipalign16K": true,
+  "libraries": {
+    "libonnxruntime.so": {
+      "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+      "loadAlignment": "16384",
+      "zipCompression": "stored"
+    },
+    "libonnxruntime4j_jni.so": {
+      "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+      "loadAlignment": "16384",
+      "zipCompression": "stored"
+    }
+  },
+  "internetPermission": false,
+  "physicalAndroidDeviceTest": false
+}

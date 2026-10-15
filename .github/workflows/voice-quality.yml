@@ -1,0 +1,78 @@
+name: Voice Quality 005G
+on:
+  pull_request:
+    paths: ['voiceQuality/**', 'pocketRuntime/**', 'settings.gradle.kts', 'scripts/pocket/verify_experimental_apk.py', 'scripts/pocket/verify_quality_delivery.py', 'deliveries/mission005g/**', '.github/workflows/voice-quality.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: voice-quality-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
+          log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@v4
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Build without private models or signing key; official numeric trace tests
+        run: ./gradlew :pocketRuntime:test :voiceQuality:assembleDebug :voiceQuality:assembleDebugAndroidTest :voiceQuality:lintDebug --no-daemon --max-workers=2
+      - run: python scripts/pocket/verify_experimental_apk.py voiceQuality/build/outputs/apk/debug/voiceQuality-debug.apk --application-id com.jarvis.voice.voicequality005g --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voiceQuality/build/apk-verification.json
+      - name: Audit independently signed APK; never upload an ephemeral CI key
+        if: hashFiles('deliveries/mission005g/005g-experimental-apk.zip') != ''
+        run: python scripts/pocket/verify_quality_delivery.py deliveries/mission005g/005g-experimental-apk.zip --build-tools "$ANDROID_HOME/build-tools/35.0.0" --out voiceQuality/build/delivery
+      - uses: actions/upload-artifact@v4
+        if: hashFiles('deliveries/mission005g/005g-experimental-apk.zip') != ''
+        with:
+          name: jarvis-voice-005g-experimental-signed-apk
+          retention-days: 30
+          path: |
+            voiceQuality/build/delivery/**
+            docs/mission005g/**
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jarvis-voice-005g-unit-lint-reports
+          path: |
+            pocketRuntime/build/reports/tests/**
+            pocketRuntime/build/test-results/**
+            voiceQuality/build/reports/lint-results-debug.*
+  android-quality-playback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
+          log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: ./gradlew :voiceQuality:connectedDebugAndroidTest -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jarvis-voice-005g-android-reports
+          path: |
+            voiceQuality/build/reports/androidTests/**
+            voiceQuality/build/outputs/androidTest-results/**

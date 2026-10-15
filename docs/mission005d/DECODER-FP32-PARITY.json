@@ -1,0 +1,79 @@
+{
+  "checkpointSha256": "dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",
+  "strictParity": true,
+  "decoderCases": [
+    {
+      "frames": 2,
+      "samples": 3840,
+      "maxAudioAbs": 1.4528632164001465e-07,
+      "maxStateAbs": 9.5367431640625e-06
+    },
+    {
+      "frames": 4,
+      "samples": 7680,
+      "maxAudioAbs": 1.1809170246124268e-06,
+      "maxStateAbs": 1.4543533325195312e-05
+    },
+    {
+      "frames": 1,
+      "samples": 1920,
+      "maxAudioAbs": 4.3585896492004395e-07,
+      "maxStateAbs": 1.609325408935547e-05
+    },
+    {
+      "frames": 3,
+      "samples": 5760,
+      "maxAudioAbs": 1.0132789611816406e-06,
+      "maxStateAbs": 2.378225326538086e-05
+    },
+    {
+      "frames": 8,
+      "samples": 15360,
+      "maxAudioAbs": 9.313225746154785e-07,
+      "maxStateAbs": 4.3392181396484375e-05
+    }
+  ],
+  "flowCases": [
+    {
+      "case": 0,
+      "maxAbs": 1.8477439880371094e-06
+    },
+    {
+      "case": 1,
+      "maxAbs": 1.7285346984863281e-06
+    },
+    {
+      "case": 2,
+      "maxAbs": 2.1457672119140625e-06
+    },
+    {
+      "case": 3,
+      "maxAbs": 1.6093254089355469e-06
+    },
+    {
+      "case": 4,
+      "maxAbs": 3.814697265625e-06
+    },
+    {
+      "case": 5,
+      "maxAbs": 2.384185791015625e-06
+    },
+    {
+      "case": 6,
+      "maxAbs": 3.2186508178710938e-06
+    },
+    {
+      "case": 7,
+      "maxAbs": 2.384185791015625e-06
+    },
+    {
+      "case": 8,
+      "maxAbs": 5.7220458984375e-06
+    }
+  ],
+  "androidImportEnabled": false,
+  "models": {
+    "flow_lm_flow": "5772f23044581fb635ad6ba484d39b6ee4d1e2452902fda58eaab8f49d9e7c7e",
+    "mimi_decoder": "5714f08394977e24e88673e638572cb8ae05045fa113f3ebc28ee2e9b5777586"
+  }
+}

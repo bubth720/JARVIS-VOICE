@@ -1,0 +1,61 @@
+{
+  "baselineRows": [
+    {
+      "steps": 1,
+      "cases": 24,
+      "strictAudioPassed": 13,
+      "functionalPassed": 24,
+      "asrWerPercent": 2.2222222222222223,
+      "medianOnnxCpuSeconds": 1.987035168499986,
+      "medianOnnxRtf": 0.8245743867227696,
+      "medianPcm16SnrDb": 77.31206517097999,
+      "maxClippedPercent": 0.0,
+      "medianSeconds": 2.36
+    },
+    {
+      "steps": 2,
+      "cases": 24,
+      "strictAudioPassed": 14,
+      "functionalPassed": 24,
+      "asrWerPercent": 2.2222222222222223,
+      "medianOnnxCpuSeconds": 1.918940601000017,
+      "medianOnnxRtf": 0.8414446094106567,
+      "medianPcm16SnrDb": 76.36200702083504,
+      "maxClippedPercent": 0.0,
+      "medianSeconds": 2.24
+    },
+    {
+      "steps": 3,
+      "cases": 24,
+      "strictAudioPassed": 14,
+      "functionalPassed": 24,
+      "asrWerPercent": 5.555555555555555,
+      "medianOnnxCpuSeconds": 1.9207525879999992,
+      "medianOnnxRtf": 0.8791682570871866,
+      "medianPcm16SnrDb": 77.1788177427301,
+      "maxClippedPercent": 0.0,
+      "medianSeconds": 2.2
+    },
+    {
+      "steps": 5,
+      "cases": 24,
+      "strictAudioPassed": 12,
+      "functionalPassed": 24,
+      "asrWerPercent": 6.111111111111111,
+      "medianOnnxCpuSeconds": 1.9504000710000042,
+      "medianOnnxRtf": 0.9063868933117192,
+      "medianPcm16SnrDb": 77.62061630276241,
+      "maxClippedPercent": 0.0,
+      "medianSeconds": 2.16
+    }
+  ],
+  "totalIndependentCases": 114,
+  "functionalPassed": 114,
+  "strictIndependentAudioPassed": 66,
+  "strictSamplerIdenticalInputCasesPassed": 72,
+  "maxSamplerAbsError": 3.0994415283203125e-06,
+  "humanNaturalnessAssessed": false,
+  "personalRecordingUsed": false,
+  "deviceEnergyMeasured": false,
+  "cloudCombinedTorchOnnxPeakRssMiB": 2928.734375
+}
