@@ -1,0 +1,44 @@
+{
+  "modelRebuilt": false,
+  "perceptualImprovementClaimed": false,
+  "publicReference": "Kyutai Alba CC BY 4.0, pinned SHA256",
+  "personalDataUsed": false,
+  "results": [
+    {
+      "seed": 7,
+      "stats": "PCM : 32640 échantillons, 24000 Hz, 1,360 s ; pic 0,585946 ; RMS 0,122348 ; silence |x| < 0,0001 : 4,13 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "text": "Bonjour à tous.",
+      "steps": 1,
+      "samples": 32640,
+      "NEUTRAL": {
+        "bitIdentical": true,
+        "wallMs": 1647.197156,
+        "maxAbsError": 0
+      },
+      "baselineComputeMs": 1793.72591,
+      "CONVERSATION": {
+        "bitIdentical": true,
+        "wallMs": 1656.923588,
+        "maxAbsError": 0
+      }
+    },
+    {
+      "seed": 42,
+      "stats": "PCM : 46080 échantillons, 24000 Hz, 1,920 s ; pic 0,731085 ; RMS 0,131914 ; silence |x| < 0,0001 : 1,12 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "text": "Demain, je prendrai le train pour Paris.",
+      "steps": 3,
+      "samples": 46080,
+      "NEUTRAL": {
+        "bitIdentical": true,
+        "wallMs": 2297.999017,
+        "maxAbsError": 0
+      },
+      "baselineComputeMs": 2321.610667,
+      "CONVERSATION": {
+        "bitIdentical": true,
+        "wallMs": 2290.131422,
+        "maxAbsError": 0
+      }
+    }
+  ]
+}
