@@ -123,3 +123,46 @@ l'audio effectivement relu et à son format de sortie ; aucune note préremplie.
 identité, profil et validation CPU/RAM/thermique ; les 18 caches 6L ne sont pas un
 profil universel. Aucun remplacement automatique et aucun mode distant activé.
 Voir [MOTEURS-SUPERIEURS.md](MOTEURS-SUPERIEURS.md) et [TEST-XIAOMI.md](TEST-XIAOMI.md).
+
+## Livraison et vérifications du 15 octobre 2026
+
+[Workflow 005G réussi](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352623),
+commit testé `b0a3a477012bb6c953372a6a8e26ec3f997c5cbc` : build ARM64 et
+AndroidTest, lint sans erreur (29 avertissements conservés), audits signature,
+manifestes, absence de poids et alignements ZIP/ELF 16 Ko. JVM publique :
+33 réussis, 13 ignorés explicitement sur 46, aucun échec. Avec le pack privé en
+local : 35 réussis, 11 ignorés sur 46, dont l'égalité exacte 1 étape avec 005F.
+Les tests ignorés ne sont pas comptés comme réussis.
+
+Sur Android 35 x86_64 : **14/14 tests instrumentés réussis**, aucun ignoré.
+Lecture STATIC FLOAT32 et PCM16, phrases courtes, toutes les frames présentées,
+Arrêt, PCM invalide, import ZIP, confidentialité, sampler sur ART et cache A/B
+ont été exercés. Le test des notes vérifie le refus sans écoute et sans notes
+explicites. Aucun poids gated ou profil personnel dans l'émulateur CI.
+Ce résultat ne valide pas une génération 005G ou son naturel sur Xiaomi.
+Les [preuves structurées](VALIDATION-CI.json) distinguent ces résultats des
+[tests locaux](VALIDATION-LOCALE.json) et des évaluations numériques ci-dessus.
+
+[Télécharger l'APK signée et les rapports](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352623/artifacts/11964480867)
+(artefact jusqu'au 14 novembre 2026). Installer uniquement
+`voiceQuality/build/delivery/JARVIS-VOICE-005G-experimental.apk` extrait de ce ZIP.
+Une copie durable de cette même APK est conservée dans
+[`deliveries/mission005g/005g-experimental-apk.zip`](../../deliveries/mission005g/005g-experimental-apk.zip).
+Il ne s'agit pas d'un pack modèle : réutiliser le ZIP FP32 privé existant.
+
+APK : **29277161 octets**, SHA256
+`ab690aa2d4dfad8f80a226c28d59c37e11f994f58e2f45963210c24644bd843c`.
+Certificat SHA256
+`aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e`.
+La clé privée stable reste dans l'espace privé Cloud ; elle n'est pas incluse
+dans Git ou les artefacts. Les prochaines mises à jour 005G devront conserver
+ce certificat et augmenter versionCode. L'APK livrée a été retéléchargée depuis
+GitHub puis vérifiée : taille, SHA256, signature et alignements identiques.
+Voir [VERIFICATION-TELECHARGEMENT.json](VERIFICATION-TELECHARGEMENT.json).
+
+005F conserve son APK et réussit son
+[workflow de non-régression](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352618).
+Les fichiers 005D et JARVIS CORE ne sont pas modifiés par 005G. Le test émulateur
+005D de fin AudioTrack conserve son échec connu `count=1 frames=72000 submitted=72000`
+(4/5 tests au run 38717652861) ; il n'est ni masqué ni corrigé dans cette mission.
+La PR #5 reste en brouillon, sans fusion dans main.

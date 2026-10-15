@@ -1,0 +1,65 @@
+{
+  "testedCommit": "b0a3a477012bb6c953372a6a8e26ec3f997c5cbc",
+  "codeCommit": "44f4618e20a8c001551532de5c22f09c8fce415d",
+  "workflow": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352623",
+  "conclusion": "success",
+  "buildAndAudit": "success",
+  "jvmPublicCI": {
+    "tests": 46,
+    "passed": 33,
+    "skipped": 13,
+    "failures": 0,
+    "errors": 0,
+    "privatePackAvailable": false
+  },
+  "jvmPrivateLocal": {
+    "tests": 46,
+    "passed": 35,
+    "skipped": 11,
+    "failures": 0,
+    "errors": 0,
+    "privatePackAvailable": true
+  },
+  "lint": {
+    "fatal": 0,
+    "errors": 0,
+    "warnings": 29,
+    "warningKinds": {
+      "SetTextI18n": 24,
+      "GradleDependency": 2,
+      "OldTargetApi": 1,
+      "ChromeOsAbiSupport": 1,
+      "UsableSpace": 1
+    }
+  },
+  "android": {
+    "api": 35,
+    "abi": "x86_64",
+    "tests": 14,
+    "passed": 14,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0,
+    "realFloatStaticPlaybackTested": true,
+    "personalWeightsUsed": false,
+    "physicalXiaomi": false
+  },
+  "stable005f": {
+    "workflow": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352618",
+    "conclusion": "success",
+    "moduleUnchanged": true,
+    "apkUnchanged": true
+  },
+  "artifacts": {
+    "signedModelFreeApk": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352623/artifacts/11964480867",
+    "androidReports": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352623/artifacts/11964261504",
+    "unitLintReports": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38718352623/artifacts/11964296279"
+  },
+  "humanListeningPerformed": false,
+  "qualityImprovementValidated": false,
+  "initialCiFailure": {
+    "runId": 38717652911,
+    "cause": "setup-android default requested removed SDK package tools before application tests",
+    "fix": "explicit platform-tools package; no application/model/threshold change"
+  }
+}
