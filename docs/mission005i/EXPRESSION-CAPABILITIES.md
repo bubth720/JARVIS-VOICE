@@ -15,3 +15,5 @@ Les frontières avec citations, parenthèses, ponctuation terminale interne (abr
 Le frontend historique supprime notamment guillemets/parenthèses et normalise ponctuation/casse : 005I ne prétend pas préserver ces signes dans la tokenisation. Le texte utilisateur reste exact dans le plan et le cache. Aucune réécriture supplémentaire n'est permise, même si proposée comme équivalente. La comparaison neutre doit rester bit-identique au moteur 005G avec les mêmes entrées.
 
 Pas de signal d'urgence ajouté : le signal de test du lecteur est explicitement synthétique et volontaire. Ne pas utiliser cette application comme alarme.
+
+Les capacités natives Pocket restent exactement celles de 005H (ensemble vide). `LocalProsodyPlan.capabilities` déclare séparément le champ `pause` uniquement lorsqu’un silence inter-phrases est effectivement appliqué ; `unsupportedEffects` expose les demandes ignorées/dégradées après validation. Il ne s’agit jamais d’une capacité émotionnelle native.

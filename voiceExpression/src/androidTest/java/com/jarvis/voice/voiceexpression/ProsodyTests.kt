@@ -23,8 +23,9 @@ class ProsodyTests {
     }
     @Test fun explicitWholeSentencePausesOnlyAndNoImplicitPermission() {
         val p=prepare(plan("Bonjour à tous.\nNous sommes prêts.","CONVERSATION",250,true))
+        assertTrue(p.expression.capabilities.supported.isEmpty());assertEquals(setOf("pause"),p.capabilities.supported);assertEquals(setOf("intent"),p.unsupportedEffects.map { it.field }.toSet())
         assertEquals(2,p.segments.size);assertEquals(250,p.pauseMs);assertTrue(p.effects.any { it.field=="pause" && it.status=="applied" })
-        val notAllowed=prepare(plan("Bonjour à tous.\nNous sommes prêts.",pause=250));assertEquals(1,notAllowed.segments.size);assertEquals(0,notAllowed.pauseMs)
+        val notAllowed=prepare(plan("Bonjour à tous.\nNous sommes prêts.",pause=250));assertEquals(1,notAllowed.segments.size);assertEquals(0,notAllowed.pauseMs);assertTrue(notAllowed.capabilities.supported.isEmpty());assertEquals(setOf("pause"),notAllowed.unsupportedEffects.map { it.field }.toSet())
         for(bad in listOf("Bonjour.\n", "M. Martin arrive.\nNous sommes prêts.","Il est 12.30 h.\nNous sommes prêts.","« Bonjour à tous.\nNous sommes prêts. »", "Bonjour,\nNous sommes prêts.")) SyntheticVault.reject { prepare(plan(bad,pause=500,allow=true)) }
     }
     @Test fun rendererPreservesExactFloatPcmAndInsertsOnlyRequestedSilence() {

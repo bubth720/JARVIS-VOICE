@@ -78,7 +78,8 @@ data class VoiceExpressionPlan(val request: CoreVoiceRequestV1, val intent: Voic
 
 /** No classifier, rewriting, speaker/style substitution, scheduler bypass or sampler heuristic. */
 object ExpressionPolicy {
-    val capabilities=ExpressionCapabilities(PocketIdentity.ENGINE,setOf("sentencePause"))
+    // Native Pocket capabilities remain empty; sentence pauses belong to the local orchestrator.
+    val capabilities=PocketIdentity.capabilities
     fun plan(request: CoreVoiceRequestV1,binding: ExpressionVoiceBinding,sampling: QualitySampling,seed: Long,
         runningPriority: Int?=null): VoiceExpressionPlan {
         require(request.identityId==binding.identityId) { "Identité de la demande différente du profil" }

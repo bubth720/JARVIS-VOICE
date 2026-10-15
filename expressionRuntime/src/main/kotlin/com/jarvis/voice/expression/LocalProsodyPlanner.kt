@@ -1,6 +1,7 @@
 package com.jarvis.voice.expression
 
 import com.jarvis.voice.identity.VoiceIdentityVault
+import com.jarvis.voice.identity.ExpressionCapabilities
 import com.jarvis.voice.pocket.*
 import org.json.JSONObject
 import java.io.File
@@ -13,6 +14,9 @@ data class LocalProsodyPlan(val expression: VoiceExpressionPlan, val segments: L
         require(pauseMs in 0..1500 && preparedTexts.size==segments.size && tokenCounts.size==segments.size && tokenCounts.all { it in 1..50 })
         require(segments.size==1 && pauseMs==0 || segments.size>=2 && pauseMs>0 && expression.request.allowSentencePauses && expression.request.pauseMs==pauseMs) { "Pauses du plan non autorisées" }
     }
+    /** Field names match the existing ExpressionCapabilities.unsupported contract. Not native emotion. */
+    val capabilities get()=ExpressionCapabilities("005i-local-prosody",if(pauseMs>0) setOf("pause") else emptySet())
+    val unsupportedEffects get()=(expression.effects.filter { it.field!="pause" }+effects).filter { it.status in setOf("unsupported","degraded") }
     fun summary()="${expression.intent} : ${if(effects.any { it.status=="unsupported" }) "limitée" else expression.status}\n"+
         (expression.effects.filter { it.field!="pause" }+effects).joinToString("\n") { "${it.field} : ${it.status} — ${it.reason}" }+
         "\n${segments.size} phrase(s), pause $pauseMs ms ; même profil, graine et paramètres."
