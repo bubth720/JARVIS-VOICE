@@ -28,6 +28,8 @@ Toutes les opérations utilisent un thread CPU et les gardes RAM/thermiques.
    fusion de caches ou activation d'une variante n'est automatique.
 7. Générer une phrase nouvelle avec le profil actif. Les réglages 005G sont
    disponibles : LSD 1/2/3/5, températures 0,2/0,3/0,5, EOS −4, queue officielle.
+   Reprendre les mêmes étapes/température que votre essai 005G pour isoler
+   l'effet du choix de profil.
    Arrêt coupe la lecture ; un calcul natif peut finir son appel avant annulation.
 8. Pour A/B, choisir les deux profils de **la même identité**, texte identique,
    graine **42**, mêmes étapes/température et PCM16. Générer A puis B. Si les
@@ -63,6 +65,8 @@ seconde identité de test consentie, l'archiver, essayer un mauvais mot de passe
 une identité de test supprimée volontairement. Un UUID déjà présent est refusé,
 sans remplacement. Ne pas désinstaller l'application contenant son unique copie
 de profil pour tester l'archive. Voir [MIGRATION-EXPORT.md](MIGRATION-EXPORT.md).
+Confirmer le consentement légal des voix de l'archive avant toute restauration ;
+les confirmations et notes d'origine de chaque référence restent conservées.
 
 005H n'est pas encore validée physiquement sur ce Xiaomi par le développeur.
 L'amélioration 005G rapportée par le propriétaire ne valide pas automatiquement

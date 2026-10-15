@@ -169,7 +169,7 @@ class MainActivity: Activity() {
             archiveIdentity=selectedIdentity();archiveIncludesReferences=includeReferences.isChecked
             startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).apply { type="application/octet-stream";addCategory(Intent.CATEGORY_OPENABLE);putExtra(Intent.EXTRA_TITLE,"JARVIS-VOICE-IDENTITY.jvi") },203)
         }
-        button("Restaurer une archive chiffrée locale — aucun écrasement") { choose("application/octet-stream",204) }
+        button("Restaurer une archive chiffrée locale — aucun écrasement") { require(consent.isChecked) { "Confirmer le consentement légal des voix de cette archive avant restauration" };choose("application/octet-stream",204) }
         button("Supprimer seulement le profil sélectionné") { val id=selectedIdentity();val pid=profileId();confirm("Supprimer ce profil et ses seuls audios ? Les autres profils et références restent conservés.") { task("Suppression du profil",false) { cancel -> comparisons(id).deleteProfile(id,pid,cancel);single(id).deleteProfile(id,pid,cancel);vault.removeProfile(id,pid,true,cancel);audition=null;"Profil supprimé, autres profils intacts." } } }
         button("Effacer seulement les audios de l'identité active — profils conservés") { val id=selectedIdentity();confirm("Effacer les caches de réécoute de cette identité seulement ? Aucun profil ni référence ne sera supprimé.") { task("Suppression des caches privés",false) { comparisons(id).delete();single(id).delete();audition=null;"Audios de cette identité effacés ; profils et autres identités intacts." } } }
         button("Supprimer seulement le WAV de cette référence") { val id=selectedIdentity();val rid=referenceId();confirm("Supprimer cet extrait WAV privé ? Les profils encodés restent utilisables, mais un réimport sera nécessaire pour réencoder.") { task("Suppression de l'extrait",false) { vault.removeReferenceAudio(id,rid,true,it);"WAV supprimé, métadonnées et profils conservés." } } }
@@ -254,10 +254,10 @@ class MainActivity: Activity() {
                     }
                     if(!started) chars.fill('\u0000')
                 } }
-                204 -> passwordDialog(false) { chars -> val started=task("Authentification puis restauration atomique…",true,cleanup={ chars.fill('\u0000') }) { cancel ->
+                204 -> { require(consent.isChecked) { "Confirmer le consentement légal des voix de cette archive avant restauration" };passwordDialog(false) { chars -> val started=task("Authentification puis restauration atomique…",true,cleanup={ chars.fill('\u0000') }) { cancel ->
                     try { requireNotNull(contentResolver.openInputStream(uri)).use { archives.restore(vault,chars,it,cancel) };audition=null;ui { consent.isChecked=false;samePerson.isChecked=false };"Identité restaurée et sélectionnée explicitement par cette opération ; aucun profil précédent écrasé." }
                     finally { chars.fill('\u0000') }
-                };if(!started) chars.fill('\u0000') }
+                };if(!started) chars.fill('\u0000') } }
             }
         }
     }

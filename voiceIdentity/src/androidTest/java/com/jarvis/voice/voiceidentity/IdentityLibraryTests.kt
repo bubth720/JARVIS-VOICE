@@ -91,6 +91,11 @@ class IdentityLibraryTests {
                     val labels=text(a.window.decorView);assertTrue(labels.any { it.contains("fournisseur distant ou inconnu refusé") });assertFalse(labels.any { it.contains("private-personal-name") })
                 }
             }
+            instrumentation.runOnMainSync {
+                val local=Uri.parse("content://com.android.externalstorage.documents/document/primary:Download/synthetic.jvi")
+                MainActivity::class.java.getDeclaredMethod("onActivityResult",Integer.TYPE,Integer.TYPE,Intent::class.java).apply { isAccessible=true }.invoke(a,204,Activity.RESULT_OK,Intent().setData(local))
+                assertTrue(text(a.window.decorView).any { it.contains("consentement légal des voix de cette archive") })
+            }
         } finally { instrumentation.runOnMainSync { a.finish() } }
     }
     @Test fun androidAeadRoundTripWrongPasswordAndTagTamperPreserveDestination()=work { root ->
