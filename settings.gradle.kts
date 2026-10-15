@@ -9,3 +9,4 @@ include(":pocketRuntime", ":pocketProbe")
 include(":voicePrototype")
 
 include(":voiceQuality")
+include(":identityRuntime", ":voiceIdentity")
