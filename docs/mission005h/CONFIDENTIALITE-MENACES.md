@@ -42,3 +42,8 @@ et bornés. Les originaux temporaires et les espaces d'archive interrompus sont
 nettoyés à la réouverture ; un échec de nettoyage est signalé, pas assimilé à un
 effacement réussi. La stabilité Xiaomi, la chauffe et l'audibilité 005H exigent
 encore un essai physique.
+
+Les MP3/WAV originaux choisis et les archives .jvi exportées manuellement sont
+des copies indépendantes, extérieures à la sandbox. Supprimer une identité dans
+005H ne les supprime pas ; les inspecter/effacer séparément dans l'application
+Fichiers, et vérifier l'absence de synchronisation de leur dossier.

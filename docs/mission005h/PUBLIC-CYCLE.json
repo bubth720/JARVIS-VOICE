@@ -1,0 +1,14 @@
+{
+  "distinctConditionings": true,
+  "pcmA": "PCM : 46080 échantillons, 24000 Hz, 1,920 s ; pic 0,731085 ; RMS 0,131914 ; silence |x| < 0,0001 : 1,12 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+  "publicFixture": "Alba CC BY 4.0, pinned SHA256",
+  "personalAudioUsed": false,
+  "seed": 42,
+  "profiles": 2,
+  "samplesA": 46080,
+  "repeatedABitIdentical": true,
+  "samplesB": 57600,
+  "pcmB": "PCM : 57600 échantillons, 24000 Hz, 2,400 s ; pic 0,629112 ; RMS 0,123295 ; silence |x| < 0,0001 : 3,71 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+  "steps": 3,
+  "distinctGeneratedPcm": true
+}

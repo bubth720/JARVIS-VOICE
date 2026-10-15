@@ -59,12 +59,22 @@ Créer et confirmer un mot de passe fort (12–128 caractères), gardé séparé
 Le fichier .jvi ne contient aucun modèle. Ne pas choisir Drive ou un dossier
 synchronisé. Aucun PC, Termux, ADB ou débogage sans fil n'est nécessaire.
 
-Pour tester sans mettre en danger l'identité personnelle : créer d'abord une
-seconde identité de test consentie, l'archiver, essayer un mauvais mot de passe
-(coffre inchangé), puis restaurer vers une 005H vierge ou, après sauvegarde vérifiée,
-une identité de test supprimée volontairement. Un UUID déjà présent est refusé,
-sans remplacement. Ne pas désinstaller l'application contenant son unique copie
-de profil pour tester l'archive. Voir [MIGRATION-EXPORT.md](MIGRATION-EXPORT.md).
+Pour tester sans mettre en danger l'identité personnelle :
+
+1. Archiver l'identité personnelle, puis tenter l'import de sa propre archive
+   sans rien supprimer. Un mauvais mot de passe doit être refusé. Avec le bon
+   mot de passe, le message « Identité déjà présente » est le résultat attendu :
+   l'authentification, les SHA et les formats sont contrôlés avant ce refus.
+   Cela vérifie le contenu, **pas une écriture de restauration**.
+2. Créer une seconde identité nommée TEST ARCHIVE, idéalement avec un petit
+   extrait consenti et un profil. L'archiver, puis supprimer **seulement cette
+   identité de test**, jamais l'identité personnelle principale.
+3. Restaurer l'archive TEST ARCHIVE : retrouver son UUID, sa référence et son
+   profil. Revenir ensuite explicitement à l'identité personnelle principale.
+
+Un UUID déjà présent est toujours refusé, sans remplacement. Ne pas désinstaller
+l'application contenant son unique copie de profil pour tester l'archive.
+Voir [MIGRATION-EXPORT.md](MIGRATION-EXPORT.md).
 Confirmer le consentement légal des voix de l'archive avant toute restauration ;
 les confirmations et notes d'origine de chaque référence restent conservées.
 
