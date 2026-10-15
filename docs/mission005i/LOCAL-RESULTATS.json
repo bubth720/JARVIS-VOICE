@@ -31,5 +31,57 @@
   "publicAlbaOnly": true,
   "personalAudioUsed": false,
   "physicalXiaomi005iValidated": false,
-  "androidInstrumentation": "pending CI"
+  "androidInstrumentation": {
+    "runId": 38759583443,
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0
+  },
+  "codeCommit": "532c6580835525b8879e012bde56fae8159fbe55",
+  "signedApkAudit": {
+    "apkSha256": "af79265c432285d45313be1d6220da2046f9691da9bc238fc88e3d3fcf300f15",
+    "apkBytes": 29323459,
+    "applicationId": "com.jarvis.voice.voiceexpression005i",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false,
+    "codeCommit": "532c6580835525b8879e012bde56fae8159fbe55",
+    "versionCode": 1,
+    "versionName": "0.5.0-mission005i-experimental",
+    "stableSigning": true,
+    "preservesInstalled005h": true,
+    "preservesInstalled005g": true,
+    "preservesInstalled005f": true,
+    "preservesInstalled005d": true,
+    "modelRebuilt": false,
+    "archiveFormat": "JVIENC01",
+    "requiresExplicitProfileConfirmation": true,
+    "physicalXiaomi005iValidated": false
+  },
+  "publicApkZip": {
+    "bytes": 11429850,
+    "sha256": "a0fd0939ccecfaf05980bc04eb82bfee810722a149619b27d80fa893c6d6f9f8",
+    "onlyEntry": "JARVIS-VOICE-005I-experimental.apk"
+  }
 }

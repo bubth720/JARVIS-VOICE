@@ -78,7 +78,15 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: ./gradlew :voiceExpression:connectedDebugAndroidTest -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+          script: |
+            ./gradlew :voiceIdentity:assembleDebug -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+            adb install -r voiceIdentity/build/outputs/apk/debug/voiceIdentity-debug.apk
+            adb shell run-as com.jarvis.voice.voiceidentity005h mkdir -p files
+            adb shell run-as com.jarvis.voice.voiceidentity005h touch files/005i-synthetic-isolation-sentinel
+            ./gradlew :voiceExpression:connectedDebugAndroidTest -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+            adb shell pm path com.jarvis.voice.voiceidentity005h
+            adb shell pm path com.jarvis.voice.voiceexpression005i
+            adb shell run-as com.jarvis.voice.voiceidentity005h test -f files/005i-synthetic-isolation-sentinel
       - uses: actions/upload-artifact@v4
         if: always()
         with:
