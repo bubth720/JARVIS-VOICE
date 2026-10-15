@@ -10,3 +10,6 @@ include(":voicePrototype")
 
 include(":voiceQuality")
 include(":identityRuntime", ":voiceIdentity")
+
+include(":expressionRuntime")
+include(":voiceExpression")

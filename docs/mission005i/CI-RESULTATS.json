@@ -1,0 +1,437 @@
+{
+  "codeCommit": "532c6580835525b8879e012bde56fae8159fbe55",
+  "environment": "Android API35 x86_64 GitHub emulator; JVM17 CI",
+  "jvm": {
+    "expressionRuntime": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 11
+    },
+    "identityRuntime": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 18
+    },
+    "pocketRuntime": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13,
+      "passed": 33
+    }
+  },
+  "workflows": [
+    {
+      "mission": "005I",
+      "runId": 38759583443,
+      "buildJob": 116506994921,
+      "androidJob": 116506995415,
+      "tests": 31,
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38759583443"
+    },
+    {
+      "mission": "005H",
+      "runId": 38759583352,
+      "buildJob": 116506994240,
+      "androidJob": 116506994527,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38759583352"
+    },
+    {
+      "mission": "005G",
+      "runId": 38759583344,
+      "buildJob": 116506994648,
+      "androidJob": 116506995084,
+      "tests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38759583344"
+    },
+    {
+      "mission": "005F",
+      "runId": 38759583316,
+      "buildJob": 116506995249,
+      "androidJob": 116506995321,
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "conclusion": "success",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38759583316"
+    },
+    {
+      "mission": "005D",
+      "runId": 38759583394,
+      "buildJob": 116506996617,
+      "androidJob": 116506996920,
+      "tests": 5,
+      "passed": 4,
+      "failed": 1,
+      "skipped": 0,
+      "conclusion": "known-failure",
+      "unchanged": true,
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38759583394"
+    }
+  ],
+  "downloadedArtifacts": {
+    "11985127839": {
+      "bytes": 48694,
+      "sha256": "97d538ad3f77c8e0722e71583d012ed527f2aee19bcfa72dcc801fa432997209",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_voiceQuality-.xml",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 14,
+          "skippedCases": [],
+          "failedCases": []
+        }
+      ]
+    },
+    "11985731484": {
+      "bytes": 56382,
+      "sha256": "0f887a8b114289977cac5dfdee9bb0d78946314339b5e84ee8a58f753e7d491c",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_voiceIdentity-.xml",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 18,
+          "skippedCases": [],
+          "failedCases": []
+        }
+      ]
+    },
+    "11984049665": {
+      "bytes": 29742,
+      "sha256": "7a797de3af91bac5ffcfe92d5645ce26f882f4132aab2ff41f6320ebbd52b980",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_pocketProbe-.xml",
+          "tests": 5,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 4,
+          "skippedCases": [],
+          "failedCases": [
+            {
+              "name": "testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns",
+              "message": ""
+            }
+          ]
+        }
+      ]
+    },
+    "11984449295": {
+      "bytes": 83265,
+      "sha256": "85fc939e649df9e68993f6afe52f3e956c7a65c7e77d4e2111ce4578663f906c",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ExpressionContractTests.xml",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 4,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ExpressionStoreTests.xml",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 3,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ProsodyTests.xml",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 4,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.PublicNeutralParityTests.xml",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "passed": 0,
+          "skippedCases": [
+            "publicAlbaNeutralAndUnsupportedStyleAreBitIdenticalToUnchanged005gBackend"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.RealPublicIdentityTests.xml",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "passed": 0,
+          "skippedCases": [
+            "twoContiguousPublicAlbaReferencesReallyEncodeAndGenerateDistinctDeterministicConditionings"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.IdentityWavTests.xml",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 1,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.VoiceIdentityArchiveTests.xml",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 5,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.VoiceIdentityVaultTests.xml",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 12,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.CandidateVoiceEncoderTests.xml",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "passed": 1,
+          "skippedCases": [
+            "realEncoderAndAll18StatesMatchIndependentOfficialGolden"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.ExperimentalImportTests.xml",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 3,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.ExperimentalProfileTests.xml",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 2,
+          "passed": 4,
+          "skippedCases": [
+            "originalPrivateZipInstallsWithEmbeddedManifest",
+            "realOfflineProfileIsEncodedPersistedSelectedAndUsedByFP32Generator"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PcmDeliveryTests.xml",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 6,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PerformanceTests.xml",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "passed": 0,
+          "skippedCases": [
+            "compareOneAndTwoThreadsStreamingAndWholeSentence"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PlaybackEvidenceTests.xml",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 5,
+          "skippedCases": [],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PocketTests.xml",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8,
+          "passed": 3,
+          "skippedCases": [
+            "installRealPackAndRejectCorruptedReplacement",
+            "frontendMatchesPublishedExportFixtures",
+            "voicePresetHasMatchingLayerCachesAndOffsets",
+            "nativeRequestCancellationFromAnotherThreadAndRecovery",
+            "frontendMatchesOfficialFrenchCorpus",
+            "realFrenchInferenceAndCancellation",
+            "pinnedPackHasSixFrenchLayersAndNoCloningEncoder",
+            "refusesEmptyReservedAndOversizedText"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.QualitySamplerTests.xml",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "passed": 4,
+          "skippedCases": [
+            "qualityOneStepExactlyPreservesStableEngineWithSamePublicProfileAndSeed"
+          ],
+          "failedCases": []
+        },
+        {
+          "xml": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.ReferenceAudioTests.xml",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 7,
+          "skippedCases": [],
+          "failedCases": []
+        }
+      ]
+    },
+    "11985721578": {
+      "bytes": 78739,
+      "sha256": "16129fb8fc785fcf3028a76c5396534c4fe367bce08f8394b0b039149f846b14",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_voiceExpression-.xml",
+          "tests": 31,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 31,
+          "skippedCases": [],
+          "failedCases": []
+        }
+      ]
+    },
+    "11983969860": {
+      "bytes": 40520,
+      "sha256": "e399525a23a2889ba105733e0ccbc310d239b7e92e8a378328c26e06281da69e",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_voicePrototype-.xml",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "passed": 10,
+          "skippedCases": [],
+          "failedCases": []
+        }
+      ]
+    }
+  },
+  "physicalXiaomi005iValidated": false,
+  "personalDataUsed": false,
+  "privatePackDownloadedInCI": false,
+  "coinstallationEmulatorDeliveryCheck": {
+    "runId": 38762084531,
+    "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38762084531",
+    "workflowCommit": "1cf87c452aa5f4c0f4e88597c0c52b876d492784",
+    "applicationCodeCommit": "532c6580835525b8879e012bde56fae8159fbe55",
+    "applicationSourcesUnchanged": true,
+    "buildJob": 116515699113,
+    "androidJob": 116515698655,
+    "conclusion": "success",
+    "tests": 31,
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "bothPackagesPresent": [
+      "com.jarvis.voice.voiceidentity005h",
+      "com.jarvis.voice.voiceexpression005i"
+    ],
+    "hPrivateSyntheticSentinelPreserved": true,
+    "gradleTestCleanupAccountedFor": true,
+    "emulatorOnly": true,
+    "personalProfileTested": false,
+    "reportArtifact": {
+      "id": 11987016274,
+      "bytes": 77291,
+      "sha256": "9c7b9e06b80c02b051ae1411d65ef5d2ab5d7b03b62b49a7ba265da40d9a8685",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_voiceExpression-.xml",
+          "tests": 31,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  },
+  "deliveryAudit": {
+    "runId": 38760833472,
+    "buildJob": 116511364392,
+    "conclusion": "success",
+    "stableSignedArtifactId": 11985692633,
+    "artifactDownloadedAndApkCompared": true
+  },
+  "firstCoinstallationAttempt": {
+    "runId": 38760833472,
+    "androidJob": 116511365625,
+    "applicationTestsPassed": 31,
+    "applicationTestsFailed": 0,
+    "postcheckFailed": true,
+    "cause": "Gradle uninstalls the tested package after connectedDebugAndroidTest; post-test pm path failed for 005I. Fixed by reinstalling only on the emulator before checking coexistence.",
+    "fixedWorkflowCommit": "1cf87c452aa5f4c0f4e88597c0c52b876d492784"
+  }
+}
