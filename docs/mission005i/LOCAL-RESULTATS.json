@@ -83,5 +83,7 @@
     "bytes": 11429850,
     "sha256": "a0fd0939ccecfaf05980bc04eb82bfee810722a149619b27d80fa893c6d6f9f8",
     "onlyEntry": "JARVIS-VOICE-005I-experimental.apk"
-  }
+  },
+  "coinstallationEmulatorValidation": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38762084531",
+  "publicDownloadProof": "VERIFICATION-TELECHARGEMENT.json"
 }

@@ -2,6 +2,18 @@
 
 005H et son profil B doivent rester installés et utilisables. Ne rien désinstaller, ne pas effacer les données de 005H. Aucun fichier personnel à envoyer au développeur/Cloud.
 
+## Parcours court
+
+1. **005H** : activer B et sauvegarder l'identité en `.jvi` chiffré dans Téléchargements. Garder 005H et le mot de passe.
+2. [Télécharger le ZIP APK 005I](https://github.com/bubth720/JARVIS-VOICE/raw/56ffebc5b514d683f977ea177a26e2b6a91b4930/deliveries/mission005i/005i-experimental-apk.zip), extraire puis installer `JARVIS-VOICE-005I-experimental.apk` depuis l'application Fichiers.
+3. **005I** : importer le ZIP FP32 privé déjà présent sur le téléphone ; cocher le consentement et restaurer le `.jvi` local avec son mot de passe.
+4. Vérifier le profil B (UUID/SHA256 identiques à 005H), le sélectionner puis appuyer sur **Activer ce profil**. Aucun réencodage.
+5. Même phrase/graine/LSD/température, pauses à 0 : écouter **A NEUTRAL**, puis **B CONVERSATION**. Un résultat identique est attendu pour une intention sans commande acoustique. Noter seulement après écoute réelle.
+
+Aucun PC, USB, ADB ou envoi au Cloud nécessaire. Si la restauration échoue, arrêter et garder 005H intacte.
+
+## Protocole détaillé
+
 1. Dans **005H**, sélectionner l'identité et activer le profil B déjà préféré à l'oreille. Repérer localement son UUID et son SHA256 affichés. Sauvegarder cette identité en archive chiffrée `.jvi` dans **Téléchargements** : mot de passe personnel de 12–128 caractères, conservé séparément. Inclure les WAV seulement si désiré ; sans cette option, seuls métadonnées et profils subsistent dans l'archive. Ne pas partager l'archive.
 2. Télécharger le ZIP **APK 005I** du lien de livraison, l'extraire avec l'application Fichiers, installer l'APK. Son nom est « JARVIS Voix 005I EXPÉRIMENTAL », identifiant distinct `com.jarvis.voice.voiceexpression005i`. Aucun remplacement de 005H, aucune désinstallation demandée.
 3. Dans **005I**, importer par le sélecteur **local** le ZIP FP32 privé existant. Ne pas réencoder/reconstruire les modèles. Taille du pack 234932686 octets, SHA256 `9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd` ; le manifeste vérifie chacun de ses dix fichiers.

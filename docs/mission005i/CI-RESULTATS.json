@@ -381,5 +381,57 @@
   "physicalXiaomi005iValidated": false,
   "personalDataUsed": false,
   "privatePackDownloadedInCI": false,
-  "coinstallationEmulatorDeliveryCheck": "pending"
+  "coinstallationEmulatorDeliveryCheck": {
+    "runId": 38762084531,
+    "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38762084531",
+    "workflowCommit": "1cf87c452aa5f4c0f4e88597c0c52b876d492784",
+    "applicationCodeCommit": "532c6580835525b8879e012bde56fae8159fbe55",
+    "applicationSourcesUnchanged": true,
+    "buildJob": 116515699113,
+    "androidJob": 116515698655,
+    "conclusion": "success",
+    "tests": 31,
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "bothPackagesPresent": [
+      "com.jarvis.voice.voiceidentity005h",
+      "com.jarvis.voice.voiceexpression005i"
+    ],
+    "hPrivateSyntheticSentinelPreserved": true,
+    "gradleTestCleanupAccountedFor": true,
+    "emulatorOnly": true,
+    "personalProfileTested": false,
+    "reportArtifact": {
+      "id": 11987016274,
+      "bytes": 77291,
+      "sha256": "9c7b9e06b80c02b051ae1411d65ef5d2ab5d7b03b62b49a7ba265da40d9a8685",
+      "digestVerified": true,
+      "suites": [
+        {
+          "xml": "outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_voiceExpression-.xml",
+          "tests": 31,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  },
+  "deliveryAudit": {
+    "runId": 38760833472,
+    "buildJob": 116511364392,
+    "conclusion": "success",
+    "stableSignedArtifactId": 11985692633,
+    "artifactDownloadedAndApkCompared": true
+  },
+  "firstCoinstallationAttempt": {
+    "runId": 38760833472,
+    "androidJob": 116511365625,
+    "applicationTestsPassed": 31,
+    "applicationTestsFailed": 0,
+    "postcheckFailed": true,
+    "cause": "Gradle uninstalls the tested package after connectedDebugAndroidTest; post-test pm path failed for 005I. Fixed by reinstalling only on the emulator before checking coexistence.",
+    "fixedWorkflowCommit": "1cf87c452aa5f4c0f4e88597c0c52b876d492784"
+  }
 }
