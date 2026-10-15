@@ -35,5 +35,20 @@ class IdentityComparisonStore(private val root: File) {
         if(slot=="B") requireB(id,p,m.getString("context"),cancel)
         return cache.loadComparable(slot,cancel)
     }
-    fun delete() { cache.delete();for(slot in listOf("A","B")) { val f=record(slot);check(!f.exists() || f.delete()) } }
+    private fun deleteSlot(slot: String) {
+        check(File(root,slot).deleteRecursively())
+        for(f in listOf(record(slot),File(root,"profile-$slot.json.pending"))) check(!f.exists() || f.delete())
+    }
+    fun deleteProfile(id: VoiceIdentityId,pid: String,cancel: CancellationToken) {
+        for(slot in listOf("A","B")) {
+            val directory=File(root,slot);val file=record(slot)
+            if(!directory.exists() && !file.exists()) continue
+            require(file.isFile) { "Cache interrompu : effacer explicitement les audios de cette identité avant suppression du profil" }
+            val m=metadata(slot);cache.load(slot,cancel)
+            require(m.getString("pcmHash")==cache.metadata(slot).getString("pcmHash") && m.getString("context")==cache.metadata(slot).getString("context")) { "Cache incohérent : effacer explicitement les audios de cette identité" }
+            require(m.getString("identityId")==id.value)
+            if(m.getString("profileId")==pid) deleteSlot(slot)
+        }
+    }
+    fun delete() { for(slot in listOf("A","B")) deleteSlot(slot) }
 }

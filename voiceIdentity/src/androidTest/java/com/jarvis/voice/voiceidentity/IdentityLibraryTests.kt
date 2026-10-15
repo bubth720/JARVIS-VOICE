@@ -131,6 +131,16 @@ class IdentityLibraryTests {
         SyntheticVault.reject { IdentityAdmission.requireHeavy(4096L*1048576,true,0) }
         SyntheticVault.reject { IdentityAdmission.requireHeavy(4096L*1048576,false,3) }
     }
+    @Test fun profileAudioDeletionDoesNotTouchAnotherIdentitySandboxPartition()=work { root ->
+        val v=VoiceIdentityVault(File(root,"vault"));val a=SyntheticVault.identity(v,"A");val ra=SyntheticVault.reference(v,a);val pa=v.saveProfile(a,ra,SyntheticVault.profile(),CancellationToken())
+        val b=SyntheticVault.identity(v,"B");val rb=SyntheticVault.reference(v,b);val pb=v.saveProfile(b,rb,SyntheticVault.profile(.1f),CancellationToken())
+        val profiles=v.list().associateBy { it.id };val ar=File(root,"audio/${a.value}");val br=File(root,"audio/${b.value}");val ac=IdentityComparisonStore(ar);val bc=IdentityComparisonStore(br)
+        val c=CancellationToken();val pcm=FloatArray(24000) { .01f }
+        ac.save("A",a,profiles.getValue(a).profiles.single(),"Bonjour.",42,QualitySampling(),pcm,c)
+        bc.save("A",b,profiles.getValue(b).profiles.single(),"Bonjour.",42,QualitySampling(),pcm,c)
+        ac.deleteProfile(a,pa,c);v.removeProfile(a,pa,true)
+        assertFalse(File(ar,"A").exists());assertArrayEquals(pcm,bc.load("A",v,c),0f);assertEquals(pb,v.list().single { it.id==b }.profiles.single().id)
+    }
     @Test fun unknownSchemaAndMaliciousIdentityIdFailClosedWithoutReplacingIndex()=work { root ->
         val v=VoiceIdentityVault(root);SyntheticVault.identity(v)
         val index=File(root,"vault.json");val original=index.readText()

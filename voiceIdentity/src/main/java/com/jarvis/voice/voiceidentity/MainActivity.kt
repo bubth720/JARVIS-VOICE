@@ -30,8 +30,9 @@ class MainActivity: Activity() {
     @Volatile private var destroyed=false
     private lateinit var vault: VoiceIdentityVault
     private val pack get()=File(noBackupFilesDir,"models/fp32")
-    private val comparisons get()=IdentityComparisonStore(File(noBackupFilesDir,"comparison"))
-    private val single get()=IdentityComparisonStore(File(noBackupFilesDir,"single"))
+    private fun audioRoot(id: VoiceIdentityId)=File(noBackupFilesDir,"identity-audio/${id.value}")
+    private fun comparisons(id: VoiceIdentityId)=IdentityComparisonStore(File(audioRoot(id),"comparison"))
+    private fun single(id: VoiceIdentityId)=IdentityComparisonStore(File(audioRoot(id),"single"))
     private val archives get()=VoiceIdentityArchive(File(noBackupFilesDir,"archive-work"))
     private val controls=mutableListOf<View>()
     private lateinit var status: TextView
@@ -169,10 +170,11 @@ class MainActivity: Activity() {
             startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).apply { type="application/octet-stream";addCategory(Intent.CATEGORY_OPENABLE);putExtra(Intent.EXTRA_TITLE,"JARVIS-VOICE-IDENTITY.jvi") },203)
         }
         button("Restaurer une archive chiffrée locale — aucun écrasement") { choose("application/octet-stream",204) }
-        button("Supprimer seulement le profil sélectionné") { val id=selectedIdentity();val pid=profileId();confirm("Supprimer ce profil et les audios de comparaison ? Les autres profils et références restent conservés.") { task("Suppression du profil",false) { vault.removeProfile(id,pid,true,it);comparisons.delete();single.delete();audition=null;"Profil supprimé, autres profils intacts." } } }
+        button("Supprimer seulement le profil sélectionné") { val id=selectedIdentity();val pid=profileId();confirm("Supprimer ce profil et ses seuls audios ? Les autres profils et références restent conservés.") { task("Suppression du profil",false) { cancel -> comparisons(id).deleteProfile(id,pid,cancel);single(id).deleteProfile(id,pid,cancel);vault.removeProfile(id,pid,true,cancel);audition=null;"Profil supprimé, autres profils intacts." } } }
+        button("Effacer seulement les audios de l'identité active — profils conservés") { val id=selectedIdentity();confirm("Effacer les caches de réécoute de cette identité seulement ? Aucun profil ni référence ne sera supprimé.") { task("Suppression des caches privés",false) { comparisons(id).delete();single(id).delete();audition=null;"Audios de cette identité effacés ; profils et autres identités intacts." } } }
         button("Supprimer seulement le WAV de cette référence") { val id=selectedIdentity();val rid=referenceId();confirm("Supprimer cet extrait WAV privé ? Les profils encodés restent utilisables, mais un réimport sera nécessaire pour réencoder.") { task("Suppression de l'extrait",false) { vault.removeReferenceAudio(id,rid,true,it);"WAV supprimé, métadonnées et profils conservés." } } }
         button("Supprimer les métadonnées de cette référence sans profil") { val id=selectedIdentity();val rid=referenceId();confirm("Supprimer cette référence ? Refus si elle est encore liée à un profil.") { task("Suppression de la référence",false) { vault.removeReference(id,rid,true,it);"Référence supprimée." } } }
-        button("Supprimer l'identité active et ses données privées") { val id=selectedIdentity();confirm("Supprimer cette identité, ses références, profils et audios ? Aucun changement des autres identités ni des applications 005D/F/G.") { task("Suppression de l'identité",false) { vault.removeIdentity(id,true,it);comparisons.delete();single.delete();audition=null;"Identité supprimée ; aucune autre identité sélectionnée automatiquement." } } }
+        button("Supprimer l'identité active et ses données privées") { val id=selectedIdentity();confirm("Supprimer cette identité, ses références, profils et audios ? Aucun changement des autres identités ni des applications 005D/F/G.") { task("Suppression de l'identité",false) { check(audioRoot(id).deleteRecursively());vault.removeIdentity(id,true,it);audition=null;"Identité supprimée ; aucune autre identité sélectionnée automatiquement." } } }
         stop=Button(this).apply { text="ARRÊT";layout.addView(this);setOnClickListener { stop() } }
         status=label("Importer le ZIP FP32 existant puis créer une identité. Aucun fichier personnel à transmettre au développeur.")
         diagnostics=label("");metrics=label(DeviceMetrics.summary(this))
@@ -314,9 +316,10 @@ class MainActivity: Activity() {
         val pid=if(slot==null) requireNotNull(identity.activeProfiles[PocketIdentity.bindingKey]) { "Activer explicitement un profil avant synthèse" } else profileId(if(slot=="A") profileA else profileB)
         val profile=identity.profiles.single { it.id==pid };val phrase=text.text.toString().trim();require(phrase.isNotEmpty())
         val randomSeed=requireNotNull(seed.text.toString().toLongOrNull()) { "Graine entière requise" };val sampling=settings()
-        val store=if(slot==null) single else comparisons;val side=slot ?: "A"
+        val store=if(slot==null) single(id) else comparisons(id);val side=slot ?: "A"
         task("${identity.name} / profil ${pid.take(8)} : ${sampling.label()} ; génération…",true) { cancel ->
             audition=null
+            require(vault.selected()==id) { "Identité active modifiée ; la sélectionner de nouveau avant génération" }
             if(slot=="B") store.requireB(id,profile,store.context(id,phrase,randomSeed,sampling),cancel)
             val voice=vault.binding().resolve(id,pid,cancel);val chunks=mutableListOf<FloatArray>();var samples=0
             val result=QualityEngine(pack,voice,loadCancel=cancel,sampling=sampling).use { engine ->
@@ -339,7 +342,7 @@ class MainActivity: Activity() {
         finally { audio.close();player.compareAndSet(audio,null) }
     }
     private fun replay(slot: String) {
-        val store=if(slot=="main") single else comparisons;val side=if(slot=="main") "A" else slot
+        val id=selectedIdentity();val store=if(slot=="main") single(id) else comparisons(id);val side=if(slot=="main") "A" else slot
         task("Réécoute $slot sans modèle ni recalcul…",false) { cancel ->
             val meta=store.metadata(side);play(store.load(side,vault,cancel),cancel);remember(slot,meta)
             "Réécoute $slot terminée ; identité et profil vérifiés, aucun recalcul."
@@ -349,7 +352,7 @@ class MainActivity: Activity() {
     private fun rate() {
         val a=requireNotNull(audition) { "Écouter un profil avant de noter" }
         require(heard.isChecked && ratings.all { it.selectedItemPosition>0 }) { "Confirmer l'audibilité et renseigner les cinq notes" }
-        val scores=ratings.map { it.selectedItem.toString().toInt() };val slot=a.getString("slot");val store=if(slot=="main") single else comparisons;val side=if(slot=="main") "A" else slot
+        val scores=ratings.map { it.selectedItem.toString().toInt() };val slot=a.getString("slot");val id=VoiceIdentityId(a.getString("identityId"));val store=if(slot=="main") single(id) else comparisons(id);val side=if(slot=="main") "A" else slot
         task("Évaluation humaine privée",false) { cancel ->
             store.load(side,vault,cancel)
             require(store.metadata(side).getString("pcmHash")==a.getString("pcmHash") && store.metadata(side).getString("context")==a.getString("context")) { "Audio remplacé ; réécouter avant de noter" }

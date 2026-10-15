@@ -60,8 +60,12 @@ température, EOS, queue et sortie PCM16 identiques. Une empreinte canonique des
 Deux fichiers différents contenant les mêmes tenseurs ne constituent pas un A/B
 de profils distincts. Les caches PCM et leurs métadonnées sont liés par SHA256 ;
 un écrit partiel est refusé. Une réécoute exige la même identité explicitement
-sélectionnée et un profil existant/valide. Deux caches A/B de 20 s et un cache de
-synthèse active de 20 s maximum, tous privés, aucune reconstruction à la réécoute.
+sélectionnée et un profil existant/valide. Par identité : deux caches A/B de 20 s
+et un cache de synthèse active de 20 s maximum, tous privés ; moins de 58 Mo de
+PCM brut pour les dix identités maximales. Aucune reconstruction à la réécoute.
+Supprimer un profil efface uniquement ses propres caches identifiables ; un cache
+interrompu/incohérent impose un effacement explicite des audios de cette identité.
+Supprimer une identité ne touche jamais aux caches d'une autre identité.
 
 Un exécuteur unique pour tout le processus survit aux recréations d'activité :
 l'ancien appel natif annulé doit fermer son modèle avant qu'une nouvelle opération

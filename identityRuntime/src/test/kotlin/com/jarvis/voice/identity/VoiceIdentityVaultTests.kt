@@ -116,4 +116,18 @@ class VoiceIdentityVaultTests {
         IdentityAdmission.requireHeavy(2048L*1048576,false,0)
         for((ram,low,heat) in listOf(Triple(2048L*1048576-1,false,0),Triple(4096L*1048576,true,0),Triple(4096L*1048576,false,3))) SyntheticVault.reject { IdentityAdmission.requireHeavy(ram,low,heat) }
     }
+    @Test fun deletingOneProfileCacheNeverDeletesAnotherProfileOrIdentityAudio()=work { root ->
+        val v=VoiceIdentityVault(File(root,"vault"));val a=SyntheticVault.identity(v,"A");val ra=SyntheticVault.reference(v,a)
+        val pa1=v.saveProfile(a,ra,SyntheticVault.profile(),CancellationToken());val pa2=v.saveProfile(a,ra,SyntheticVault.profile(.1f),CancellationToken())
+        val b=SyntheticVault.identity(v,"B");val rb=SyntheticVault.reference(v,b);val pb=v.saveProfile(b,rb,SyntheticVault.profile(.2f),CancellationToken())
+        val aProfiles=v.list().single { it.id==a }.profiles.associateBy { it.id };val bProfile=v.list().single { it.id==b }.profiles.single()
+        val aRoot=File(root,"audio/${a.value}");val bRoot=File(root,"audio/${b.value}");val ac=IdentityComparisonStore(aRoot);val bc=IdentityComparisonStore(bRoot)
+        val c=CancellationToken();val pcm=FloatArray(24000) { .1f };val sampling=QualitySampling()
+        ac.save("A",a,aProfiles.getValue(pa1),"Bonjour.",42,sampling,pcm,c);ac.save("B",a,aProfiles.getValue(pa2),"Bonjour.",42,sampling,pcm,c)
+        bc.save("A",b,bProfile,"Bonjour.",42,sampling,pcm,c)
+        ac.deleteProfile(a,pa1,c);v.removeProfile(a,pa1,true)
+        assertFalse(File(aRoot,"A").exists());assertArrayEquals(pcm,QualityABStore(aRoot).load("B",c),0f)
+        assertArrayEquals(pcm,bc.load("A",v,c),0f);assertEquals(pb,v.list().single { it.id==b }.profiles.single().id)
+        aRoot.deleteRecursively();v.removeIdentity(a,true);assertArrayEquals(pcm,bc.load("A",v,c),0f)
+    }
 }
