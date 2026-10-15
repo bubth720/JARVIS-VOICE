@@ -32,6 +32,16 @@ class PublicNeutralParityTests {
                 }
                 results.put(row)
             }
+            val multi="Bonjour à tous.\nNous sommes prêts.";val sampling=QualitySampling(3)
+            val pplan=ExpressionPolicy.plan(CoreVoiceRequestV1(multi,id,expressionIntent="CONVERSATION",pauseMs=250,allowSentencePauses=true),ExpressionVoiceBinding.from(p),sampling,42)
+            val planned=ExpressionRenderer.prepare(File(pack),pplan);val expectedParts=mutableListOf<FloatArray>()
+            for((index,segment) in planned.segments.withIndex()) {
+                if(index>0) expectedParts.add(FloatArray(6000))
+                QualityEngine(File(pack),voice,sampling=sampling).use { engine -> engine.generate(segment,c,42,true,expectedParts::add) }
+            }
+            val expected=expectedParts.flatMap { it.toList() }.toFloatArray();val paused=ExpressionRenderer.render(File(pack),voice,planned,c)
+            assertArrayEquals(expected,paused.pcm,0f)
+            results.put(JSONObject().put("test","explicit-two-sentence-pause").put("pauseMs",250).put("seed",42).put("steps",3).put("samples",paused.pcm.size).put("bitIdenticalToWholeSentenceConcatenation",true).put("stats",PcmStatistics.measure(paused.pcm).summary()).put("wallMs",paused.wallMs))
             val report=JSONObject().put("personalDataUsed",false).put("publicReference","Kyutai Alba CC BY 4.0, pinned SHA256").put("modelRebuilt",false).put("results",results).put("perceptualImprovementClaimed",false)
             System.getenv("EXPRESSION_VALIDATION_OUT")?.let { File(it).apply { parentFile.mkdirs();writeText(report.toString(2)+"\n") } }
         } finally { root.deleteRecursively() }

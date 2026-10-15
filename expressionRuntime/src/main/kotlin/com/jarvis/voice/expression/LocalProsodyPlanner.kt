@@ -8,7 +8,12 @@ import java.io.File
 /** Boundaries are supplied by the human/CORE as NEWLINES, never inferred from punctuation. */
 data class LocalProsodyPlan(val expression: VoiceExpressionPlan, val segments: List<String>, val pauseMs: Int,
     val preparedTexts: List<String>, val tokenCounts: List<Int>, val effects: List<ExpressionEffect>) {
-    fun summary()="${expression.intent} : ${expression.status}\n"+
+    init {
+        require(segments.size in 1..3 && segments.all { it.isNotBlank() } && segments.joinToString("\n")==expression.request.utteranceText) { "Texte du plan altéré" }
+        require(pauseMs in 0..1500 && preparedTexts.size==segments.size && tokenCounts.size==segments.size && tokenCounts.all { it in 1..50 })
+        require(segments.size==1 && pauseMs==0 || segments.size>=2 && pauseMs>0 && expression.request.allowSentencePauses && expression.request.pauseMs==pauseMs) { "Pauses du plan non autorisées" }
+    }
+    fun summary()="${expression.intent} : ${if(effects.any { it.status=="unsupported" }) "limitée" else expression.status}\n"+
         (expression.effects.filter { it.field!="pause" }+effects).joinToString("\n") { "${it.field} : ${it.status} — ${it.reason}" }+
         "\n${segments.size} phrase(s), pause $pauseMs ms ; même profil, graine et paramètres."
 }

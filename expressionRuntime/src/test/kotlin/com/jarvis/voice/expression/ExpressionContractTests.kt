@@ -33,6 +33,7 @@ class ExpressionContractTests {
             { it.getJSONObject("flags").put("allowSentencePauses","true") },{ it.put("identityId","secret-personal-path") },
             { it.put("utteranceText","<s>test") },{ it.put("utteranceText","x".repeat(301)) })
         for(change in mutations) { val j=JSONObject(base);change(j);try { CoreVoiceRequestV1.parse(j.toString());fail("Refus attendu") } catch(_: Exception) {} }
+        for(bad in listOf(base.replace("\"version\":1", "\"version\":1,\"version\":1"),base.replace("\"version\"", "'version'"),base.replace("\"version\":1", "\"version\":01"))) reject { CoreVoiceRequestV1.parse(bad) }
         reject { CoreVoiceRequestV1.parse(base+" ignored") };reject { CoreVoiceRequestV1.parse(" ".repeat(9000)) }
         reject { CoreVoiceRequestV1("Bonjour",id,intensity=Double.NaN) }
         reject { CoreVoiceRequestV1("Bonjour",id,speedRequested=Double.POSITIVE_INFINITY) }

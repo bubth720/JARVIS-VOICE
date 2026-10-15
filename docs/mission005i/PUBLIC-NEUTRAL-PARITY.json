@@ -12,13 +12,13 @@
       "samples": 32640,
       "NEUTRAL": {
         "bitIdentical": true,
-        "wallMs": 1647.197156,
+        "wallMs": 1699.617179,
         "maxAbsError": 0
       },
-      "baselineComputeMs": 1793.72591,
+      "baselineComputeMs": 1769.070623,
       "CONVERSATION": {
         "bitIdentical": true,
-        "wallMs": 1656.923588,
+        "wallMs": 1658.578023,
         "maxAbsError": 0
       }
     },
@@ -30,15 +30,25 @@
       "samples": 46080,
       "NEUTRAL": {
         "bitIdentical": true,
-        "wallMs": 2297.999017,
+        "wallMs": 2269.263009,
         "maxAbsError": 0
       },
-      "baselineComputeMs": 2321.610667,
+      "baselineComputeMs": 2377.907042,
       "CONVERSATION": {
         "bitIdentical": true,
-        "wallMs": 2290.131422,
+        "wallMs": 2318.716965,
         "maxAbsError": 0
       }
+    },
+    {
+      "bitIdenticalToWholeSentenceConcatenation": true,
+      "test": "explicit-two-sentence-pause",
+      "seed": 42,
+      "stats": "PCM : 67440 échantillons, 24000 Hz, 2,810 s ; pic 0,706520 ; RMS 0,125002 ; silence |x| < 0,0001 : 11,83 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "pauseMs": 250,
+      "wallMs": 3043.120845,
+      "steps": 3,
+      "samples": 67440
     }
   ]
 }

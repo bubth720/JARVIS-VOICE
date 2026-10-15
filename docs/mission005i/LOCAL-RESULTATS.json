@@ -1,0 +1,35 @@
+{
+  "jvm": {
+    "expressionRuntime": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 12
+    },
+    "identityRuntime": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 19
+    },
+    "pocketRuntime": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 11,
+      "passed": 35
+    }
+  },
+  "lint": {
+    "Warning": 24
+  },
+  "buildArm64": "success",
+  "buildInstrumentation": "success",
+  "privatePackUsedLocally": true,
+  "publicAlbaOnly": true,
+  "personalAudioUsed": false,
+  "physicalXiaomi005iValidated": false,
+  "androidInstrumentation": "pending CI"
+}

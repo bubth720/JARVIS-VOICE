@@ -40,6 +40,7 @@ data class CoreVoiceRequestV1(val utteranceText: String, val identityId: VoiceId
         }
         private fun decode(raw: String): CoreVoiceRequestV1 {
             require(raw.toByteArray(Charsets.UTF_8).size<=8192 && raw.count { it=='{' || it=='[' }<=4) { "Contrat trop grand ou profond" }
+            StrictContractJson(raw).validate()
             // JSONTokener in org.json accepts trailing data; prohibit it explicitly.
             val tok=org.json.JSONTokener(raw);val j=JSONObject(tok);require(tok.nextClean()=='\u0000') { "Données après le contrat" }
             require(j.keys().asSequence().toSet()==keys) { "Champs v1 incompatibles" }

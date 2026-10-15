@@ -33,6 +33,8 @@ class ProsodyTests {
     }
     @Test fun boundsEosAndCancellationNeverDeliverPartialSuccess() {
         val p=prepare(plan("Bonjour à tous."))
+        SyntheticVault.reject { p.copy(segments=listOf("Texte modifié.")) }
+        SyntheticVault.reject { p.copy(pauseMs=500) }
         SyntheticVault.reject { ExpressionRenderer.renderWith(p,CancellationToken()) { _,_,sink -> sink(FloatArray(480001));m() } }
         SyntheticVault.reject { ExpressionRenderer.renderWith(p,CancellationToken()) { _,_,sink -> sink(floatArrayOf(Float.NaN));m() } }
         SyntheticVault.reject { ExpressionRenderer.renderWith(p,CancellationToken()) { _,_,sink -> sink(floatArrayOf(.1f));m().copy(eosReached=false) } }
