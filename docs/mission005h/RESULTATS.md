@@ -94,6 +94,18 @@ l'APK livrée, sa signature épinglée, version, ARM64, manifestes, absence de p
 archives/clé/audio embarqués et alignements ELF/ZIP 16 Ko. Le codeCommit de
 `delivery.json` est un ancêtre vérifié de la livraison.
 
+[Téléchargement direct du ZIP APK](https://github.com/bubth720/JARVIS-VOICE/raw/3efafd517906e51611e8cdf361fa2a1dca137a7f/deliveries/mission005h/005h-experimental-apk.zip).
+Extraire puis installer `JARVIS-VOICE-005H-experimental.apk`. Le ZIP public a été
+retéléchargé depuis ce commit : 11393808 octets, SHA256
+`4a9f42541406a4510d737482619d65931c3cc08f7306f73f94894d9f00526432`.
+L'APK extraite conserve exactement sa taille, son SHA256, son certificat et ses
+alignements. Voir [VERIFICATION-TELECHARGEMENT.json](VERIFICATION-TELECHARGEMENT.json).
+L'[artefact GitHub Actions signé](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38737418123/artifacts/11974787597)
+contient la même APK et les rapports (jusqu'au 14 novembre 2026). Le job build/audit
+de cette livraison réussit, et son artefact a lui aussi été téléchargé et comparé
+au SHA256 de l'original. Les tests de code ci-dessus restent liés à `1cf2b4c` ;
+les commits de livraison et de preuves ne changent aucun code d'application.
+
 Le pack original reste **234932686 octets**, SHA256
 `9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd`.
 Les dix fichiers extraits correspondent toujours au manifeste embarqué inchangé.

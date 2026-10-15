@@ -132,5 +132,13 @@
   },
   "physicalXiaomi005hValidated": false,
   "personalRecordingUsedInCloud": false,
-  "mergedIntoMain": false
+  "mergedIntoMain": false,
+  "deliveryBuildAndAudit": {
+    "workflow": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38737418123",
+    "jobId": 116430150823,
+    "conclusion": "success",
+    "commit": "3efafd517906e51611e8cdf361fa2a1dca137a7f",
+    "signedApkArtifact": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38737418123/artifacts/11974787597",
+    "downloadedApkSha256Verified": true
+  }
 }
