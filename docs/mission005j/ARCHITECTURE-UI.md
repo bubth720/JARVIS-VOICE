@@ -22,7 +22,7 @@ Phase A construit les états vides et la navigation ; aucun bouton ne simule une
 
 `StudioLibrary` préserve la sélection active pendant la préparation d'une nouvelle identité. Ajouter deux audios crée deux références de cette même identité. La confirmation du profil lie UUID/empreinte/pack et ne confirme jamais automatiquement un profil restauré. Une restauration préserve la voix précédente jusqu’au choix explicite ; une suppression concernée invalide la confirmation. Les consentements sont explicitement redemandés, jamais persistés comme cases cochées. Le brouillon est sauvegardé hors Android Bundle, mots de passe exclus ; champs de texte privés désactivent autofill et demandent l'absence d'apprentissage IME. Dialogues privés et Activity utilisent FLAG_SECURE.
 
-Les helpers MP3, AudioTrack, mesures et protections sont repris de 005I avec seul changement de package ; aucune copie de son Activity monolithique. Les services de modèles/archives/encodeur sont les mêmes bibliothèques inchangées.
+AudioTrack, mesures et protections sont repris de 005I avec seul changement de package ; le lecteur MP3 de 005J recadre désormais sur les frames PCM décodées pour respecter exactement une portion de cinq secondes dès le début du fichier, sans remplir les données manquantes ; aucune copie de son Activity monolithique. Les services de modèles/archives/encodeur sont les mêmes bibliothèques inchangées.
 
 Caches privés : principal, A/B d'expression, A/B de profils ; chacun <=20 s, au plus 10 identités (moins de 92 Mio de PCM total, hors petites métadonnées). Réécoute sans modèle, vérification des contextes et suppression isolée. Pas de bascule entre deux profils sans action explicite ; la comparaison de profils ne change pas la voix principale.
 

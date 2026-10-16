@@ -2,6 +2,7 @@ package com.jarvis.voice.voicestudio
 
 import android.media.*
 import com.jarvis.voice.pocket.*
+import com.jarvis.voice.studio.StudioPcmWindow
 import java.io.File
 import java.nio.ByteOrder
 
@@ -42,6 +43,7 @@ object LocalMp3 {
             // Decode from the beginning so MP3 bit reservoirs and timestamp offsets remain consistent.
             // Only the selected 5–15 seconds are retained in memory.
             var rate = info.sampleRate; var channels = info.channels; var encoding = AudioFormat.ENCODING_PCM_16BIT
+            val region = StudioPcmWindow(startMs, durationMs, info.sampleRate)
             val selected = ArrayList<FloatArray>()
             var inputDone = false; var outputDone = false
             val bufferInfo = MediaCodec.BufferInfo()
@@ -79,8 +81,12 @@ object LocalMp3 {
                         require(bufferInfo.size % (width * channels) == 0)
                         stage = "MP06"
                         val frames = bufferInfo.size / width / channels
-                        val first = maxOf(0, ((startMs * 1000 - bufferInfo.presentationTimeUs) * rate / 1000000).toInt())
-                        val end = minOf(first + maxOf(0, (rate.toLong() * durationMs / 1000).toInt() - kept), frames, (((startMs + durationMs) * 1000 - bufferInfo.presentationTimeUs) * rate / 1000000).toInt())
+                        // MediaCodec already removes encoder delay/padding from its PCM.
+                        // Its timestamps can still include that delay and packet rounding.
+                        // Select by contiguous delivered frames, never by timestamp gaps.
+                        val slice = region.next(frames)
+                        val first = slice.first
+                        val end = first + slice.count()
                         if (end > first) {
                             bytes.position(bufferInfo.offset + first * channels * width)
                             stage = "MP07"
@@ -92,12 +98,12 @@ object LocalMp3 {
                             require(mono.all { it.isFinite() })
                             kept += mono.size; require(kept <= rate * 16) { "Extrait trop long" }; selected.add(mono)
                         }
-                        outputDone = bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0 || bufferInfo.presentationTimeUs >= (startMs + durationMs) * 1000
+                        outputDone = bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0 || region.complete
                     } finally { decoder.releaseOutputBuffer(slot, false) }
                 }
             }
             stage = "MP06"
-            require(kept >= rate * (durationMs - 100) / 1000) { "MP3 tronqué ou extrait incomplet" }
+            require(region.complete && kept.toLong() == region.expected) { "MP3 tronqué ou extrait incomplet" }
             val mono = FloatArray(kept); var offset = 0
             for (block in selected) { block.copyInto(mono, offset); offset += block.size }
             stage = "MP08"

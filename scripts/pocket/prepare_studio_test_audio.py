@@ -7,5 +7,6 @@ for name,rate,channels,seconds,ext in [('stereo44',44100,2,12,'mp3'),('mono48',4
     args=['ffmpeg','-v','error','-y','-f','lavfi','-i',f'sine=frequency=440:sample_rate={rate}:duration={seconds}','-ac',str(channels)]
     args+=['-codec:a','libmp3lame','-b:a','128k'] if ext=='mp3' else ['-codec:a','pcm_s16le']
     subprocess.run([*args,str(out/f'{name}.{ext}')],check=True)
+(out/'truncated.mp3').write_bytes((out/'stereo44.mp3').read_bytes()[:2000])
 import zipfile
 with zipfile.ZipFile(out/'invalid-pack.zip','w') as z:z.writestr('not-the-official-model.txt','Synthetic invalid import, must be refused')

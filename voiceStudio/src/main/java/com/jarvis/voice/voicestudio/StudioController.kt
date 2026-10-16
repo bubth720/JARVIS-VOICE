@@ -58,7 +58,7 @@ class StudioController(private val context: Context,private val backend: StudioB
         is java.util.concurrent.CancellationException -> "Annulé. Vos profils et références déjà validés sont conservés."
         is PlaybackFailure -> "Lecture interrompue : ${t.reason}. Le PCM complet reste disponible pour Réécouter."
         is FP32ImportException -> t.message.orEmpty().take(250)
-        is ReferenceFailure -> "Audio non décodé (${t.stage}/${t.exceptionType}). Choisir un MP3 ou WAV local valide."
+        is ReferenceFailure -> "Audio non décodé (${t.diagnostic()}). Choisir un MP3 ou WAV local valide."
         is IllegalArgumentException,is IllegalStateException -> t.message.orEmpty().take(220).takeIf { !it.contains('/') && !it.contains("content:") } ?: "Données incompatibles. Réessayer avec un document local valide ; rien n’a été effacé."
         else -> "Opération impossible (${t.javaClass.simpleName}). Données conservées ; réessayer depuis cet écran."
     }

@@ -70,6 +70,21 @@ class StudioFlowTests {
         action { c.addSource(uri("exact5.wav")) };assertEquals(5000L,c.state.wizard.sourceMs);assertEquals(VoiceStep.REVIEW,c.state.wizard.step)
         val refs=c.wizardIdentity()!!.references.size;action { c.saveReference(false,true) };assertEquals(refs,c.wizardIdentity()!!.references.size);assertEquals(old,c.vault.selected())
     }
+    @Test fun mp3WindowsAtZeroAndOneSecondAreExactAndTruncatedInputIsNeverPadded() {
+        val file=File(i.targetContext.cacheDir,"synthetic-window.private")
+        try {
+            for(name in listOf("stereo44.mp3","mono48.mp3")) {
+                i.context.assets.open(name).use { input -> file.outputStream().use(input::copyTo) }
+                for(start in listOf(0L,1000L)) {
+                    val pcm=LocalMp3.decode(file,start,5000,CancellationToken())
+                    println("STUDIO_MP3_WINDOW $name startMs=$start samples=${pcm.size}")
+                    assertEquals(120000,pcm.size);assertTrue(pcm.all { it.isFinite() });assertTrue(PcmStatistics.measure(pcm).peak>.02)
+                }
+            }
+            i.context.assets.open("truncated.mp3").use { input -> file.outputStream().use(input::copyTo) }
+            try { LocalMp3.decode(file,0,5000,CancellationToken());fail("Incomplete MP3 padded or accepted") } catch(_: IllegalArgumentException) { }
+        } finally { file.delete() }
+    }
     @Test fun encryptedJvmArchiveRestoresExactlyAndWrongPasswordDoesNotLoseOldVoice()=fixture {
         val old=readyVoice();val original=c.library.activeConfirmed();val before=File(c.vault.root,"vault.json").readBytes()
         action { c.restore(uri("jvm-synthetic.jvi"),"wrong-password-005h".toCharArray(),true) }
