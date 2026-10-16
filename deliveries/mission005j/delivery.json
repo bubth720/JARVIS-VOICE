@@ -1,0 +1,37 @@
+{
+  "apkSha256": "febbe6bf815d3ba792734bf7312cdad665ed89a6b4d8fcd2ff3fb3a5c35cb18f",
+  "apkBytes": 34123677,
+  "applicationId": "com.jarvis.voice.voicestudio005j",
+  "minSdk": 26,
+  "targetSdk": 35,
+  "abi": [
+    "arm64-v8a"
+  ],
+  "signatureVerified": true,
+  "certificateSha256": "aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e",
+  "zipalign16K": true,
+  "libraries": {
+    "libonnxruntime.so": {
+      "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+      "loadAlignment": "16384",
+      "zipCompression": "stored"
+    },
+    "libonnxruntime4j_jni.so": {
+      "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+      "loadAlignment": "16384",
+      "zipCompression": "stored"
+    }
+  },
+  "internetPermission": false,
+  "physicalAndroidDeviceTest": false,
+  "experimental": true,
+  "modelWeightsIncluded": false,
+  "versionCode": 1,
+  "versionName": "0.6.0-mission005j-experimental",
+  "codeCommit": "4240e631869cd04746e0de48f368586bd59f0bd2",
+  "stableSigning": true,
+  "preservesInstalled005i": true,
+  "zipBytes": 15259381,
+  "zipSha256": "82db41ca499077fc062d6300c6ee48f816cca728d346588de5ee2cc3a04260b0",
+  "archiveContainsOnly": "JARVIS-VOICE-005J-experimental.apk"
+}

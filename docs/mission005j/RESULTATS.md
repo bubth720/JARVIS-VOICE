@@ -1,37 +1,67 @@
-# Mission 005J — preuves et état de livraison
+# Mission 005J — résultats vérifiables
 
-Module VOICE, branche `feat/voice-studio-005j`, base 005I contrôlée `f917ef15ce74a045564ddabdc407ccde4b595ba6`. Aucune fusion.
+VOICE Studio est implémenté en application indépendante `com.jarvis.voice.voicestudio005j`, version `0.6.0-mission005j-experimental` / code 1. Accueil Parler, Mes voix, assistant sept étapes et Avancé séparés, clair/sombre, consentement explicite après rotation, import/restauration locaux et sélection volontaire. Le moteur et les trois bibliothèques 005I sont inchangés ; quatre générations complètes restent bit-identiques avec/sans pauses. Aucune amélioration sonore ou validation Xiaomi revendiquée.
 
-## Implémentation par phases
+Branche `feat/voice-studio-005j`, base immuable `f917ef15ce74a045564ddabdc407ccde4b595ba6`, [PR #8 brouillon](https://github.com/bubth720/JARVIS-VOICE/pull/8) vers `feat/voice-expression-005i`. Aucune fusion. Code de l’APK : `4240e631869cd04746e0de48f368586bd59f0bd2` ; les ajouts de livraison/CI ultérieurs ne changent pas le code applicatif.
 
-- A `244ca8f` : coque Material3, navigation, thèmes et états privés. JVM 4/4, APK/UI-test build réussis.
-- B `275e2a1` : assistant sept étapes, deux audios dans une même identité, coffre et sélection explicite, archives chiffrées, écrans simples/avancés. JVM 7/7, build/lint réussis (0 erreur, 17 avertissements).
-- C `cebb575` puis correctifs isolés : parité native complète, tests de parcours avec fixtures synthétiques, protections, coexistence, audit et livraison indépendante. Résultats locaux ci-dessous ; les tests Android CI et la livraison seront consignés après exécution.
+## Télécharger depuis Android
 
-## Vérification locale C
+[ZIP signé, contenant seulement l’APK 005J](../../deliveries/mission005j/005j-experimental-apk.zip) · [taille, SHA256 et certificat](../../deliveries/mission005j/delivery.json) · [protocole Xiaomi sans PC](TEST-XIAOMI.md).
 
-`TESTS-LOCAUX.json` contient les comptes JUnit : studioRuntime 10/10 (dont 2 tests de fenêtre PCM), expressionRuntime 12/12, identityRuntime 19/19 ; pocketRuntime 35 réussis, 11 sautés (46 déclarés), zéro échec/erreur. APK et APK de test compilent ; lint 0 erreur, 17 avertissements. Les avertissements restent consignés dans le rapport CI, sans abaissement des contrôles de sécurité.
+Garder 005I installée et votre sauvegarde. Importer le ZIP FP32 **déjà présent sur votre téléphone**, puis le `.jvi` chiffré local de 005I. Confirmer le bon profil B en comparant localement UUID/SHA/pack. Aucun réencodage, aucune migration forcée, aucun transfert de B au Cloud. Le propriétaire doit encore vérifier l’audibilité réelle, les pauses et la sélection sur Xiaomi.
 
-`PARITE-PUBLIQUE.json` : pack FP32 privé existant, sans reconstruction, Alba publique CC BY 4.0 ; quatre générations 005I/J, même conditionnement, graine, LSD/température et texte. Sans pauses (LSD1 puis3, intention CONVERSATION) et avec pauses 250 ms/2 phrases et 500 ms/3 phrases : PCM bit-identique, erreur absolue maximale 0. Valeurs finies, aucun écrêtage sur ces cas. Les temps mesurés sont ceux du CPU Cloud, pas du Xiaomi. Ce résultat limité ne remplace pas la validation indépendante PyTorch stricte ni l’évaluation perceptive ; aucun seuil ancien n’est changé.
+## Tests
 
-L’audit a identifié `DebugProbesKt.bin`, ressource de débogage coroutine transitive de Material/AndroidX : exclusion précise de cette ressource inutilisée dans le nouveau module, sans relâcher le refus global des `.bin`/modèles/enregistrements.
+| Environnement | Suite | Réussis | Sautés | Échecs |
+|---|---|---:|---:|---:|
+| Local, pack privé existant + Alba publique | Studio JVM | 10 | 0 | 0 |
+| Local, même pack | expression JVM | 12 | 0 | 0 |
+| Local, même pack | identités JVM | 19 | 0 | 0 |
+| Local | moteur JVM | 35 | 11 | 0 |
+| CI sans poids privés | Studio JVM | 9 | 1 | 0 |
+| CI sans poids privés | expression JVM | 11 | 1 | 0 |
+| CI sans poids privés | identités JVM | 18 | 1 | 0 |
+| CI sans poids privés | moteur JVM | 33 | 13 | 0 |
+| Émulateur API35 x86_64 | Studio Android | 24 | 0 | 0 |
+| Émulateur API35 x86_64 | 005F / 005G / 005H / 005I | 10 / 14 / 18 / 31 | 0 | 0 |
+| Émulateur API35 x86_64 | 005D historique | 4 | 0 | 1 |
 
-## Périmètre des tests Android
+Comptes issus de XML JUnit téléchargés, sans compter une seconde fois les rapports HTML. [Local](TESTS-LOCAUX.json), [CI 005J](CI-005J.json), [non-régression avec runs/artefacts](CI-NONREGRESSION.json). Les sauts CI correspondent aux fixtures/modèles privés absents ; aucun poids n’est téléchargé en CI.
 
-Les tests de parcours emploient des MP3/WAV de sinus et un `.jvi` chiffré synthétique générés en CI, jamais des voix privées. Le coffre, l’authentification, les contrôles locaux, le codec MP3, le lecteur AudioTrack et l’UI sont réels. Le backend d’encodage/génération et le transport des documents sont injectés **uniquement par l’APK de test** : ces tests ne valident donc ni l’encodeur ONNX réel sur Android ni les autorisations du sélecteur Xiaomi. Le pack réel est exercé séparément en JVM locale. Aucun faux backend ou audio fixture dans l’APK livrée.
+Les 24 tests J couvrent navigation/état vide, deux MP3 dans une identité/deux profils, refus 3/4 s et admission 5 s, fenêtres MP3 à 0/1 s et données tronquées, consentement/retour/reprise, coffre/crypto et `.jvi` JVM authentifié, activation explicite, Parler/Réécouter/Arrêt, pauses ambiguës, fournisseur distant refusé, ZIP invalide sans perte, isolation/permissions, thèmes et accessibilité élémentaire. Coexistence I/J et conservation d’un marqueur privé synthétique I vérifiées après tests et réinstallation de J dans l’émulateur.
 
-La CI prévoit aussi coexistence I/J avec sentinelle privée synthétique, capture clair/sombre de bibliothèque vide, et non-régression des workflows F/G/H/I. L’échec historique 005D (4/5, underrun terminal) doit être rapporté séparément, sans modifier 005D.
+Le backend d’encodage/génération et le transport des documents sont injectés **uniquement par l’APK de test** ; vrai coffre/codec MP3/crypto/AudioTrack/UI. Cela ne valide ni l’encodeur ONNX réel sur Android ni les autorisations SAF physiques Xiaomi. L’APK livrée contient uniquement le backend officiel et ContentResolver, aucun modèle/voix/fixture de démonstration. Le pack réel est exercé séparément en JVM.
 
-## Confidentialité et limites
+## Parité du rendu
 
-Les trois bibliothèques et applications historiques sont inchangées par rapport à la base. ZIP privé conservé : 234932686 octets, SHA256 `9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd`. Aucun modèle privé, archive personnelle, enregistrement, jeton ou clé de signature publié. L’application n’a aucune permission réseau/micro, reste expérimentale et n’améliore pas le son par son UI.
+[PARITE-PUBLIQUE.json](PARITE-PUBLIQUE.json) : pack FP32 existant, sans reconstruction, référence Alba CC BY 4.0 à hash épinglé. Quatre couples 005I/J : LSD1/graine7 neutre, LSD3/graine42 intention CONVERSATION sans pauses, puis deux phrases/250 ms et trois phrases/500 ms. PCM flottant bit-identique avant conversion PCM16, erreur absolue max 0, valeurs finies et aucun écrêtage sur ces cas. Temps mesurés sur CPU Cloud, pas sur Xiaomi. Aucun filtre/pitch/timestretch, seuil ancien ou état FP32 changé. Cela n’efface pas les limites de parité indépendante PyTorch stricte documentées précédemment et ne remplace pas une écoute humaine.
 
-005J n’a pas encore été essayée sur un Xiaomi physique. Le propriétaire doit importer son ZIP existant puis son `.jvi` local depuis 005I et confirmer B lui-même ; voir TEST-XIAOMI.md. Le profil B n’est ni connu ni collecté. Garder 005I installée.
+## Phases et défauts corrigés
 
-## Défauts détectés et corrections C
+- A `244ca8f` : coque Material3 native, navigation et brouillons privés ; JVM 4/4, builds réussis.
+- B `275e2a1` : assistant connecté, ajouts incrémentaux, choix et archives ; JVM 7/7, builds/lint réussis.
+- C `cebb575`, `4b8f840`, `4240e63` : parité réelle, instrumentation, correctifs de reprise/restauration et du recadrage MP3, audits et livraison.
 
-Premier run Android `38829303967` au commit `cebb575` : 20/23. Consentement repris par Android après rotation malgré l’absence de persistance métier : désactivation explicite de la sauvegarde de hiérarchie pour les cases privées. Navigation : le test lisait le contenu avant le message UI asynchrone ; synchronisation sur l’état idle et vérification du contenu central. Import MP3 : le contrôle strict révélait une portion décodée incomplète.
+Premier run Android [38829303967](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38829303967) : 20/23. Correction d’une case de consentement restaurée par la hiérarchie Android après rotation ; synchronisation du test de navigation sur l’UI idle. Second run [38830109413](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38830109413) : 22/23 ; MP3 synthétique stéréo 44,1 kHz, portion 0–5 s, refus strict **118981/120000 échantillons**. Le recadrage par horodatages MediaCodec ne correspondait pas aux indices du PCM livré. Correction dans le lecteur **005J seulement** : sélection de frames décodées contiguës après traitement du codec, exactitude et EOF complet exigés, aucun padding/répétition/assemblage. Quatre cas MP3 44,1/48 kHz à 0/1 s donnent désormais chacun 120000 échantillons ; le MP3 tronqué est refusé. Aucun fichier 005I modifié.
 
-Second run `38830109413`, commit `4b8f840` : 22/23, zéro saut. Consentement/reprise, restauration exacte sans réencodage, ancienne voix conservée et navigation passent. Le refus restant est reproduit sur un MP3 **synthétique** stéréo 44,1 kHz, sélection 0–5 s : **118981 / 120000** échantillons. Le lecteur existant recadrait par horodatages de sortie MediaCodec ; ces horodatages peuvent conserver délai/codecs/arrondis, sans être des indices du PCM livré. Correction **005J seulement** : fenêtre de frames décodées contiguës après traitement du codec, sortie exactement complète, aucun padding/répétition/assemblage. Un EOF anticipé reste refusé. Les contrôles et le WAV/profil n’ont pas été assouplis ; aucun fichier 005I ni modèle modifié. Tests supplémentaires de fenêtres JVM, MP3 44,1/48 kHz à 0/1 s et MP3 tronqué, avant livraison.
+Run applicatif [38877740628](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38877740628), source `4240e63` : 24/24, coexistence/sentinelle et captures réussies. Le workflow a ensuite échoué sur sa seule commande finale : variable de résultat perdue entre shells distincts d’android-emulator-runner. Le script CI est désormais exécuté dans **un seul shell**, sans transformer les erreurs de tests en succès. Le nouveau run de livraison doit confirmer l’état global ; son identifiant sera consigné après exécution.
 
-Les preuves de non-régression au commit `cebb575` : 005F 10/10, 005G 14/14, 005H 18/18, 005I 31/31 sur API35, zéro saut/échec. 005D 4/5 reproduit exactement `AudioTrack [count=1 frames=72000 submitted=72000] expected 0 but was 1`, échec historique isolé sans changement de code.
+005D conserve exactement son échec connu `DeviceAudioTests.testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns`, `AudioTrack [count=1 frames=72000 submitted=72000] expected 0 but was 1`. Ni son test ni son lecteur n’ont été modifiés.
+
+## Préservation et limites
+
+[PRESERVATION.json](PRESERVATION.json) : applications D/F/G/H/I, CORE et bibliothèques inchangées par rapport à la base ; helpers AudioTrack/mesures/protections identiques hors package. Seul le nouveau lecteur MP3 J possède le correctif décrit ci-dessus. Un thread ONNX, file unique, admission 2 Gio, thermique/mémoire, lecture STATIC, caches PCM bornés et Arrêt conservés.
+
+ZIP privé original conservé : 234932686 octets, SHA256 `9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd`. Aucun profil B réel, enregistrement personnel, poids privé, jeton, URL signée ou clé publié. Aucune émotion native ou amélioration perceptive attribuée à l’interface. Les mesures physiques PSS/CPU/batterie/thermique de 005J et son essai Xiaomi restent à effectuer par le propriétaire.
+
+## Application signée
+
+Version 0.6.0-mission005j-experimental, versionCode 1, applicationId `com.jarvis.voice.voicestudio005j`. Code source `4240e631869cd04746e0de48f368586bd59f0bd2`. Clé stable des prototypes, certificat SHA256 `aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e` ; clé et mot de passe jamais publiés. Les prochaines mises à jour 005J devront conserver cet identifiant/certificat et augmenter versionCode. 005I reste installée indépendamment.
+
+APK : 34123677 octets, SHA256 `febbe6bf815d3ba792734bf7312cdad665ed89a6b4d8fcd2ff3fb3a5c35cb18f`. ZIP contenant seulement `JARVIS-VOICE-005J-experimental.apk` : 15259381 octets, SHA256 `82db41ca499077fc062d6300c6ee48f816cca728d346588de5ee2cc3a04260b0`. Aucun pack FP32 n’est distribué avec cette livraison. Coût binaire total de l’interface/l’application : environ 32.54 Mio ; ne constitue pas une mesure de PSS sur Xiaomi.
+
+Audit : signature vérifiée, natifs ARM64 ONNX 1.27.0 et hashes identiques, alignement 16 Ko, min26/target35, manifeste FP32 embarqué exact, absence de permissions Internet/micro/stockage large, d’audio/poids/archives/clefs et de backend de test dans le DEX de l’APK livrée. Bibliothèques UI Apache2/MIT attribuées ; modèles privés exclus.
+
+Lint local : 0 erreur, 17 avertissements de portage ChromeOS x86 absent (APK Xiaomi ARM64), surdessin, API d’espace disponible conservatrice, action d’engrenage toujours visible, recommandations KTX et chaînes françaises non internationalisées. Aucun contrôle de sécurité désactivé.
+
+Lint CI en ligne : 0 erreur, 21 avertissements ; quatre supplémentaires signalent target35 et trois dépendances épinglées ayant une version plus récente. Cible35/min26 et versions validées conservées conformément à la mission.

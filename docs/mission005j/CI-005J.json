@@ -1,0 +1,46 @@
+{
+  "codeCommit": "4240e631869cd04746e0de48f368586bd59f0bd2",
+  "runId": 38877740628,
+  "unitArtifactId": 12035818209,
+  "privatePackDownloaded": false,
+  "results": {
+    "studioRuntime": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "expressionRuntime": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "identityRuntime": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "pocketRuntime": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    },
+    "lint": {
+      "Error": 0,
+      "Warning": 21
+    }
+  },
+  "android": {
+    "tests": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidArtifactId": 12035404783,
+  "coinstalled005i005j": true,
+  "privateSynthetic005iSentinelPreserved": true,
+  "workflowFinalStatus": "failure due shell status variable scope, tests and coexistence pass; correction pending"
+}

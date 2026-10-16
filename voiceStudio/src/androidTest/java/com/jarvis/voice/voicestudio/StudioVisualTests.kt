@@ -18,7 +18,7 @@ class StudioVisualTests {
         assertFalse(c.busy);assertTrue(c.vault.list().isEmpty())
         try {
             for((mode,name) in listOf(AppCompatDelegate.MODE_NIGHT_NO to "005j-empty-light.png",AppCompatDelegate.MODE_NIGHT_YES to "005j-empty-dark.png")) {
-                i.runOnMainSync { AppCompatDelegate.setDefaultNightMode(mode);c.update { StudioState() };app.fixture.available=false }
+                i.runOnMainSync { AppCompatDelegate.setDefaultNightMode(mode);c.update { StudioState() };c.notice("Tout reste sur votre téléphone. Aucune émotion native simulée.");app.fixture.available=false }
                 val a=i.startActivitySync(Intent(i.targetContext,StudioActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) as StudioActivity
                 try {
                     i.waitForIdleSync()
