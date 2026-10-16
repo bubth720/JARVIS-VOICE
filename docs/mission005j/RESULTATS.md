@@ -6,7 +6,7 @@ Branche `feat/voice-studio-005j`, base immuable `f917ef15ce74a045564ddabdc407ccd
 
 ## Télécharger depuis Android
 
-[ZIP signé, contenant seulement l’APK 005J](../../deliveries/mission005j/005j-experimental-apk.zip) · [taille, SHA256 et certificat](../../deliveries/mission005j/delivery.json) · [protocole Xiaomi sans PC](TEST-XIAOMI.md).
+[Téléchargement direct du ZIP signé 005J](https://raw.githubusercontent.com/bubth720/JARVIS-VOICE/493b485ba3b094d3902bb99d361284a47b93b142/deliveries/mission005j/005j-experimental-apk.zip) · [taille, SHA256 et certificat](../../deliveries/mission005j/delivery.json) · [protocole Xiaomi sans PC](TEST-XIAOMI.md).
 
 Garder 005I installée et votre sauvegarde. Importer le ZIP FP32 **déjà présent sur votre téléphone**, puis le `.jvi` chiffré local de 005I. Confirmer le bon profil B en comparant localement UUID/SHA/pack. Aucun réencodage, aucune migration forcée, aucun transfert de B au Cloud. Le propriétaire doit encore vérifier l’audibilité réelle, les pauses et la sélection sur Xiaomi.
 
@@ -44,7 +44,7 @@ Le backend d’encodage/génération et le transport des documents sont injecté
 
 Premier run Android [38829303967](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38829303967) : 20/23. Correction d’une case de consentement restaurée par la hiérarchie Android après rotation ; synchronisation du test de navigation sur l’UI idle. Second run [38830109413](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38830109413) : 22/23 ; MP3 synthétique stéréo 44,1 kHz, portion 0–5 s, refus strict **118981/120000 échantillons**. Le recadrage par horodatages MediaCodec ne correspondait pas aux indices du PCM livré. Correction dans le lecteur **005J seulement** : sélection de frames décodées contiguës après traitement du codec, exactitude et EOF complet exigés, aucun padding/répétition/assemblage. Quatre cas MP3 44,1/48 kHz à 0/1 s donnent désormais chacun 120000 échantillons ; le MP3 tronqué est refusé. Aucun fichier 005I modifié.
 
-Run applicatif [38877740628](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38877740628), source `4240e63` : 24/24, coexistence/sentinelle et captures réussies. Le workflow a ensuite échoué sur sa seule commande finale : variable de résultat perdue entre shells distincts d’android-emulator-runner. Le script CI est désormais exécuté dans **un seul shell**, sans transformer les erreurs de tests en succès. Le nouveau run de livraison doit confirmer l’état global ; son identifiant sera consigné après exécution.
+Run applicatif [38877740628](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38877740628), source `4240e63` : 24/24, coexistence/sentinelle et captures réussies. Le workflow a ensuite échoué sur sa seule commande finale : variable de résultat perdue entre shells distincts d’android-emulator-runner. Le script CI est désormais exécuté dans **un seul shell**, sans transformer les erreurs de tests en succès. Le run de livraison [38878834587](https://github.com/bubth720/JARVIS-VOICE/actions/runs/38878834587), commit `493b485`, est entièrement **vert** : build, audit du ZIP signé, 24/24 Android, coexistence et captures. Les applications et bibliothèques n’ont pas changé entre les deux runs.
 
 005D conserve exactement son échec connu `DeviceAudioTests.testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns`, `AudioTrack [count=1 frames=72000 submitted=72000] expected 0 but was 1`. Ni son test ni son lecteur n’ont été modifiés.
 
@@ -65,3 +65,9 @@ Audit : signature vérifiée, natifs ARM64 ONNX 1.27.0 et hashes identiques, ali
 Lint local : 0 erreur, 17 avertissements de portage ChromeOS x86 absent (APK Xiaomi ARM64), surdessin, API d’espace disponible conservatrice, action d’engrenage toujours visible, recommandations KTX et chaînes françaises non internationalisées. Aucun contrôle de sécurité désactivé.
 
 Lint CI en ligne : 0 erreur, 21 avertissements ; quatre supplémentaires signalent target35 et trois dépendances épinglées ayant une version plus récente. Cible35/min26 et versions validées conservées conformément à la mission.
+
+[Téléchargement public de l’APK seule vérifié](TELECHARGEMENT-VERIFIE.json) : HTTP200, taille/SHA du ZIP puis SHA/signature/alignement de l’APK réextraits et revérifiés. Les poids et données personnels sont exclus.
+
+## Captures contrôlées
+
+Vues [claire](visuels/005j-empty-light.png) et [sombre](visuels/005j-empty-dark.png) de l’émulateur API35, bibliothèque vide uniquement. Captures revues, sans voix personnelle ; FLAG_SECURE reste actif dans l’APK livrée. Le code d’instrumentation seul lève temporairement ce drapeau sur cette fenêtre vide.

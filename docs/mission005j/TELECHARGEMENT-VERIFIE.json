@@ -1,0 +1,18 @@
+{
+  "verifiedUtc": "2026-10-16T09:14:01.243166+00:00",
+  "deliveryCommit": "493b485ba3b094d3902bb99d361284a47b93b142",
+  "codeCommit": "4240e631869cd04746e0de48f368586bd59f0bd2",
+  "url": "https://raw.githubusercontent.com/bubth720/JARVIS-VOICE/493b485ba3b094d3902bb99d361284a47b93b142/deliveries/mission005j/005j-experimental-apk.zip",
+  "httpStatus": 200,
+  "zipBytes": 15259381,
+  "zipSha256": "82db41ca499077fc062d6300c6ee48f816cca728d346588de5ee2cc3a04260b0",
+  "apkBytes": 34123677,
+  "apkSha256": "febbe6bf815d3ba792734bf7312cdad665ed89a6b4d8fcd2ff3fb3a5c35cb18f",
+  "certificateSha256": "aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e",
+  "signatureVerifiedAfterDownload": true,
+  "zipalign16KAfterDownload": true,
+  "modelWeightsIncluded": false,
+  "personalRecordingsIncluded": false,
+  "privateModelPackUploaded": false,
+  "physicalXiaomiTest": false
+}

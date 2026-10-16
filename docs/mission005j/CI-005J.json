@@ -1,7 +1,11 @@
 {
   "codeCommit": "4240e631869cd04746e0de48f368586bd59f0bd2",
-  "runId": 38877740628,
-  "unitArtifactId": 12035818209,
+  "testedDeliveryCommit": "493b485ba3b094d3902bb99d361284a47b93b142",
+  "runId": 38878834587,
+  "runUrl": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/38878834587",
+  "unitArtifactId": 12036647617,
+  "androidArtifactId": 12037061449,
+  "signedApkArtifactId": 12036388251,
   "privatePackDownloaded": false,
   "results": {
     "studioRuntime": {
@@ -39,8 +43,8 @@
     "errors": 0,
     "skipped": 0
   },
-  "androidArtifactId": 12035404783,
   "coinstalled005i005j": true,
   "privateSynthetic005iSentinelPreserved": true,
-  "workflowFinalStatus": "failure due shell status variable scope, tests and coexistence pass; correction pending"
+  "workflowFinalStatus": "success",
+  "physicalXiaomiTest": false
 }
