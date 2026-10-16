@@ -20,7 +20,8 @@ class StudioLibrary(val vault: VoiceIdentityVault,val choice: StudioProfileChoic
         require(legal && sameSpeaker) { "Confirmer le consentement et le même locuteur pour ce fichier." }
         val id=VoiceIdentityId(requireNotNull(draft.identityId));val source=requireNotNull(draft.sourceMs)
         WizardPolicy.requireRegion(source,draft.startMs,draft.durationMs)
-        require(pcm.size.toLong()==draft.durationMs*24 && pcm.all { it.isFinite() }) { "Extrait incomplet ou invalide ; aucune référence ajoutée." }
+        require(pcm.size.toLong()==draft.durationMs*24) { "Extrait incomplet : ${pcm.size} échantillons décodés, ${draft.durationMs*24} attendus à 24000 Hz. Aucune référence ajoutée." }
+        require(pcm.all { it.isFinite() }) { "Extrait avec valeurs non finies ; aucune référence ajoutée." }
         val rid=vault.addReference(id,pcm,requireNotNull(draft.sourceFormat),sourceSha,draft.startMs,draft.label,draft.comment,
             draft.note.ifBlank { "Consentement local explicite" },true,true,draft.keepWav,cancel,sourceDurationMs=source)
         return draft.copy(referenceId=rid,step=VoiceStep.ENCODE)

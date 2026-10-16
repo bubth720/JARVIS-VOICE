@@ -51,7 +51,9 @@ class StudioFlowTests {
         val id=c.state.wizard.identityId;assertNotNull(id);assertEquals(old,c.vault.selected())
         for(name in listOf("stereo44.mp3","mono48.mp3")) {
             action { c.addSource(uri(name)) };assertEquals(VoiceStep.REVIEW,c.state.wizard.step);assertTrue(c.state.wizard.sourceMs!!>=12000)
-            action { c.draft { it.copy(durationMs=5000,keepWav=true) };c.saveReference(true,true) };assertEquals(VoiceStep.ENCODE,c.state.wizard.step)
+            val decoded=StudioAudio.decode(c.source,requireNotNull(c.state.wizard.sourceFormat),0,5000,CancellationToken())
+            println("STUDIO_SYNTHETIC_MP3 $name samples=${decoded.size} requested=120000")
+            action { c.draft { it.copy(durationMs=5000,keepWav=true) };c.saveReference(true,true) };assertEquals(c.message,VoiceStep.ENCODE,c.state.wizard.step)
             action { c.encodeReference() };assertEquals(VoiceStep.TRY,c.state.wizard.step)
         }
         val row=c.vault.list().single { it.id.value==id };assertEquals(2,row.references.size);assertEquals(2,row.profiles.size)
@@ -73,21 +75,31 @@ class StudioFlowTests {
         action { c.restore(uri("jvm-synthetic.jvi"),"wrong-password-005h".toCharArray(),true) }
         assertEquals(old,c.vault.selected());assertArrayEquals(before,File(c.vault.root,"vault.json").readBytes());assertEquals(original,c.library.activeConfirmed())
         action { c.restore(uri("jvm-synthetic.jvi"),"synthetic-password-005h".toCharArray(),true) }
-        val restored=c.currentIdentity()!!;assertNotEquals(old,restored.id);assertEquals(2,restored.profiles.size);assertTrue(restored.references.all { it.retained });assertNull(c.confirmedProfile())
+        val restored=c.wizardIdentity()!!;assertNotEquals(old,restored.id);assertEquals(2,restored.profiles.size);assertTrue(restored.references.all { it.retained })
+        assertEquals(old,c.vault.selected());assertEquals(original,c.library.activeConfirmed());assertFalse(c.library.choice.isConfirmed(restored.profiles[1]))
+        val encoded=app.fixture.calls.get();assertEquals(restored.name,c.state.wizard.name)
+        action { c.draft { it.copy(step=VoiceStep.ENCODE) };c.encodeReference() }
+        assertEquals(encoded,app.fixture.calls.get());assertEquals(VoiceStep.TRY,c.state.wizard.step)
         val hashes=restored.profiles.map { it.sha256 };action { c.activate(restored.id,restored.profiles[1].id) };assertEquals(hashes,c.currentIdentity()!!.profiles.map { it.sha256 });assertEquals(restored.profiles[1].id,c.library.activeConfirmed().id)
     }
     @Test fun actualUiSpeaksReplaysAndStopsWithoutRunningASecondModel()=fixture {
         readyVoice();action { c.update { it.copy(screen=StudioScreen.SPEAK,text="Bonjour à tous.") } };val a=activity()
         try {
             val start=app.fixture.calls.get();action { a.findViewById<View>(R.id.talk).performClick() };assertTrue(c.message.contains("Lecture terminée"));assertTrue(c.hasReplay())
+            assertTrue(c.diagnostics.contains("EOS true"));assertTrue(c.diagnostics.contains("non finis 0"))
             val generated=app.fixture.calls.get();assertEquals(start+1,generated)
             action { a.findViewById<View>(R.id.replay).performClick() };assertEquals(generated,app.fixture.calls.get())
+            assertTrue(c.diagnostics.contains("Mesures de génération avant lecture"));assertTrue(c.diagnostics.contains("CPU processus"))
             app.fixture.hold=true;i.runOnMainSync { a.findViewById<View>(R.id.talk).performClick() };i.waitForIdleSync();assertTrue(c.busy)
             action { a.findViewById<View>(R.id.stop).performClick() };app.fixture.hold=false;assertTrue(c.message.contains("Annulé"));assertTrue(c.hasReplay())
         } finally { i.runOnMainSync { a.finish() } }
     }
     @Test fun refusedPausesNeverSilentlyGenerateAndNeutralContextKeepsSameSettings()=fixture {
-        readyVoice();action { c.update { it.copy(text="M. Martin arrive.\nNous sommes prêts.",settings=it.settings.copy(pauses=true,pauseMs=250)) };c.generate() }
+        readyVoice();action {
+            c.update { it.copy(text="M. Martin arrive.\nNous sommes prêts.",settings=it.settings.copy(pauses=true,pauseMs=250)) }
+            // Same boundary as StudioActivity.guard: this policy fails before a worker is started.
+            runCatching { c.generate() }.onFailure(c::error)
+        }
         assertTrue(c.message.contains("ambiguë"));assertFalse(c.hasReplay())
         val settings=c.state.settings
         action { c.update { it.copy(text="Bonjour à tous.\nNous sommes prêts.") };c.generate() };assertTrue(c.hasReplay());assertEquals(settings,c.state.settings)

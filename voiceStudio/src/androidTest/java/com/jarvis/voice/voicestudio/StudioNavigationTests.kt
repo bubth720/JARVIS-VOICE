@@ -26,10 +26,11 @@ class StudioNavigationTests {
     }
     @Test fun navigationSeparatesVoicesWizardAndTechnicalScreen() {
         val a=i.startActivitySync(Intent(i.targetContext,StudioActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) as StudioActivity
-        try { i.runOnMainSync {
-            a.findViewById<View>(R.id.voices).performClick();assertTrue(texts(a.window.decorView).contains("Mes voix"))
-            a.findViewById<View>(R.id.create).performClick();assertTrue(texts(a.window.decorView).contains("Créer une voix"))
-            a.findViewById<View>(R.id.advanced).performClick();assertTrue(texts(a.window.decorView).contains("Réglages avancés"))
-        } } finally { i.runOnMainSync { a.finish() } }
+        try {
+            for((id,title) in listOf(R.id.voices to "Mes voix",R.id.create to "Créer une voix",R.id.advanced to "Réglages avancés")) {
+                i.runOnMainSync { a.findViewById<View>(id).performClick() };i.waitForIdleSync()
+                i.runOnMainSync { assertTrue(title,texts(a.findViewById(R.id.content)).contains(title)) }
+            }
+        } finally { i.runOnMainSync { a.finish() } }
     }
 }

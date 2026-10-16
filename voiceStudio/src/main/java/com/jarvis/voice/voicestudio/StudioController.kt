@@ -139,7 +139,21 @@ class StudioController(private val context: Context,private val backend: StudioB
         requireLocal(uri)
         if(!legal) { password.fill('\u0000');error(IllegalArgumentException("Confirmer le droit de cloner les voix de cette archive."));return }
         run("Authentification de l’archive privée…",true,cleanup={password.fill('\u0000')}) { c ->
-            documents.input(uri).use { input -> val id=archive.restore(vault,password,input,c);library.choice.clear();draft { it.copy(identityId=id.value,step=VoiceStep.TRY,referenceId=null,sourceMs=null,sourceFormat=null) } }
+            val previous=vault.selected()
+            documents.input(uri).use { input ->
+                val id=archive.restore(vault,password,input,c)
+                // The archive service selects its imported identity. Preparing a new
+                // voice in Studio must keep the previous speaking voice until the
+                // owner explicitly activates a profile of the restored identity.
+                if(previous!=null) vault.select(previous,CancellationToken())
+                val row=vault.list().single { it.id==id }
+                val active=row.profiles.singleOrNull { it.id==row.activeProfiles[PocketIdentity.bindingKey] }
+                val ref=row.references.singleOrNull { it.id==active?.referenceId }
+                draft { WizardDraft(step=VoiceStep.TRY,identityId=id.value,name=row.name,note=row.consentNote,
+                    referenceId=ref?.id,startMs=ref?.startMs ?: 0,durationMs=ref?.durationMs ?: 5000,
+                    sourceMs=ref?.sourceDurationMs,sourceFormat=ref?.sourceFormat,label=ref?.label ?: ReferenceLabel.NEUTRE,
+                    keepWav=ref?.keepAfterEncoding ?: false,comment=ref?.comment.orEmpty()) }
+            }
             audition=null;"Archive restaurée sans réencodage. Comparer UUID/SHA256 puis confirmer le profil choisi dans Mes voix."
         }
     }
@@ -163,14 +177,18 @@ class StudioController(private val context: Context,private val backend: StudioB
             val rendered=backend.render(pack,voice,prosody,c);c.check()
             target.save(side,p.identityId,p,text,s.seed,s.sampling(),rendered.pcm,c,plan.intent.name,prosody.pauseMs)
             measure?.summary()?.let { target.performance(side,it,c) }
-            diagnostics=(prosody.summary())+"\n"+PcmStatistics.measure(rendered.pcm).summary();message="Génération réussie. Audio conservé ; lecture en préparation.";emit()
+            diagnostics="Génération réussie ; EOS ${rendered.metrics.all { it.eosReached }} ; rendu ${rendered.wallMs.toLong()} ms ; phrases ${rendered.metrics.size}\n"+prosody.summary()+"\n"+PcmStatistics.measure(rendered.pcm).summary();message="Génération réussie. Audio conservé ; lecture en préparation.";emit()
             play(rendered.pcm,c);audition=(slot ?: "main") to target.metadata(side)
             "Lecture terminée. Réécouter est disponible sans recalcul du modèle."
         }
     }
     fun replay(slot: String="main") {
         val p=library.activeConfirmed();val target=if(slot=="main") single(p.identityId) else expressions(p.identityId);val side=if(slot=="main") "A" else slot
-        run("Réécoute locale sans modèle…") { c -> val meta=target.metadata(side);play(target.load(side,vault,c),c);audition=slot to meta;"Réécoute terminée, même profil vérifié." }
+        run("Réécoute locale sans modèle…") { c ->
+            val meta=target.metadata(side)
+            diagnostics="Réécoute ${meta.getString("intent")} ; profil ${meta.getString("profileId").take(8)} ; pause ${meta.getInt("pauseMs")} ms\nMesures de génération avant lecture :\n${meta.optString("generationMetrics","indisponibles")}"
+            play(target.load(side,vault,c),c);audition=slot to meta;"Réécoute terminée, même profil vérifié."
+        }
     }
     fun compareProfile(slot: String,pid: String,confirmed: Boolean) {
         require(confirmed);val current=library.activeConfirmed();require(hasModel()) { "Importer le pack FP32 existant." }

@@ -33,7 +33,12 @@ class StudioUi(val context: Context) {
             if(multiline) { minLines=4;gravity=Gravity.TOP;inputType=android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE } else setSingleLine(true)
         };box.addView(entry);parent.addView(box,LinearLayout.LayoutParams(-1,-2).apply { topMargin=dp(8);bottomMargin=dp(12) });return entry
     }
-    fun check(parent: LinearLayout,title: String,checked: Boolean=false,id: Int=View.NO_ID)=com.google.android.material.checkbox.MaterialCheckBox(context).apply { this.id=id;text=title;isChecked=checked;minHeight=dp(48);parent.addView(this) }
+    fun check(parent: LinearLayout,title: String,checked: Boolean=false,id: Int=View.NO_ID)=com.google.android.material.checkbox.MaterialCheckBox(context).apply {
+        this.id=id;text=title;isChecked=checked;minHeight=dp(48)
+        // Consent must never be restored by Android's view-hierarchy Bundle after rotation.
+        isSaveEnabled=false;isSaveFromParentEnabled=false;importantForAutofill=View.IMPORTANT_FOR_AUTOFILL_NO
+        parent.addView(this)
+    }
     fun toggle(parent: LinearLayout,title: String,checked: Boolean,id: Int=View.NO_ID)=MaterialSwitch(context).apply { this.id=id;text=title;isChecked=checked;minHeight=dp(48);parent.addView(this) }
     fun spinner(parent: LinearLayout,title: String,options: List<String>,selected: Int=0,id: Int=View.NO_ID): Spinner {
         val label=text(parent,title,14f,true)
