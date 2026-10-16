@@ -40,3 +40,6 @@ class StudioUi(val context: Context) {
         return Spinner(context).apply { this.id=if(id==View.NO_ID) View.generateViewId() else id;label.labelFor=this.id;contentDescription=title;minimumHeight=dp(48);adapter=ArrayAdapter(context,android.R.layout.simple_spinner_dropdown_item,options);if(options.isNotEmpty()) setSelection(selected.coerceIn(0,options.lastIndex));parent.addView(this,LinearLayout.LayoutParams(-1,dp(52))) }
     }
 }
+
+/** Secure even for dialog windows, including profile details and private notes. */
+fun com.google.android.material.dialog.MaterialAlertDialogBuilder.showPrivate(): androidx.appcompat.app.AlertDialog = create().also { it.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);it.show();it.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE) }

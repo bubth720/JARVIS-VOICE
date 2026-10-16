@@ -1,4 +1,5 @@
 <resources>
+    <item type="id" name="live_diagnostics"/><item type="id" name="voice_name"/><item type="id" name="restore_voice"/>
     <item type="id" name="advanced"/>
     <item type="id" name="speak"/><item type="id" name="voices"/><item type="id" name="create"/>
     <item type="id" name="phrase"/><item type="id" name="talk"/><item type="id" name="replay"/><item type="id" name="stop"/>

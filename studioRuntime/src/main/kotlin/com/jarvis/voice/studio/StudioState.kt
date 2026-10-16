@@ -36,7 +36,7 @@ data class StudioState(val screen: StudioScreen=StudioScreen.SPEAK,val wizard: W
 }
 object WizardPolicy {
     fun requireSource(durationMs: Long) {
-        require(durationMs>=5000) { "Cet audio dure moins de 5 secondes. Choisir un fichier d’au moins 5 secondes." }
+        require(durationMs>=5000) { "Cet audio dure ${durationMs/1000.0} secondes. Choisir un fichier d’au moins 5 secondes." }
         require(durationMs<=180000) { "Choisir un audio de 3 minutes maximum." }
     }
     fun requireRegion(sourceMs: Long,startMs: Long,durationMs: Long) {
@@ -82,6 +82,10 @@ class StudioStateStore(private val file: File) {
     }
 }
 class StudioProfileChoice(private val file: File) {
+    fun clear() { StudioStateStore.atomic(file,"{}") }
+    fun forget(id: VoiceIdentityId,pid: String?=null) {
+        if(runCatching { val j=JSONObject(file.readText());j.getString("identity")==id.value && (pid==null || j.getString("profile")==pid) }.getOrDefault(false)) clear()
+    }
     fun confirm(p: com.jarvis.voice.identity.VoiceProfile) {
         require(p.status==ProfileStatus.VALID && p.engineId==PocketIdentity.ENGINE && p.packId==PocketIdentity.packId)
         StudioStateStore.atomic(file,JSONObject().put("identity",p.identityId.value).put("profile",p.id).put("sha",p.sha256).put("pack",p.packId).toString())
