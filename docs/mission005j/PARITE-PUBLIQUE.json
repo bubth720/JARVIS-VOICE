@@ -1,0 +1,60 @@
+{
+  "modelRebuilt": false,
+  "publicReference": "Alba CC BY 4.0, pinned SHA256",
+  "personalDataUsed": false,
+  "results": [
+    {
+      "seed": 7,
+      "stats": "PCM : 32640 échantillons, 24000 Hz, 1,360 s ; pic 0,585946 ; RMS 0,122348 ; silence |x| < 0,0001 : 4,13 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "referenceWallMs": 1767.925354,
+      "pauseMs": 0,
+      "text": "Bonjour à tous.",
+      "bitIdenticalTo005i": true,
+      "maxAbsError": 0,
+      "steps": 1,
+      "intent": "NEUTRAL",
+      "samples": 32640,
+      "studioWallMs": 1637.261406
+    },
+    {
+      "seed": 42,
+      "stats": "PCM : 46080 échantillons, 24000 Hz, 1,920 s ; pic 0,731085 ; RMS 0,131914 ; silence |x| < 0,0001 : 1,12 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "referenceWallMs": 2253.867094,
+      "pauseMs": 0,
+      "text": "Demain, je prendrai le train pour Paris.",
+      "bitIdenticalTo005i": true,
+      "maxAbsError": 0,
+      "steps": 3,
+      "intent": "CONVERSATION",
+      "samples": 46080,
+      "studioWallMs": 2258.923936
+    },
+    {
+      "seed": 42,
+      "stats": "PCM : 67440 échantillons, 24000 Hz, 2,810 s ; pic 0,706520 ; RMS 0,125002 ; silence |x| < 0,0001 : 11,83 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "referenceWallMs": 2973.841679,
+      "pauseMs": 250,
+      "text": "Bonjour à tous.\nNous sommes prêts.",
+      "bitIdenticalTo005i": true,
+      "maxAbsError": 0,
+      "steps": 3,
+      "intent": "NEUTRAL",
+      "samples": 67440,
+      "studioWallMs": 2927.622729
+    },
+    {
+      "seed": 42,
+      "stats": "PCM : 146880 échantillons, 24000 Hz, 6,120 s ; pic 0,767247 ; RMS 0,120995 ; silence |x| < 0,0001 : 18,85 % ; non finis 0 ; écrêtage PCM16 0,00 %.",
+      "referenceWallMs": 5767.409456,
+      "pauseMs": 500,
+      "text": "Bonjour à tous.\nNous sommes prêts.\nLe train arrive.",
+      "bitIdenticalTo005i": true,
+      "maxAbsError": 0,
+      "steps": 3,
+      "intent": "NEUTRAL",
+      "samples": 146880,
+      "studioWallMs": 5797.980427
+    }
+  ],
+  "physicalXiaomiTest": false
+}

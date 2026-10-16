@@ -13,3 +13,5 @@ include(":identityRuntime", ":voiceIdentity")
 
 include(":expressionRuntime")
 include(":voiceExpression")
+
+include(":studioRuntime", ":voiceStudio")

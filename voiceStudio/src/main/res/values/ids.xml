@@ -1,0 +1,9 @@
+<resources>
+    <item type="id" name="live_diagnostics"/><item type="id" name="voice_name"/><item type="id" name="restore_voice"/>
+    <item type="id" name="advanced"/>
+    <item type="id" name="speak"/><item type="id" name="voices"/><item type="id" name="create"/>
+    <item type="id" name="phrase"/><item type="id" name="talk"/><item type="id" name="replay"/><item type="id" name="stop"/>
+    <item type="id" name="wizard_next"/><item type="id" name="wizard_back"/><item type="id" name="consent"/>
+    <item type="id" name="pause_switch"/><item type="id" name="profile_select"/><item type="id" name="activate_profile"/>
+    <item type="id" name="audio_add"/><item type="id" name="reference_save"/><item type="id" name="profile_encode"/>
+</resources>

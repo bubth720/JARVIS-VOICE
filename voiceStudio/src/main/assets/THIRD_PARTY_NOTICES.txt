@@ -1,0 +1,15 @@
+JARVIS VOICE STUDIO 005J — expérimental, hors ligne.
+
+JARVIS VOICE 005J — EXPRESSION EXPÉRIMENTALE
+
+Application distincte de Pocket Probe 005D et des prototypes 005F/005G/005H/005I. Aucun poids ni enregistrement inclus dans l’APK.
+Moteur : Pocket TTS officiel par Kyutai, code MIT 3.3.0 ; ONNX Runtime 1.27.0 MIT ; Kotlin/Gradle/AGP Apache 2.0. Textes MIT/Apache fournis dans les actifs.
+Pack privé FP32 dérivé du checkpoint français officiel d0ebc5deb50bc6b225f686782f124dd37e2dca0a : CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), attribution Kyutai, adaptations ONNX de streaming pour JARVIS. Le pack est distinct du pack INT8 005D.
+Référence de comparaison publique : Alba MacKenna casual.wav, Kyutai tts-voices revision 323332d33f997de8394f24a193e1a76df720e01a, CC BY 4.0 ; seul son état recalculé FP32 est dans le pack, pas son enregistrement.
+Les conditions Kyutai exigent le consentement explicite et légal et excluent les usages illicites, trompeurs, frauduleux ou portant atteinte à la vie privée. Une synthèse ne doit jamais être présentée comme un véritable enregistrement.
+Profil personnel, WAV et modèles : stockage privé Android hors sauvegarde/transfert. Aucune permission Internet ou microphone, aucun envoi automatique, aucun remplacement de 005D.
+La parité numérique stricte des générations indépendantes n’est pas acquise et ses mesures restent documentées. La ressemblance et l’intelligibilité sont à évaluer sur appareil ; aucune validation perceptive revendiquée.
+
+Intentions de style : aucune commande émotionnelle native validée avec Pocket French 6L. Pauses explicites entre phrases seulement ; aucun filtre de pitch/timestretch, aucune paraphrase ni remplacement automatique de profil. URGENT ne constitue pas une alarme temps réel.
+
+UI : Material Components Android 1.12.0 et AndroidX, Apache 2.0 (texte fourni). Aucun SDK publicitaire, compte, télémétrie ou transport Cloud. Le changement d’interface ne prétend pas améliorer la qualité sonore.

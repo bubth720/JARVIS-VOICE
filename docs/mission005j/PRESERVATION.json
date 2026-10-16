@@ -1,0 +1,32 @@
+{
+  "base": "f917ef15ce74a045564ddabdc407ccde4b595ba6",
+  "unchangedSourceAndDeliveries": [
+    "app",
+    "pocketProbe",
+    "voicePrototype",
+    "voiceQuality",
+    "voiceIdentity",
+    "voiceExpression",
+    "pocketRuntime",
+    "identityRuntime",
+    "expressionRuntime",
+    "deliveries/mission005f",
+    "deliveries/mission005g",
+    "deliveries/mission005h",
+    "deliveries/mission005i"
+  ],
+  "helpersIdenticalExceptPackage": {
+    "PcmPlayer": true,
+    "LocalMp3": false,
+    "ReferenceFailure": true,
+    "DeviceMetrics": true,
+    "OperationMetrics": true
+  },
+  "privatePackPreserved": {
+    "bytes": 234932686,
+    "sha256": "9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd"
+  },
+  "testBackendsAbsentFromDeliveredDex": true,
+  "personalDataUsed": false,
+  "isolatedStudioMp3Correction": "005J only: select contiguous decoded frames after codec trimming, exact completeness required; 005I file unchanged"
+}
