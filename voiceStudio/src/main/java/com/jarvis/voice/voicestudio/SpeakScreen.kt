@@ -26,10 +26,22 @@ class SpeakScreen(private val a: StudioActivity) {
         u.text(options,"Option explicite : écrire 2 ou 3 phrases complètes, une par ligne. Pas de découpage automatique. Désactiver si le texte est ambigu.",14f,true)
         val contexts=u.spinner(options,"Contexte (intention uniquement)",VoiceExpressionIntent.entries.map { it.name },c.state.settings.intent.ordinal)
         u.text(options,"Intention enregistrée ; effet émotionnel indisponible avec ce moteur. Aucune modification cachée de la voix ou du sampler.",14f,true)
-        u.button(options,"Appliquer ces options") { a.guard {
-            c.update { it.copy(settings=it.settings.copy(pauses=pause.isChecked,pauseMs=durations.selectedItem.toString().toInt(),intent=VoiceExpressionIntent.valueOf(contexts.selectedItem.toString()))) }
-            c.notice(if(pause.isChecked) "Pauses demandées explicitement. Fournir 2–3 phrases complètes, une par ligne ; aucun changement silencieux du texte." else "Pauses désactivées. Rendu entier 005I conservé.")
+        pause.setOnCheckedChangeListener { _,enabled -> a.guard {
+            c.update { it.copy(settings=it.settings.copy(pauses=enabled)) }
+            c.notice(if(enabled) "Pauses demandées explicitement. Écrire 2–3 phrases complètes, une par ligne ; les ambiguïtés seront refusées." else "Pauses désactivées. Rendu entier 005I conservé.")
         } }
+        durations.onItemSelectedListener=object: android.widget.AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?,view: View?,position: Int,id: Long) {
+                val value=durations.selectedItem.toString().toInt();if(value!=c.state.settings.pauseMs) a.guard { c.update { it.copy(settings=it.settings.copy(pauseMs=value)) };c.notice("Pause réglée à $value ms ; active uniquement si vous l’autorisez.") }
+            }
+        }
+        contexts.onItemSelectedListener=object: android.widget.AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?,view: View?,position: Int,id: Long) {
+                val intent=VoiceExpressionIntent.valueOf(contexts.selectedItem.toString());if(intent!=c.state.settings.intent) a.guard { c.update { it.copy(settings=it.settings.copy(intent=intent)) };c.notice(if(intent==VoiceExpressionIntent.NEUTRAL) "Contexte neutre. Voix et sampler inchangés." else "Intention enregistrée ; effet émotionnel indisponible. Voix et sampler inchangés.") }
+            }
+        }
         u.text(page,"Synthèse expérimentale · 005I reste votre référence de repli.",12f,true)
         return u.page(page)
     }

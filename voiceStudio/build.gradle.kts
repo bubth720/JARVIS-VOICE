@@ -11,13 +11,18 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.6.0-mission005j-experimental"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.jarvis.voice.voicestudio.StudioTestRunner"
         ndk { abiFilters += providers.gradleProperty("prototypeTestAbi").getOrElse("arm64-v8a") }
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
     sourceSets.getByName("androidTest").assets.srcDir("build/generated/androidTestAssets")
-    packaging { jniLibs.useLegacyPackaging = false }
+    packaging {
+        jniLibs.useLegacyPackaging = false
+        // Kotlin coroutine debugger probe, not used by this application. Keep the
+        // strict delivery audit that rejects every packaged binary/model asset.
+        resources.excludes += "DebugProbesKt.bin"
+    }
     // Private local key only. Public CI uses ephemeral debug keys for instrumentation, not stable delivery.
     val privateKey=providers.environmentVariable("JARVIS_PROTOTYPE_KEYSTORE").orNull
     if(privateKey!=null) {

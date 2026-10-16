@@ -15,7 +15,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 
 /** Application-scoped queue, not an Activity. One heavy model, one ORT thread, no remote transport. */
-class StudioController(private val context: Context) {
+class StudioController(private val context: Context,private val backend: StudioBackend=OfficialStudioBackend,private val documents: StudioDocuments=LocalStudioDocuments(context)) {
     private val main=Handler(Looper.getMainLooper())
     private val worker=Executors.newSingleThreadExecutor()
     private val lock=Any()
@@ -79,14 +79,14 @@ class StudioController(private val context: Context) {
     fun currentIdentity()=vault.list().singleOrNull { it.id==vault.selected() }
     fun wizardIdentity()=state.wizard.identityId?.let { value -> vault.list().singleOrNull { it.id.value==value } }
     fun confirmedProfile()=runCatching { library.activeConfirmed() }.getOrNull()
-    fun hasModel()=File(pack,"bundle.json").isFile
+    fun hasModel()=backend.modelAvailable(pack)
     fun hasReplay()=runCatching { val p=library.activeConfirmed();single(p.identityId).load("A",vault,CancellationToken());true }.getOrDefault(false)
     fun requireLocal(uri: Uri) { require(uri.scheme=="content" && uri.authority in setOf("com.android.externalstorage.documents","com.android.providers.downloads.documents","com.android.providers.media.documents")) { "Choisir Téléchargements ou le stockage interne. Fournisseur distant ou inconnu refusé." } }
     fun importPack(uri: Uri) {
         requireLocal(uri)
         run("Vérification et installation du pack FP32…") { c ->
             require(root.usableSpace>=1200L*1048576) { "Libérer au moins 1,2 Gio de stockage pour ce pack." }
-            requireNotNull(context.contentResolver.openInputStream(uri)).use { ExperimentalModelPack.install(it,File(root,"models"),c::isCancelled) }
+            documents.input(uri).use { ExperimentalModelPack.install(it,File(root,"models"),c::isCancelled) }
             "Modèle FP32 vérifié. Les voix et leurs profils restent inchangés."
         }
     }
@@ -99,7 +99,7 @@ class StudioController(private val context: Context) {
         run("Lecture de la durée réelle de l’audio…") { c ->
             val tmp=File(root,"incoming.candidate")
             try {
-                requireNotNull(context.contentResolver.openInputStream(uri)).use { StudioAudio.copy(it,tmp,c) }
+                documents.input(uri).use { StudioAudio.copy(it,tmp,c) }
                 val info=StudioAudio.inspect(tmp);c.check();check(tmp.renameTo(source))
                 draft { it.copy(step=VoiceStep.REVIEW,referenceId=null,startMs=0,durationMs=minOf(10000,info.durationMs),sourceMs=info.durationMs,sourceFormat=info.format,comment="") }
                 "Audio ${info.format} · ${info.durationMs/1000.0} s. Choisir et écouter une portion contiguë avant de la valider."
@@ -128,7 +128,7 @@ class StudioController(private val context: Context) {
         val d=state.wizard;val id=VoiceIdentityId(requireNotNull(d.identityId));val rid=requireNotNull(d.referenceId)
         require(hasModel()) { "Modèle absent. Importer le ZIP FP32 existant dans Réglages avancés." }
         run("Création du profil vocal individuel…",true) { c ->
-            if(vault.list().single { it.id==id }.profiles.none { it.referenceId==rid }) IdentityEncoding.official(vault,id,rid,pack,c)
+            if(vault.list().single { it.id==id }.profiles.none { it.referenceId==rid }) backend.encode(vault,id,rid,pack,c)
             draft { it.copy(step=VoiceStep.TRY) };"Profil prêt. L’écouter puis choisir explicitement la voix principale. Aucun profil précédent remplacé."
         }
     }
@@ -139,30 +139,31 @@ class StudioController(private val context: Context) {
         requireLocal(uri)
         if(!legal) { password.fill('\u0000');error(IllegalArgumentException("Confirmer le droit de cloner les voix de cette archive."));return }
         run("Authentification de l’archive privée…",true,cleanup={password.fill('\u0000')}) { c ->
-            requireNotNull(context.contentResolver.openInputStream(uri)).use { input -> val id=archive.restore(vault,password,input,c);library.choice.clear();draft { it.copy(identityId=id.value,step=VoiceStep.TRY,referenceId=null,sourceMs=null,sourceFormat=null) } }
+            documents.input(uri).use { input -> val id=archive.restore(vault,password,input,c);library.choice.clear();draft { it.copy(identityId=id.value,step=VoiceStep.TRY,referenceId=null,sourceMs=null,sourceFormat=null) } }
             audition=null;"Archive restaurée sans réencodage. Comparer UUID/SHA256 puis confirmer le profil choisi dans Mes voix."
         }
     }
     fun export(uri: Uri,password: CharArray,includeWav: Boolean,id: VoiceIdentityId) {
         requireLocal(uri)
         run("Sauvegarde chiffrée locale…",true,cleanup={password.fill('\u0000')}) { c ->
-            try { requireNotNull(context.contentResolver.openOutputStream(uri,"w")).use { archive.export(vault,id,password,includeWav,it,c) };"Sauvegarde chiffrée créée localement. Conserver le mot de passe séparément." }
-            catch(t: Throwable) { runCatching { android.provider.DocumentsContract.deleteDocument(context.contentResolver,uri) };throw t }
+            try { documents.output(uri).use { archive.export(vault,id,password,includeWav,it,c) };"Sauvegarde chiffrée créée localement. Conserver le mot de passe séparément." }
+            catch(t: Throwable) { runCatching { documents.remove(uri) };throw t }
         }
     }
     fun generate(slot: String?=null) {
         val p=library.activeConfirmed();require(hasModel()) { "Modèle absent. Importer le ZIP FP32 existant dans Réglages avancés." }
-        val s=state.settings;val text=state.text;val plan=ExpressionPolicy.plan(s.request(text,p.identityId,slot=="A"),ExpressionVoiceBinding.from(p),s.sampling(),s.seed)
+        val s=state.settings;val text=state.text;val plan=StudioRendering.plan(state,p,slot=="A")
         run("JARVIS prépare la phrase complète…",true) { c ->
             audition=null;require(library.activeConfirmed()==p)
             val target=if(slot==null) single(p.identityId) else expressions(p.identityId);val side=slot ?: "A"
             if(slot=="B") target.requireB(p.identityId,p,target.context(p.identityId,text,s.seed,s.sampling()),c)
-            val prosody=ExpressionRenderer.prepare(pack,plan);val voice=vault.binding().resolve(p.identityId,p.id,c)
+            val voice=vault.binding().resolve(p.identityId,p.id,c)
+            val prosody=backend.prepare(pack,plan)
             diagnostics=prosody.summary();emit()
-            val rendered=ExpressionRenderer.render(pack,voice,prosody,c);c.check()
+            val rendered=backend.render(pack,voice,prosody,c);c.check()
             target.save(side,p.identityId,p,text,s.seed,s.sampling(),rendered.pcm,c,plan.intent.name,prosody.pauseMs)
             measure?.summary()?.let { target.performance(side,it,c) }
-            diagnostics=prosody.summary()+"\n"+PcmStatistics.measure(rendered.pcm).summary();message="Génération réussie. Audio conservé ; lecture en préparation.";emit()
+            diagnostics=(prosody.summary())+"\n"+PcmStatistics.measure(rendered.pcm).summary();message="Génération réussie. Audio conservé ; lecture en préparation.";emit()
             play(rendered.pcm,c);audition=(slot ?: "main") to target.metadata(side)
             "Lecture terminée. Réécouter est disponible sans recalcul du modèle."
         }
@@ -177,9 +178,10 @@ class StudioController(private val context: Context) {
         val s=state.settings;val text=state.text
         run("Comparaison de profils : ${slot}…",true) { c ->
             val target=profiles(i.id);if(slot=="B") target.requireB(i.id,p,target.context(i.id,text,s.seed,s.sampling()),c)
-            val voice=vault.binding().resolve(i.id,p.id,c);val chunks=mutableListOf<FloatArray>();var count=0
-            QualityEngine(pack,voice,loadCancel=c,sampling=s.sampling()).use { it.generate(text,c,s.seed,true) { block -> count+=block.size;require(count<=480000);chunks.add(block) } }
-            val pcm=FloatArray(count);var at=0;chunks.forEach { it.copyInto(pcm,at);at+=it.size };target.save(slot,i.id,p,text,s.seed,s.sampling(),pcm,c)
+            val voice=vault.binding().resolve(i.id,p.id,c)
+            val neutralState=state.copy(settings=s.copy(pauses=false,intent=VoiceExpressionIntent.NEUTRAL),text=text)
+            val pcm=backend.render(pack,voice,backend.prepare(pack,StudioRendering.plan(neutralState,p)),c).pcm
+            target.save(slot,i.id,p,text,s.seed,s.sampling(),pcm,c)
             play(pcm,c);audition=("profile$slot") to target.metadata(slot);"Profil $slot écouté, voix active inchangée. Aucun meilleur profil choisi automatiquement."
         }
     }

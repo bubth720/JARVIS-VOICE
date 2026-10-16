@@ -1,3 +1,6 @@
 package com.jarvis.voice.voicestudio
 import android.app.Application
-class StudioApplication: Application() { val controller: StudioController by lazy { StudioController(this) } }
+open class StudioApplication: Application() {
+    protected open fun createController()=StudioController(this)
+    val controller: StudioController by lazy { createController() }
+}

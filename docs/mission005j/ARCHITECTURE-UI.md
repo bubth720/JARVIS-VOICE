@@ -25,3 +25,11 @@ Phase A construit les états vides et la navigation ; aucun bouton ne simule une
 Les helpers MP3, AudioTrack, mesures et protections sont repris de 005I avec seul changement de package ; aucune copie de son Activity monolithique. Les services de modèles/archives/encodeur sont les mêmes bibliothèques inchangées.
 
 Caches privés : principal, A/B d'expression, A/B de profils ; chacun <=20 s, au plus 10 identités (moins de 92 Mio de PCM total, hors petites métadonnées). Réécoute sans modèle, vérification des contextes et suppression isolée. Pas de bascule entre deux profils sans action explicite ; la comparaison de profils ne change pas la voix principale.
+
+## Validation et frontières de test
+
+`StudioRendering` prépare exactement la politique 005I puis appelle ExpressionRenderer. Quatre générations complètes sur Alba publique et le pack FP32 privé existant comparent le PCM flottant avant conversion PCM16. Les poids et fichiers audio ne sont pas inclus dans les rapports.
+
+Le backend officiel et les documents ContentResolver sont injectables : l’APK de test seule contient un backend synthétique et un lecteur de documents fixtures. L’APK livrée ne contient aucune voix ni modèle de démonstration, aucune branche de succès factice. Les tests de parcours utilisent le vrai coffre/codec/archive/contrôleur/AudioTrack mais ne constituent pas une validation de l’encodeur ONNX Android réel ni des autorisations SAF physiques Xiaomi. Le test natif JVM complémentaire utilise le pack réel ; l’essai sur téléphone reste distinct.
+
+Les captures automatiques montrent uniquement une bibliothèque vide synthétique. FLAG_SECURE est conservé dans l’application livrée, sa levée temporaire étant confinée au code d’instrumentation pour ces captures. CI installe aussi 005I avec un marqueur synthétique privé et vérifie coexistence et conservation ; aucune donnée personnelle n’est requise.

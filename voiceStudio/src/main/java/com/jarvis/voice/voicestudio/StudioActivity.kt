@@ -43,7 +43,7 @@ class StudioActivity: AppCompatActivity() {
         findViewById<MaterialToolbar>(R.id.toolbar).setOnMenuItemClickListener { controller.navigate(StudioScreen.ADVANCED);true }
         findViewById<BottomNavigationView>(R.id.navigation).setOnItemSelectedListener { controller.navigate(when(it.itemId){R.id.voices->StudioScreen.VOICES;R.id.create->StudioScreen.CREATE;else->StudioScreen.SPEAK});true }
         findViewById<View>(R.id.stop).setOnClickListener { controller.stop() }
-        controller.observe(this) { rebuild -> if(!isFinishing) { if(rebuild) render();status() } };render();status()
+        render();status()
     }
     private fun render() {
         val content=when(controller.state.screen) {
@@ -100,6 +100,7 @@ class StudioActivity: AppCompatActivity() {
         else if(controller.state.screen!=StudioScreen.SPEAK) controller.navigate(StudioScreen.SPEAK)
         else { controller.stop();super.onBackPressed() }
     }
+    override fun onStart() { super.onStart();if(ready) { controller.observe(this) { rebuild -> if(!isFinishing) { if(rebuild) render();status() } };render();status() } }
     override fun onStop() { if(ready) { controller.flush();if(!isChangingConfigurations && controller.busy) controller.stop() };super.onStop() }
     override fun onDestroy() { if(ready) controller.unobserve(this);super.onDestroy() }
 }

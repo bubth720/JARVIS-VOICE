@@ -1,0 +1,30 @@
+{
+  "studioRuntime": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "expressionRuntime": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "identityRuntime": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "pocketRuntime": {
+    "tests": 46,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 11
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 17
+  }
+}

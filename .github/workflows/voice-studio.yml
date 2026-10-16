@@ -1,0 +1,104 @@
+name: Voice Studio 005J
+on:
+  pull_request:
+    paths: ['voiceStudio/**', 'studioRuntime/**', 'expressionRuntime/**', 'identityRuntime/**', 'settings.gradle.kts', 'scripts/pocket/verify*', 'scripts/pocket/prepare_studio_test_audio.py', 'deliveries/mission005j/**', '.github/workflows/voice-studio.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: voice-studio-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+        with: { packages: 'platform-tools', log-accepted-android-sdk-licenses: false }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Verify preservation of functional applications and model bindings
+        run: git diff --exit-code f917ef15ce74a045564ddabdc407ccde4b595ba6 -- app pocketProbe voicePrototype voiceQuality voiceIdentity voiceExpression pocketRuntime identityRuntime expressionRuntime deliveries/mission005f deliveries/mission005g deliveries/mission005h deliveries/mission005i
+      - name: Test JVM library and encrypted archives; private pack is never downloaded
+        run: ./gradlew :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test --no-daemon --max-workers=2
+      - name: Build independent Android application and lint
+        run: ./gradlew :voiceStudio:assembleDebug :voiceStudio:assembleDebugAndroidTest :voiceStudio:lintDebug --no-daemon --max-workers=2
+      - run: python scripts/pocket/verify_experimental_apk.py voiceStudio/build/outputs/apk/debug/voiceStudio-debug.apk --application-id com.jarvis.voice.voicestudio005j --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voiceStudio/build/apk-verification.json
+      - name: Audit locally signed model-free delivery (no signing key in CI)
+        if: hashFiles('deliveries/mission005j/005j-experimental-apk.zip') != ''
+        run: python scripts/pocket/verify_studio_delivery.py deliveries/mission005j/005j-experimental-apk.zip --build-tools "$ANDROID_HOME/build-tools/35.0.0" --out voiceStudio/build/delivery
+      - uses: actions/upload-artifact@v4
+        if: hashFiles('deliveries/mission005j/005j-experimental-apk.zip') != ''
+        with:
+          name: jarvis-voice-005j-experimental-signed-apk
+          retention-days: 30
+          path: |
+            voiceStudio/build/delivery/**
+            docs/mission005j/**
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jarvis-voice-005j-unit-lint-reports
+          path: |
+            studioRuntime/build/reports/tests/**
+            studioRuntime/build/test-results/**
+            expressionRuntime/build/reports/tests/**
+            expressionRuntime/build/test-results/**
+            identityRuntime/build/reports/tests/**
+            identityRuntime/build/test-results/**
+            pocketRuntime/build/reports/tests/**
+            pocketRuntime/build/test-results/**
+            voiceStudio/build/reports/lint-results-debug.*
+  android-library-crypto-playback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+        with: { packages: 'platform-tools', log-accepted-android-sdk-licenses: false }
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install synthetic-audio fixture encoder
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: Prepare synthetic MP3/WAV and encrypted JVM interoperability fixture
+        run: |
+          python scripts/pocket/prepare_studio_test_audio.py
+          IDENTITY_ARCHIVE_FIXTURE_OUT="$PWD/voiceStudio/build/generated/androidTestAssets/jvm-synthetic.jvi" ./gradlew :identityRuntime:test --tests '*VoiceIdentityArchiveTests.authenticatedRoundTrip*' --rerun-tasks --no-daemon --max-workers=2
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6
+          ram-size: 4096M
+          disable-animations: true
+          script: |
+            ./gradlew :voiceExpression:assembleDebug -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+            adb install -r voiceExpression/build/outputs/apk/debug/voiceExpression-debug.apk
+            adb shell run-as com.jarvis.voice.voiceexpression005i mkdir -p files
+            adb shell run-as com.jarvis.voice.voiceexpression005i touch files/005j-synthetic-isolation-sentinel
+            ./gradlew :voiceStudio:connectedDebugAndroidTest -PprototypeTestAbi=x86_64 --no-daemon --max-workers=2
+            adb install -r voiceStudio/build/outputs/apk/debug/voiceStudio-debug.apk
+            adb shell pm path com.jarvis.voice.voiceexpression005i
+            adb shell pm path com.jarvis.voice.voicestudio005j
+            adb shell run-as com.jarvis.voice.voiceexpression005i test -f files/005j-synthetic-isolation-sentinel
+            mkdir -p voiceStudio/build/visual-proof
+            adb pull /sdcard/Download/005j-empty-light.png voiceStudio/build/visual-proof/
+            adb pull /sdcard/Download/005j-empty-dark.png voiceStudio/build/visual-proof/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jarvis-voice-005j-android-reports
+          path: |
+            voiceStudio/build/visual-proof/**
+            voiceStudio/build/reports/androidTests/**
+            voiceStudio/build/outputs/androidTest-results/**
