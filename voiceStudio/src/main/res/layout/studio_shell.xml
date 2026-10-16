@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shell" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/studio_bg" android:fitsSystemWindows="true">
+    <com.google.android.material.appbar.MaterialToolbar android:id="@+id/toolbar" android:layout_width="match_parent" android:layout_height="64dp"
+        app:title="JARVIS" app:subtitle="VOICE STUDIO · EXPÉRIMENTAL" app:titleTextColor="@color/studio_text" app:subtitleTextColor="@color/studio_muted"/>
+    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="16dp"
+        app:cardBackgroundColor="@color/studio_surface" app:cardCornerRadius="16dp" app:strokeWidth="1dp" app:strokeColor="@color/studio_line" app:cardElevation="0dp">
+        <TextView android:id="@+id/status" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="14dp" android:text="Tout reste sur votre téléphone."
+            android:textColor="@color/studio_text" android:textSize="14sp" android:accessibilityLiveRegion="polite"/>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.progressindicator.LinearProgressIndicator android:id="@+id/progress" android:layout_width="match_parent" android:layout_height="4dp" android:layout_margin="16dp" android:indeterminate="true" android:visibility="gone"/>
+    <com.google.android.material.button.MaterialButton android:id="@id/stop" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginHorizontal="16dp" android:text="Arrêter" android:visibility="gone" android:contentDescription="Arrêter immédiatement la lecture et annuler le travail"/>
+    <FrameLayout android:id="@+id/content" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView android:id="@+id/navigation" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@color/studio_surface" app:menu="@menu/studio_navigation" app:labelVisibilityMode="labeled"/>
+</LinearLayout>

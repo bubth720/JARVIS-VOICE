@@ -1,0 +1,5 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@id/speak" android:icon="@drawable/ic_speak" android:title="Parler"/>
+    <item android:id="@id/voices" android:icon="@drawable/ic_voices" android:title="Mes voix"/>
+    <item android:id="@id/create" android:icon="@drawable/ic_create" android:title="Créer"/>
+</menu>
