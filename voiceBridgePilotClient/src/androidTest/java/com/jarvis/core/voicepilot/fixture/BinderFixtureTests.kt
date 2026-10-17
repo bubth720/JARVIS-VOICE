@@ -26,8 +26,9 @@ class BinderFixtureTests {
     private fun base()=mapOf("version" to "voice.bridge.fixture/1","contract_sha256" to BuildConfig.CONTRACT_SHA,"session_id" to id())
     @Before fun emulatorOnlyAndRevoke() {
         Assume.assumeTrue(Build.HARDWARE in setOf("ranchu","goldfish") || Build.FINGERPRINT.startsWith("generic"))
+        device.wakeUp();device.executeShellCommand("wm dismiss-keyguard")
         context.startActivity(Intent().setComponent(ComponentName(component.packageName,"${component.packageName}.PilotActivity")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        val revoke=device.wait(Until.findObject(By.text("Révoquer")),5000) ?: error("Fixture visible required")
+        val revoke=device.wait(Until.findObject(By.res(component.packageName,"pilot_revoke")),5000) ?: error("Fixture visible required")
         revoke.click()
     }
     private fun withEndpoint(block: (IVoicePilotFixture)->Unit) {
@@ -43,8 +44,8 @@ class BinderFixtureTests {
         } finally { if(bound) context.unbindService(connection) }
     }
     private fun authorizeVisible() {
-        device.findObject(By.text("Vérifier puis autoriser le client public pour 60 secondes")).click()
-        val allow=device.wait(Until.findObject(By.text("Autoriser")),3000) ?: error("Certificate confirmation missing")
+        device.findObject(By.res(component.packageName,"pilot_arm")).click()
+        val allow=device.wait(Until.findObject(By.res("android","button1").pkg(component.packageName)),3000) ?: error("Certificate confirmation missing")
         allow.click()
     }
     private fun authorizedOnly() { Assume.assumeTrue(context.packageName=="com.jarvis.core.voicepilot.fixture") }
@@ -74,7 +75,7 @@ class BinderFixtureTests {
             assertEquals(r["correlation_id"],result.getString("correlation_id"));assertEquals("NATIVE_AUTHORITY_UNAVAILABLE",result.getString("code"))
             assertFalse(result.has("text"));assertEquals("REFUSED",result.getString("phase"))
             val replay=JSONObject(String(remote.request(bytes(r)),Charsets.UTF_8));assertEquals("GRANT_OR_REPLAY",replay.getString("code"))
-            device.findObject(By.text("Révoquer")).click()
+            device.findObject(By.res(component.packageName,"pilot_revoke")).click()
             assertThrows(SecurityException::class.java){remote.request(bytes(r))}
         }
     }

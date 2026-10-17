@@ -15,8 +15,8 @@ class PilotActivity: Activity() {
         status=TextView(this).apply { setText(R.string.pilot_intro) }
         setContentView(LinearLayout(this).apply {
             orientation=LinearLayout.VERTICAL;setPadding(24,24,24,24);addView(status)
-            addView(Button(this@PilotActivity).apply { filterTouchesWhenObscured=true;setText(R.string.pilot_arm);setOnClickListener { confirm() } })
-            addView(Button(this@PilotActivity).apply { filterTouchesWhenObscured=true;setText(R.string.pilot_revoke);setOnClickListener { PilotRuntime.authorization.revoke();status.setText(R.string.pilot_intro) } })
+            addView(Button(this@PilotActivity).apply { id=R.id.pilot_arm;filterTouchesWhenObscured=true;setText(R.string.pilot_arm);setOnClickListener { confirm() } })
+            addView(Button(this@PilotActivity).apply { id=R.id.pilot_revoke;filterTouchesWhenObscured=true;setText(R.string.pilot_revoke);setOnClickListener { PilotRuntime.authorization.revoke();status.setText(R.string.pilot_intro) } })
         })
     }
     private fun confirm() {

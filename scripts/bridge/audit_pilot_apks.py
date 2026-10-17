@@ -32,7 +32,7 @@ for rel,pkg in expected.items():
   assert re.search(r'android:exported[^\n]*0x0',service)
  with zipfile.ZipFile(apk) as z:
   assert not any(name.endswith(('.so','.onnx','.safetensors','.gguf','.jvi','.npy','.wav','.pcm')) for name in z.namelist())
- report[pkg]={'apk':rel,'sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'certificate_sha256':sha[0],'minSdk':26,'signature_verified':True,'network_microphone_storage_permissions':False,'model_profile_pcm_or_native_library_packaged':False}
+ report[pkg]={'apk':rel,'size_bytes':apk.stat().st_size,'sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'certificate_sha256':sha[0],'minSdk':26,'signature_verified':True,'network_microphone_storage_permissions':False,'model_profile_pcm_or_native_library_packaged':False}
 common=report['com.jarvis.voice.bridgepilot']['certificate_sha256']
 assert report['com.jarvis.core.voicepilot.fixture']['certificate_sha256']==common
 assert report['com.jarvis.core.voicepilot.unknown']['certificate_sha256']==common
