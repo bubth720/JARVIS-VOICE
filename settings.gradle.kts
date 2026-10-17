@@ -17,3 +17,8 @@ include(":voiceExpression")
 include(":studioRuntime", ":voiceStudio")
 
 include(":voiceBridgeContract", ":voiceBridgeHarness")
+
+// Isolated fixture only; historical applications do not depend on the pilot.
+if (providers.gradleProperty("includeVoicePilot").orNull == "true") {
+    include(":voiceBridgePilot", ":voiceBridgePilotClient")
+}

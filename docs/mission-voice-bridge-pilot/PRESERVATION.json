@@ -1,0 +1,10 @@
+{
+  "base": "4479afb0c5604bb82ae8d84dd0267c4d6e7cb953",
+  "historical_apps_libraries_and_deliveries_unchanged": true,
+  "archive005j_preserved": true,
+  "legacy005k_sha256": "9c018ecfee1b62eb0c3cea36b580edb9edcbda43f3772135b01191018d5eacad",
+  "fixture_contract_sha256": "cfbdff471ed0403113803a0f4c86ec75c57f723cc828f5af3c13fb3ef8042cf2",
+  "cross_repository_checked": true,
+  "private_profile_access": false,
+  "native_generation": "DISABLED"
+}

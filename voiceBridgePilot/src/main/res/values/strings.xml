@@ -1,0 +1,9 @@
+<resources>
+    <string name="pilot_intro">Fixture V1 uniquement : aucun moteur, profil ou audio. Autorisation temporaire visible, révoquée en arrière-plan. Ne pas utiliser sur appareil personnel.</string>
+    <string name="pilot_arm">Vérifier puis autoriser le client public pour 60 secondes</string>
+    <string name="pilot_revoke">Révoquer</string>
+    <string name="pilot_confirm">Autoriser cette identité de fixture ?</string>
+    <string name="pilot_allow">Autoriser</string>
+    <string name="pilot_denied">Client absent, certificat incompatible ou identité refusée.</string>
+    <string name="pilot_armed">Fixture autorisée temporairement ; génération toujours refusée faute de preuve native CORE.</string>
+</resources>
