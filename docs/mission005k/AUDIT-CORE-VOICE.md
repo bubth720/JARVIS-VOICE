@@ -1,0 +1,25 @@
+# 005K — audit des sources et limites
+
+Audit en lecture seule le 17 octobre 2026. Références exactes et SHA des cinq schémas : [SOURCES.json](SOURCES.json). VOICE part de la mission préparée 521e613 et préserve intégralement 005J cce9a45. CORE main 226e2e8, UNIFIED maintenance 41f5350, LLM ressources 1756e29 : refs réellement récupérées, arbres propres. Aucune modification dans ces trois dépôts. Le dépôt CORE s’appelle **JAVIS-Local-v2**, pas JARVIS-CORE.
+
+## Chemin CORE réellement présent
+
+Dans `app/src/main/java/com/stark/jarvislocal/`, `AppGraph` construit directement SQLite/RAG/PDF/LlamaLocalEngine/JarvisCore/WhisperLocalEngine/LocalTts/recorder. `MainActivity.prepareModels()` copie puis précharge le LLM. `send()` appelle `JarvisCore.chat()` sous timeout coroutine de 90 s ; l’assistant est persisté, puis `graph.tts.speak(answer.text)` est appelé si speakReplies. Pas de session UUID, autorisation bridge, client Binder ou annulation native VOICE ici. `JarvisCore.chat()` conserve commandes, réponses rapides, heure, `/remember`, `/docs`, preuves PDF et génération ; aucune responsabilité métier déplacée.
+
+`LlamaLocalEngine` garde le modèle entre messages. Son Mutex est process-local. `releaseInternal()` est privé, appelé au remplacement/OOM ; pas de méthode publique normale de déchargement ni preuve de fin native liée au timeout. `WhisperLocalEngine` charge/libère le modèle pour la transcription, mais timeout et fin réelle ne sont pas équivalents. Un retour de chat ne suffit pas à libérer la résidence LLM. Même une réponse rapide peut survenir alors que le modèle préchargé reste résident. **Pas de pilote E2E sûr tant que ce point et l’arbitre global restent ouverts.** Le dépôt autonome LLM a un ResourceCoordinator coopératif process-local, pas un arbitre Android de CORE/VOICE.
+
+`LocalTts` utilise TextToSpeech Android, choisit une voix française sans réseau si trouvée ; ready=false retourne silencieusement, aucun callback d’audibilité/fin, aucune garantie de voix offline si aucune correspondance. `shutdown()` au onDestroy de l’Activity agit sur le TTS d’AppGraph partagé. Ces constats ne sont pas corrigés ici et ne justifient pas de le remplacer automatiquement. Repli futur explicitement choisi par CORE/utilisateur, jamais double lecture après timeout ambigu. API24/25 doit garder le parcours existant ; disponibilité offline du moteur système à qualifier séparément.
+
+## VOICE réellement présent
+
+`voiceStudio` est autonome, min26/target35, com.jarvis.voice.voicestudio005j. `StudioController` possède file unique, consentements/coffre noBackup, profil confirmé exact, admission 2 Gio et protection sévère thermique ; échantillonnage 250 ms, seuil d’urgence mémoire 256 Mio, un thread ONNX. Encodeur/profils/archives dans identityRuntime ; QualityEngine dans pocketRuntime ; CoreVoiceRequestV1, ExpressionPolicy et ExpressionRenderer dans expressionRuntime. Pas d’appel de CORE réel, service/receiver/provider IPC exporté ou permission réseau/micro. L’Activity launcher exportée ne constitue pas un endpoint texte autorisé.
+
+`ExpressionRenderer.prepare()` lit le tokenizer, valide texte et pauses ; `render()` vérifie le conditionnement, ouvre QualityEngine, rend tout le PCM puis ferme. QualityEngine vérifie le pack, ouvre quatre sessions ONNX à chaque construction et garde les résultats natifs de cache, pas de copies Java des gros caches par frame. Flux de décodage interne par quatre latents, mais **lecture différée** après EOS et PCM complet. PcmPlayer STATIC réclame le focus transitoire et vérifie frames présentées ; cela n’établit pas une perception humaine. Réécoute privée bornée sans recalcul. Pas de streaming annoncé.
+
+Le DTO 005I accepte 300 unités UTF-16, le frontend impose 50 tokens par segment, 20 s de PCM total. CORE peut produire 256 tokens et des réponses PDF bien plus longues : refus explicite ou sélection/segmentation à autoriser côté CORE, **pas de troncature/réécriture automatique**. Intentions non NEUTRAL : métadonnées, aucune émotion acoustique native.
+
+## Identité, déploiement et preuves
+
+CORE com.stark.jarvislocal min24, LLM fr.jarvis.llm min29, VOICE min26. UID et certificat **des installations Xiaomi CORE/LLM inconnus**. Le build CORE n’épingle aucune clé stable ; une signature debug générée par CI n’est pas une identité durable. Seule la livraison J est documentée/vérifiée au certificat aba9ee43361fd342e119a33ae5a628e63199b3b6ef4f14d3a3619f6d5678d89e. On ne peut pas présumer une permission signature commune, ni re-signer CORE sans perte potentielle de compatibilité. Le profil B reste exclusivement sur le téléphone, ni UUID ni empreinte connus ici.
+
+L’ADR UNIFIED approuve l’orientation hybride, conserve les applications autonomes et laisse transport, signatures, nombre d’APK et arbitre ouverts. Cinq schémas v1 proposés ; aucune case de MATRICE_INTEGRATION n’établit un E2E. La vitesse ressentie de J et le fonctionnement de B sont le retour utilisateur, pas des mesures chiffrées nouvelles. Aucun appareil/texte privé ou base réelle ouvert pendant l’audit.

@@ -1,0 +1,40 @@
+name: Voice Bridge 005K contracts only
+on:
+  pull_request:
+    paths: ['voiceBridgeContract/**', 'voiceBridgeHarness/**', 'scripts/bridge/**', 'docs/mission005k/**', 'settings.gradle.kts', '.github/workflows/voice-bridge.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: voice-bridge-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  contracts-and-preservation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools', log-accepted-android-sdk-licenses: false}
+      - uses: gradle/actions/setup-gradle@v4
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Prove historical applications and inactive transport preserved
+        run: python scripts/bridge/verify_scope.py
+      - name: Test closed contracts and adapters; no gated weight or personal fixture in CI
+        run: ./gradlew :voiceBridgeContract:test :voiceBridgeHarness:test :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test --no-daemon --max-workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: voice-005k-contract-reports
+          path: |
+            voiceBridgeContract/build/test-results/**
+            voiceBridgeContract/build/reports/tests/**
+            voiceBridgeHarness/build/test-results/**
+            voiceBridgeHarness/build/reports/tests/**
+            studioRuntime/build/test-results/**
+            expressionRuntime/build/test-results/**
+            identityRuntime/build/test-results/**
+            pocketRuntime/build/test-results/**

@@ -1,0 +1,19 @@
+# Fiche future VOICE — endpoint pilote isolé, après décision
+
+**Proposition à approuver, non lancée.** Dépôt `bubth720/JARVIS-VOICE`, branche proposée `feat/voice-bridge-pilot`, base source à figer après005K. Préserver D/F/G/H/I/J, APK, signatures, pack, B et archives. Choix recommandé : pilote séparé avec identifiant distinct à valider, jamais modification du manifeste J sous005K.
+
+Prérequis : mêmes décisions IPC/auth/API/ressources que CORE, contrat `005k.1-proposed`, bundle SHA256 **9c018ecfee1b62eb0c3cea36b580edb9edcbda43f3772135b01191018d5eacad** ([CONTRACT-PIN.json](CONTRACT-PIN.json)). Valider aussi les lacunes UNIFIED (résolution privée, liaison bail, profil/session en réponse) : pas de nouveaux champs glissés dans v1. Aucun endpoint installé/activé avant accord explicite.
+
+## Travail et ordre proposés
+
+1. Tester un endpoint/une application **fixture isolée**, sans données B, puis appliquer seulement la politique de transport approuvée. Pour Binder/AIDL candidat : service explicite, contrôle de Binder UID au point d’entrée de chaque méthode, package/certificat/ligne de signature + autorisation locale exacte. Permission signature seulement si les signataires réels le permettent ; appairage visible/revocation si approuvé, jamais confiance en chaînes self-declared.
+2. Adapter le contrat épinglé au moteur et au profil exacts, gardés dans la sandbox VOICE. Aucun .jvi/JVFP1/tensor/chemin partagé avec CORE, aucune copie directe de sandbox J. Un nouveau pilote **ne possède pas B de J automatiquement** : essais initiaux sur voix publique autorisée ; import local chiffré volontaire ultérieur seulement avec autorisation, conservation UUID/SHA/pack et confirmation du propriétaire. J/B originaux restent disponibles, sans réencodage forcé.
+3. Intégrer admission globale réellement qualifiée, plus garde locale2Gio, un thread/file, thermique/mémoire/batterie inchangés. NativeDone, fin AudioTrack et déchargement sont séparés ; nettoyage inconnu bloque. Mort client/service, timeout et cancellation répétés ne libèrent pas fictivement. Refuser le relais si LLM/Whisper reste résident ou si l’arbitre est inconnu ; vérifier heartbeat/génération et révocation selon contrat approuvé.
+4. Garder lecture différée complète, Arrêt et PCM privé borné. Erreur/succès de génération distincts de début/fin de présentation ; audibilité uniquement rapport humain. Pas d’émotion native ni de streaming inventé. Service uniquement pendant un parcours visible/autorisé ; politique Android35 arrière-plan/audio focus à qualifier, pas de modèle en veille permanente.
+5. Optimisation **séparément conditionnée** : les données005K justifient d’étudier validation/ouverture des ressources, pas un patch automatique. Tester A/B mémoire/latence sur Xiaomi avec mêmes texte/profil/graine/LSD/température, invalidation exacte et fermeture, PCM bit-identique. Ne pas réduire seuils/qualité/threads pour atteindre un chiffre. Pas de rafale résidente entre tours CORE sans qualification du bail et de la RAM.
+
+## Acceptation et coordination
+
+JVM contrats/moteur ; vrai Binder entre APK de test sur émulateur (UID/certificats mêmes et différents, client malveillant, grant absent/révoqué, ancien résultat, rejet des champs inconnus et payload géant) ; panne/annulation/nettoyage natif, API/ABI/version, admission, non-régression J24/24 et suitesF/G/H/I. Tests mocks, IPC fixture, E2E public avec CORE et Xiaomi restent quatre preuves distinctes. Aucun enregistrement personnel dans CI/Cloud.
+
+Après tests et accord d’installation, propriétaire essaie le pilote sans désinstaller J ; signature stable/versionCode cohérents pour mises à jour du **pilote**. Rollback par désactivation/désinstallation du pilote seulement si propriétaire le choisit, sans toucher à J/B. PR brouillon et rapports séparés, aucune fusion. Les deux missions annoncent ensemble les SHA CORE/VOICE et le hash de contrat avant de revendiquer un parcours connecté.

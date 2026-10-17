@@ -1,0 +1,23 @@
+{
+  "preservedBase": "cce9a4549c35e721ee37daff014d427ef3656b2a",
+  "unchangedPaths": [
+    "app",
+    "pocketProbe",
+    "voicePrototype",
+    "voiceQuality",
+    "voiceIdentity",
+    "voiceExpression",
+    "voiceStudio",
+    "pocketRuntime",
+    "identityRuntime",
+    "expressionRuntime",
+    "studioRuntime",
+    "deliveries"
+  ],
+  "schemasPinned": true,
+  "historicalAppsDependOnBridge": false,
+  "ipcEnabled": false,
+  "coreConnected": false,
+  "newApkBuilt": false,
+  "stable005jZipPreserved": true
+}

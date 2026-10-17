@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jarvis:contracts:v1:resource-lease",
+  "title": "resource-lease",
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "lease_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "core",
+        "llm",
+        "voice",
+        "interface",
+        "nexus",
+        "evolution",
+        "services",
+        "unified"
+      ]
+    },
+    "operation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "resource_class": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "heavy",
+        "model"
+      ]
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "admitted",
+        "refused"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "idle",
+        "loading",
+        "running",
+        "stop_requested",
+        "native_stopped",
+        "released",
+        "cleanup_failed",
+        "unknown"
+      ]
+    },
+    "model_resident": {
+      "type": "boolean"
+    },
+    "cancellation_requested": {
+      "type": "boolean"
+    },
+    "effective_end": {
+      "type": "boolean"
+    },
+    "release_confirmed": {
+      "type": "boolean"
+    },
+    "declared_envelope_bytes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 17179869184
+    },
+    "reserves_android_ram": {
+      "const": false
+    },
+    "coordination_scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "process",
+        "interprocess_target"
+      ]
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": [
+    "contract_version",
+    "lease_id",
+    "owner",
+    "operation_id",
+    "resource_class",
+    "decision",
+    "state",
+    "model_resident",
+    "cancellation_requested",
+    "effective_end",
+    "release_confirmed",
+    "declared_envelope_bytes",
+    "reserves_android_ram",
+    "coordination_scope",
+    "generation"
+  ],
+  "additionalProperties": false
+}

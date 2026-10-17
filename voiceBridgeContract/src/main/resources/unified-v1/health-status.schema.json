@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jarvis:contracts:v1:health-status",
+  "title": "health-status",
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "module_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "core",
+        "llm",
+        "voice",
+        "interface",
+        "nexus",
+        "evolution",
+        "services",
+        "unified"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "available",
+        "unavailable",
+        "degraded",
+        "unknown"
+      ]
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "OK",
+        "UNKNOWN",
+        "MODULE_ABSENT",
+        "INCOMPATIBLE",
+        "UNAUTHORIZED",
+        "BUSY",
+        "INSUFFICIENT_RESOURCES",
+        "CLEANUP_FAILED"
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "properties": {
+        "model_resident": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "active_heavy_work": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualified_hardware": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "details_logged": {
+          "const": false
+        }
+      },
+      "required": [
+        "model_resident",
+        "active_heavy_work",
+        "qualified_hardware",
+        "details_logged"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "contract_version",
+    "module_id",
+    "state",
+    "checked_at",
+    "reason_code",
+    "diagnostic"
+  ],
+  "additionalProperties": false
+}

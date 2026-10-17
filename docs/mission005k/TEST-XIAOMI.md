@@ -1,0 +1,14 @@
+# 005K — relevés sur Xiaomi, sans nouvelle application
+
+005J est déjà validée par le propriétaire. **Ne pas installer de bridge 005K** : aucune APK bridge n’est livrée, aucune permission IPC à accorder. Ne pas désinstaller J, ne pas déplacer/réencoder B, ne pas exporter .jvi/MP3/WAV/UUID/SHA au Cloud. Aucun PC/ADB/USB requis.
+
+1. Garder J et son profil B sélectionné. Noter localement version, graine, LSD/température et pauses actuels ; conserver ces réglages entre répétitions, aucune baisse de qualité pour gagner un chiffre. L’essai Linux utilise3 étapes mais ne justifie pas de changer une configuration Xiaomi validée.
+2. Téléphone au repos et refroidi, autres tâches lourdes fermées. Ne pas lancer CORE/LLM ou Whisper en parallèle. Noter l’état de batterie/charge ; un compteur indisponible reste indisponible. Toute admission mémoire/thermique refusée doit rester un refus, pas un benchmark forcé.
+3. Dans J, utiliser seulement les phrases publiques : « Bonjour à tous. », puis « Demain, je prendrai le train pour Paris. ». Relever les mesures affichées dans Avancé après la génération/lecture : durée totale, CPU processus, PSS maximal échantillonné, thermique et batterie. La durée inclut lecture ; ce n’est pas le délai au premier son.
+4. Réécouter sans recalcul. Les diagnostics de réécoute affichent les mesures privées de génération avant lecture enregistrées dans le cache : les distinguer des mesures de la réécoute actuelle. Recopier seulement les chiffres et le nom public du scénario, aucun profil/texte personnel/capture privée.
+5. Si le téléphone reste frais, répéter une fois à réglages identiques. Une réouverture visible de l’app ne prouve pas un processus ni un cache OS froid ; annoter « première utilisation après ouverture » / « répétition » et ne pas inventer un warm backend permanent (J ferme ses sessions).
+6. Pauses : trois phrases complètes, une par ligne : « Bonjour à tous. », « Nous sommes prêts. », « Le train arrive. ». Comparer OFF puis ON500ms seulement si souhaité, choix explicite. Noter durée PCM et fin de phrase entendue. L’absence de pauses et la segmentation n’ont pas nécessairement la même durée PCM ; aucune émotion native déduite.
+
+Pas de chronométrage précis au premier son fourni par J seule. Ne pas déduire cette latence en retranchant la durée PCM, ni quitter J pendant calcul pour lancer un chronomètre : quitter annule le travail. Le ressenti peut être noté comme subjectif. Ne pas enregistrer l’audio personnel ou utiliser une capture Cloud ; les mesures AudioTrack plus détaillées demanderont une mission d’instrumentation distincte autorisée.
+
+Arrêter immédiatement si chauffe/refus/lecture dégradée. Ne pas multiplier les encodages : B reste tel quel. En cas de problème, garder J et ses sauvegardes ; rapporter seulement scénario public, version, réglages, chiffres et code d’erreur sûr. Aucun test CORE↔VOICE ni appairage n’est demandé ici.

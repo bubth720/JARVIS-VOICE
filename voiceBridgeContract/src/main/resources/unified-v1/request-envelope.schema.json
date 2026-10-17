@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jarvis:contracts:v1:request-envelope",
+  "title": "request-envelope",
+  "type": "object",
+  "properties": {
+    "protocol_version": {
+      "const": "1.0"
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "origin": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "core",
+        "llm",
+        "voice",
+        "interface",
+        "nexus",
+        "evolution",
+        "services",
+        "unified"
+      ]
+    },
+    "destination": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "core",
+        "llm",
+        "voice",
+        "interface",
+        "nexus",
+        "evolution",
+        "services",
+        "unified"
+      ]
+    },
+    "capability": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "text.generate",
+        "speech.synthesize",
+        "speech.transcribe",
+        "document.retrieve",
+        "memory.confirm",
+        "ui.render",
+        "tool.invoke",
+        "patch.propose",
+        "registry.read",
+        "health.read"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "authorization_ref": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "session_id",
+        "authorization_ref"
+      ],
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_input_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65536
+        },
+        "max_output_tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 90000
+        },
+        "declared_memory_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 17179869184
+        }
+      },
+      "required": [
+        "max_input_bytes",
+        "max_output_tokens",
+        "timeout_ms",
+        "declared_memory_bytes"
+      ],
+      "additionalProperties": false
+    },
+    "deadline": {
+      "type": "object",
+      "properties": {
+        "clock": {
+          "const": "sender_monotonic"
+        },
+        "sent_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expires_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "clock",
+        "sent_at_ms",
+        "expires_at_ms"
+      ],
+      "additionalProperties": false
+    },
+    "cancellation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "content_ref": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "model_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "voice_profile_ref": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "pack_sha256": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "content_ref"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "protocol_version",
+    "contract_version",
+    "correlation_id",
+    "origin",
+    "destination",
+    "capability",
+    "scope",
+    "limits",
+    "deadline",
+    "cancellation_id",
+    "payload"
+  ],
+  "additionalProperties": false
+}

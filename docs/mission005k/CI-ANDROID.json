@@ -1,0 +1,64 @@
+{
+  "sourceCommit": "8890809c1b3eb5f3a47b600a3df5998f4823da32",
+  "platform": "Android API35 x86_64 emulator",
+  "newBridgeIpcTested": false,
+  "coreE2eTested": false,
+  "personalDataUsed": false,
+  "results": [
+    {
+      "module": "005F",
+      "runId": 39034864454,
+      "artifactId": 12101547350,
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "005G",
+      "runId": 39034864377,
+      "artifactId": 12101811860,
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "005H",
+      "runId": 39034864404,
+      "artifactId": 12102175898,
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "005D",
+      "runId": 39034864375,
+      "artifactId": 12101707138,
+      "tests": 5,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "historicalFailure": "testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns"
+    },
+    {
+      "module": "005I",
+      "runId": 39034864302,
+      "artifactId": 12102051665,
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "005J",
+      "runId": 39034864378,
+      "artifactId": 12101429269,
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ]
+}

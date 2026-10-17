@@ -1,0 +1,36 @@
+{
+  "voice": {
+    "repository": "bubth720/JARVIS-VOICE",
+    "branch": "feat/voice-core-bridge-005k",
+    "missionCommit": "521e613448083ffe6d575de2c9c369b48fb901f8",
+    "preservedBase": "cce9a4549c35e721ee37daff014d427ef3656b2a"
+  },
+  "core": {
+    "repository": "bubth720/JAVIS-Local-v2",
+    "branch": "main",
+    "commit": "226e2e8cc3eebd479805b89d035eb5c1cbcad540",
+    "inspection": "read-only source, no runtime link",
+    "worktreeClean": true
+  },
+  "unified": {
+    "repository": "bubth720/JARVIS-UNIFIED",
+    "branch": "mission-001g-maintenance",
+    "commit": "41f53501fb18fe727d5fd453dd715f0811d2e897",
+    "inspection": "read-only source, no runtime link",
+    "worktreeClean": true
+  },
+  "llm": {
+    "repository": "bubth720/JARVIS-LLM",
+    "branch": "mission-003b-resources",
+    "commit": "1756e29557287550b5cfdffdd911cada2a302db6",
+    "inspection": "read-only source, no runtime link",
+    "worktreeClean": true
+  },
+  "schemas": {
+    "capability-manifest.schema.json": "fdeda2a14c9ea818ebfedaad43035b192ccddc8b941fa61d6c25fa8d98b03b9a",
+    "health-status.schema.json": "84420f0f18763f557d1f14cd7a06be9bc1d05705e11c672c91d68ecfbadf2bd0",
+    "resource-lease.schema.json": "0cabee9828db1ee719d5d43ab3b1e268aeafce7af49755224c78bf705595343c",
+    "response-envelope.schema.json": "3649f25aab483c20fc53e909a0b6486724abc050245e15acdb03f8f4b17edd38",
+    "request-envelope.schema.json": "9c13abea1907cccb7f01990888d4eeb4a81aad90b5d823213bb5fe75372450fc"
+  }
+}
