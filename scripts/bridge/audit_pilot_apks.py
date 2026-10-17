@@ -24,7 +24,12 @@ for rel,pkg in expected.items():
   assert 'com.jarvis.voice.bridgepilot.VoicePilotService' in service and 'com.jarvis.voice.bridgepilot.permission.BIND' in service
   assert re.search(r'android:exported[^\n]*0xffffffff',service)
   assert re.search(r'android:protectionLevel[^\n]*0x2',manifest)
- else: assert 'E: service' not in manifest
+ else:
+  # The only client service is an unexported, second-process lifetime fixture.
+  assert manifest.count('E: service')==1
+  service=manifest[manifest.index('E: service'):]
+  assert 'com.jarvis.core.voicepilot.fixture.LifetimeService' in service and ':lifetime' in service
+  assert re.search(r'android:exported[^\n]*0x0',service)
  with zipfile.ZipFile(apk) as z:
   assert not any(name.endswith(('.so','.onnx','.safetensors','.gguf','.jvi','.npy','.wav','.pcm')) for name in z.namelist())
  report[pkg]={'apk':rel,'sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'certificate_sha256':sha[0],'minSdk':26,'signature_verified':True,'network_microphone_storage_permissions':False,'model_profile_pcm_or_native_library_packaged':False}

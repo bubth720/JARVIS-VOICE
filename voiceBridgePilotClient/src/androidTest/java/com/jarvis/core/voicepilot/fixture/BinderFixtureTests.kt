@@ -47,6 +47,12 @@ class BinderFixtureTests {
         val allow=device.wait(Until.findObject(By.text("Autoriser")),3000) ?: error("Certificate confirmation missing")
         allow.click()
     }
+    private fun authorizedOnly() { Assume.assumeTrue(context.packageName=="com.jarvis.core.voicepilot.fixture") }
+    private fun request(h: JSONObject,hello: Map<String,String>)=hello+mapOf(
+        "correlation_id" to id(),"cancellation_id" to id(),"grant_ref" to h.getString("grant_ref"),
+        "core_epoch" to id(),"lease_id" to id(),"generation" to "1","remaining_ms" to "1000",
+        "text" to "Bonjour, ceci est un test public.")
+    private fun json(payload: ByteArray)=JSONObject(String(payload,Charsets.UTF_8))
     @Test fun signaturePermissionIsActuallyGrantedOrDeniedByAndroid() {
         val permission=context.checkSelfPermission("com.jarvis.voice.bridgepilot.permission.BIND")
         assertEquals(if(context.packageName.endsWith("untrusted")) PackageManager.PERMISSION_DENIED else PackageManager.PERMISSION_GRANTED,permission)
@@ -75,5 +81,70 @@ class BinderFixtureTests {
     @Test fun oversizedTransactionRejectedBeforeJsonParsing() {
         Assume.assumeTrue(context.packageName=="com.jarvis.core.voicepilot.fixture")
         authorizeVisible();withEndpoint { remote ->assertThrows(SecurityException::class.java){remote.hello(ByteArray(16384),Binder())} }
+    }
+
+    @Test fun authorizedMalformedDuplicateAndForgedFieldsAreRejected() {
+        authorizedOnly();authorizeVisible()
+        withEndpoint { remote ->
+            val life=Binder()
+            assertEquals("INVALID_UTF8",json(remote.hello(byteArrayOf(0xc3.toByte()),life)).getString("code"))
+            val h=base()
+            assertEquals("FIELDS",json(remote.hello(bytes(h+("profile_uri" to "file://fixture-only")),life)).getString("code"))
+            val duplicate=String(bytes(h)).dropLast(1)+",\"ver\\u0073ion\":\"wrong\"}"
+            assertEquals("FIELDS",json(remote.hello(duplicate.toByteArray(),life)).getString("code"))
+            assertEquals("CONTRACT",json(remote.hello(bytes(h+("contract_sha256" to "0".repeat(64))),life)).getString("code"))
+        }
+    }
+    @Test fun absentGrantStaleKeyAndIdempotentCancelNeverGrantResources() {
+        authorizedOnly();authorizeVisible()
+        withEndpoint { remote ->
+            val hello=base();val h=json(remote.hello(bytes(hello),Binder()));val r=request(h,hello)
+            assertEquals("GRANT_OR_REPLAY",json(remote.request(bytes(r+("grant_ref" to id())))).getString("code"))
+            assertEquals("NATIVE_AUTHORITY_UNAVAILABLE",json(remote.request(bytes(r))).getString("code"))
+            val key=r.filterKeys { it !in setOf("text","remaining_ms") }
+            assertEquals("STALE_RESULT",json(remote.status(bytes(key+("generation" to "2")))).getString("code"))
+            val cancelled=json(remote.cancel(bytes(key)))
+            assertEquals("REFUSED",cancelled.getString("phase"));assertEquals("NATIVE_AUTHORITY_UNAVAILABLE",cancelled.getString("code"))
+            assertEquals(cancelled.toString(),json(remote.cancel(bytes(key))).toString())
+            assertFalse(cancelled.has("native_stopped"));assertFalse(cancelled.has("pcm"))
+        }
+    }
+    @Test fun elapsedServerExpiryReallyRefusesTheOldGrant() {
+        authorizedOnly();authorizeVisible()
+        withEndpoint { remote ->
+            val hello=base();val h=json(remote.hello(bytes(hello),Binder()));val r=request(h,hello)
+            SystemClock.sleep(30_000);SystemClock.sleep(30_050)
+            assertThrows(SecurityException::class.java) { remote.request(bytes(r)) }
+        }
+    }
+    @Test fun leavingTheLocalConsentScreenRevokesBinderCalls() {
+        authorizedOnly();authorizeVisible()
+        withEndpoint { remote ->
+            val hello=base();val h=json(remote.hello(bytes(hello),Binder()));val r=request(h,hello)
+            device.pressHome();device.waitForIdle()
+            assertThrows(SecurityException::class.java) { remote.request(bytes(r)) }
+        }
+    }
+    @Test fun actualSecondProcessBinderDeathRevokesTheGrant() {
+        authorizedOnly();authorizeVisible()
+        val connected=CountDownLatch(1);var token: IBinder?=null
+        val connection=object: ServiceConnection {
+            override fun onServiceConnected(name: ComponentName,binder: IBinder) { token=binder;connected.countDown() }
+            override fun onServiceDisconnected(name: ComponentName) {}
+        }
+        assertTrue(context.bindService(Intent(context,LifetimeService::class.java),connection,Context.BIND_AUTO_CREATE))
+        try {
+            assertTrue(connected.await(8,TimeUnit.SECONDS));val life=requireNotNull(token)
+            val died=CountDownLatch(1);life.linkToDeath({died.countDown()},0)
+            val data=Parcel.obtain();val result=Parcel.obtain()
+            val pid=try { assertTrue(life.transact(IBinder.FIRST_CALL_TRANSACTION,data,result,0));result.readInt() }
+                finally { data.recycle();result.recycle() }
+            assertNotEquals(Process.myPid(),pid)
+            withEndpoint { remote ->
+                val hello=base();val h=json(remote.hello(bytes(hello),life));val r=request(h,hello)
+                Process.killProcess(pid);assertTrue(died.await(8,TimeUnit.SECONDS));SystemClock.sleep(200)
+                assertThrows(SecurityException::class.java) { remote.request(bytes(r)) }
+            }
+        } finally { context.unbindService(connection) }
     }
 }

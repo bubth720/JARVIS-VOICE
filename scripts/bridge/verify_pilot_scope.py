@@ -5,8 +5,12 @@ from pathlib import Path
 root=Path(__file__).resolve().parents[2]
 parser=argparse.ArgumentParser();parser.add_argument('--core-root',type=Path);args=parser.parse_args()
 base='4479afb0c5604bb82ae8d84dd0267c4d6e7cb953'
-protected=['app','pocketProbe','voicePrototype','voiceQuality','voiceIdentity','voiceExpression','voiceStudio','pocketRuntime','identityRuntime','expressionRuntime','studioRuntime','deliveries','voiceBridgeContract','voiceBridgeHarness','build.gradle.kts','gradle.properties','.github','docs/mission005k']
+protected=['app','pocketProbe','voicePrototype','voiceQuality','voiceIdentity','voiceExpression','voiceStudio','pocketRuntime','identityRuntime','expressionRuntime','studioRuntime','deliveries','voiceBridgeContract','voiceBridgeHarness','build.gradle.kts','gradle.properties','docs/mission005k']
 assert not subprocess.check_output(['git','diff',base,'--',*protected],cwd=root),'historical apps/contracts modified'
+workflow='.github/workflows/voice-bridge-pilot.yml'
+changed=subprocess.check_output(['git','diff','--name-only',base,'--','.github'],cwd=root,text=True).splitlines()
+assert all(path==workflow for path in changed),'historical workflow modified'
+assert subprocess.run(['git','cat-file','-e',base+':'+workflow],cwd=root,stderr=subprocess.DEVNULL).returncode!=0,'new workflow name must not replace a historical one'
 legacy=json.loads((root/'docs/mission005k/CONTRACT-PIN.json').read_text())
 for name,sha in legacy['files'].items(): assert hashlib.sha256((root/name).read_bytes()).hexdigest()==sha,name
 assert hashlib.sha256(''.join(k+'\0'+v+'\n' for k,v in sorted(legacy['files'].items())).encode()).hexdigest()==legacy['bundleSha256']

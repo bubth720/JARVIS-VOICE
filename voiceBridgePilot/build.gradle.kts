@@ -15,7 +15,16 @@ android {
     buildFeatures { aidl=true;buildConfig=true }
     compileOptions { sourceCompatibility=JavaVersion.VERSION_17;targetCompatibility=JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget="17" }
-    testOptions { unitTests.isIncludeAndroidResources=true }
+    testOptions {
+        unitTests.isIncludeAndroidResources=true
+        unitTests.all {
+            providers.gradleProperty("pilotRobolectricDir").orNull?.let { directory ->
+                // Cloud fallback: public SDK fixture jars, no writes to a fixed HOME cache.
+                it.systemProperty("robolectric.offline","true")
+                it.systemProperty("robolectric.dependency.dir",directory)
+            }
+        }
+    }
     val key=providers.environmentVariable("VOICE_PILOT_KEYSTORE").orNull
     signingConfigs { if(key!=null) create("pilot") { storeFile=file(key);storePassword=providers.environmentVariable("VOICE_PILOT_KEY_PASSWORD").orNull;keyAlias="voice-pilot";keyPassword=storePassword } }
     buildTypes.getByName("debug") { signingConfig=if(key!=null) signingConfigs.getByName("pilot") else null }
