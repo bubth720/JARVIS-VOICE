@@ -48,3 +48,5 @@ POCKET_EXPERIMENTAL_MODEL_DIR=/private/existing-pack IDENTITY_PUBLIC_ALBA_WAV=/p
 ```
 
 Ne pas exécuter ce harness avec le profil B. CI ne télécharge pas les poids. Les mesures natives Cloud restent distinctes des tests de contrat mock et de tout essai Android/IPC.
+
+RTF dans le JSON = temps de calcul / durée PCM, pauses incluses : un silence ajouté augmente le dénominateur. Ne pas appeler cela une accélération entre OFF et ON ; seuls les essais de même scénario sont comparables.

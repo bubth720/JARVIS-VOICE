@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "8890809c1b3eb5f3a47b600a3df5998f4823da32",
+  "runId": 39034864473,
+  "artifactId": 12101314683,
+  "conclusion": "success",
+  "privateModelsDownloaded": false,
+  "personalDataUsed": false,
+  "coreConnected": false,
+  "results": {
+    "voiceBridgeContract": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "voiceBridgeHarness": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "studioRuntime": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "expressionRuntime": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "identityRuntime": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "pocketRuntime": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    }
+  }
+}

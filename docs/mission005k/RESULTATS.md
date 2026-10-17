@@ -24,7 +24,11 @@ A `807fbf1` : audit en lecture seule de CORE226e2e8, UNIFIED41f5350 et LLM1756e2
 
 B `57f31c8` : contrat proposé/port désactivé/adaptateur, première suite30/30. C `8890809` : baseline et32/32 après durcissement des cas inconnus/refus/rejeu ; anciens JVM réexécutés, empreintes verrouillées et CI nouvelle. La fixture initiale avait omis l’activation de son profil public : cache refusé correctement, puis activation explicite ajoutée sans contourner la protection.
 
-La non-régression Android F/G/H/I/J est déclenchée dans GitHub Actions ; ses résultats nouveaux seront consignés après lecture des artefacts. L’échec historique D4/5 connu est suivi séparément, jamais désactivé. Pas de résultat CI ou de signature installé sur téléphone inféré d’un build.
+CI terminée au commit source `8890809` : [workflow005K](https://github.com/bubth720/JARVIS-VOICE/actions/runs/39034864473) vert, nouveaux contrats29/29 + adaptateur3/3. Régression JVM sans poids privés : Studio9 réussis/1 saut, expression11/1, identités18/1, moteur33/13 ; total103 réussis/16 sautés, zéro échec, sur119 déclarés. [Preuves XML et compteurs CI](CI-CONTRATS.json).
+
+Android API35 x86_64 : **F10/10, G14/14, H18/18, I31/31, J24/24**, sans saut/échec. [Preuves et artefacts exacts](CI-ANDROID.json). J [run39034864378](https://github.com/bubth720/JARVIS-VOICE/actions/runs/39034864378) entièrement vert, incluant audit du ZIP signé et coexistence I/J. Ces tests sont les anciennes suites inchangées ; ils ne testent aucun nouvel IPC. Workflow Android du module historique principal également vert. D reste4/5 : seul `testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns`, `AudioTrack [count=1 frames=72000 submitted=72000] expected 0 but was 1`, défaut connu vérifié dans le XML, aucun changement de test/lecteur.
+
+Les commits documentaires ultérieurs n’affectent pas les classes/JAR/manifestes/sources testés ou le bundle de contrat. Pas de résultat Xiaomi, d’E2E ou de signature réellement installée inféré d’un build.
 
 ## Préservation
 
@@ -37,3 +41,5 @@ Pack privé original conservé,234932686 octets et SHA2569436555c6965e3480c06f51
 CORE précharge/garde le LLM sans méthode publique normale de déchargement ; timeout coroutine ne prouve pas fin native. Pas d’arbitre global, signatures/UID installés CORE inconnus, API24 vs26 et senseurs à qualifier. Le contrat v1 ne lie pas encore complètement bail/profil/session/réponse et ne définit pas la résolution privée du contenu ; compromis proposés sans modifier UNIFIED. La réutilisation de sessions pourrait éviter une partie des ~0.9s d’ouverture mesurées sur ce CPU, mais le PSS du harness atteint~2.5Gio et aucune extrapolation Xiaomi ni veille permanente n’est autorisée.
 
 **Prochaine action propriétaire** : examiner DECISIONS-IPC.md et les deux fiches, puis valider séparément transport, stratégie de confiance/signatures, arbitre/preuves natives et portée API/fallback. Ne rien installer ni migrer B pour cette revue. Cette décision conditionne les missions de raccordement, pas la publication des travaux005K déjà autorisés.
+
+D `03acb8e` : fiches futures CORE/VOICE et compte rendu ; publication finale des preuves CI et précisions documentaires sans changement applicatif. La PR#9 reste brouillon vers005J, aucun merge dans main ou autre branche. Les trois dépôts externes restent en lecture seule et leurs arbres propres.

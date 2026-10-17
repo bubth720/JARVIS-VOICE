@@ -37,3 +37,5 @@ FallbackPolicy exige demande humaine explicite, VOICE certainement arrêtée et 
 ## Tests et implémentation suivante
 
 Tests de syntaxe/schémas/Unicode/autorisation/identité/API/temps/provenance/résidence/annulation/concurrence/rejeu/repli, mocks distincts du harness public réel. AdapterTests vérifie l’égalité DTO 005I et le port désactivé, pas Binder. Les futurs ports Android devront authentifier avant mapping, lier autorité réelle, pack/profil exact et arbitre global. Contrat compilé != CORE raccordé, ni permission accordée, ni profil B accessible.
+
+Identifiant canonique de ce mapping : `PocketIdentity.ENGINE` (`pocket-tts-french-6l-fp32-v1`), celui des profils existants ; ne pas substituer le libellé interne `QualityEngine.engineId` (`pocket-french-6l-fp32-lsd`). Les deux noms existent dans les sources mais ne sont pas des alias acceptés sur le fil sans négociation.
