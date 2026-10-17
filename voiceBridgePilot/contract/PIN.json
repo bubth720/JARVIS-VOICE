@@ -1,0 +1,11 @@
+{
+  "version": "voice.bridge.fixture/1",
+  "status": "experimental-authentication-fixture-only",
+  "sha256": "cfbdff471ed0403113803a0f4c86ec75c57f723cc828f5af3c13fb3ef8042cf2",
+  "source005kBundle": "9c018ecfee1b62eb0c3cea36b580edb9edcbda43f3772135b01191018d5eacad",
+  "canonicalization": "sorted(name UTF8 + NUL + exact bytes + NUL)",
+  "files": {
+    "CONTRACT.md": "dee564d81218b1b7b17f8925503f97ff2e36df0ed29825abbbc8f419d2efefa9",
+    "IVoicePilotFixture.aidl": "55e31e7fddc800f3c123c67218f277813eba257423b9aba67ca2ba60c84d3918"
+  }
+}
