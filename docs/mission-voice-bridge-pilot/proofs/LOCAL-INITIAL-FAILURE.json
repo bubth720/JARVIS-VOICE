@@ -1,0 +1,13 @@
+{
+  "code_commit": "63838b2590c4c56914a0d500525a23809f09a8c8",
+  "emulator_api": 35,
+  "hardware_acceleration": false,
+  "declared": 9,
+  "passed": 8,
+  "failed": 1,
+  "failure": "unarmedCallerCannotPassMalformedPayload: consent fixture not yet visible in setup",
+  "root_observation": "System UI ANR dialog on software emulator; transformed uppercase UI labels observed separately; subsequent resource selectors applied",
+  "not_a_passing_run": true,
+  "security_assertions_removed": false,
+  "grant_expiry_ms": 60000
+}

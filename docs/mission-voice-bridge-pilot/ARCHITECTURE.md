@@ -21,3 +21,7 @@ Hello authentifié ne révèle aucun profil et annonce native_generation_availab
 Le coffre, l'import/restauration volontaire, le résolveur de profil exact, la génération via QualityEngine, cache PCM, focus/AudioTrack et événements vocaux V2 ne sont pas implémentés. Les protections et le comportement des anciennes bibliothèques sont préservés ; cela ne démontre pas un rendu public bit-identique par le pilote. Pas d'émotion ou streaming revendiqués, pas de repli automatique.
 
 La paire de fixtures d'authentification ne prouve pas l'arbitrage global, l'absence de modèle dans un processus non participant ou une nouvelle capacité de CORE. Aucun profil B, identifiant privé, enregistrement utilisateur ou archive personnelle accédé. Aucune installation Xiaomi.
+
+## Qualification après reprise
+
+Code qualifié ea37d5a : vrai Binder confirmé sur émulateursAPI26/35, trois variantes clientes (certificats identiques/différents), grants/révocation/expiry/mort Binder ; rapports sous proofs/CI-REPRISE.json. Consentement local protégé parFLAG_SECURE/filtrage des touches et contrôles UI à identifiants fixes. Le helper LifetimeService du client est non exporté et ne prouve aucune fin native. V2/V3 et XiaomiB restent exclus. Voir RESULTATS.md pour les limites et l’APK de laboratoire.
