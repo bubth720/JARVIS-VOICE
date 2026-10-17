@@ -32,3 +32,14 @@ Réparer/provisionner un laboratoire Android, puis exécuter BinderFixtureTests 
 Rollback : ne pas inclure les modules opt-in ou désactiver/révoquer le pilote ; le propriétaire peut retirer les seules fixtures de laboratoire s'il le choisit. Aucune désinstallation, migration ou restauration005J/B n'est nécessaire ou automatique.
 
 PR demandée **brouillon uniquement** vers `feat/voice-core-bridge-005k`, pas main ; aucune fusion ni installation. L'accès API GitHub renvoie Forbidden dans cette session ; la publication Git et la création de PR sont vérifiées séparément lors de la clôture. Aucun ancien résultat CI n'est présenté comme CI de cette mission.
+
+## Publication et coordination vérifiées
+
+Code V1 publié : `242eb651df8c1d9d2020fb4f83f963d16d8988b5`. CORE sœur : C1 `05c087b`, C2 `ee4a1bf3b8af9e07ed95d58040af248713ceb14c`, natif bloqué et C3 non commencée. Les hashes du contrat fixture ont été vérifiés croisés après compilation. Une clôture documentaire peut suivre sans changer le code testé.
+
+Tentative PR `gh pr create --draft --base feat/voice-core-bridge-005k --head feat/voice-bridge-pilot` : `Post https://api.github.com/graphql: Forbidden`. **Aucune PR créée**, aucun statut CI de cette livraison obtenu viaAPI. Le push Git fonctionne. api.github.com est absent de la liste réseau active ; ajout préparé dans le brouillon cloud sans remplacement des domaines existants, non appliqué runtime. Il faut appliquer cette autorisation réseau puis revérifier l'accès API/Pull requests, sans extraire les identifiants ni créer un PAT par défaut.
+
+Branche : <https://github.com/bubth720/JARVIS-VOICE/tree/feat/voice-bridge-pilot>.
+Comparaison manuelle vers005K : <https://github.com/bubth720/JARVIS-VOICE/compare/feat/voice-core-bridge-005k...feat/voice-bridge-pilot?expand=1>. Choisir explicitement **brouillon**, ne pas fusionner. Ce lien n'est pas une PR existante.
+
+Les clés de test ne sont pas dans Git, patches ou artefacts publiés. Les APK locaux sont des fixtures d'authentification, pas un remplacement005J ou une voixB opérationnelle. Aucune installation sur Xiaomi.
