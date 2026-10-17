@@ -1,0 +1,23 @@
+{
+  "status": "proposed-not-approved",
+  "localVersion": "005k.1-proposed",
+  "unifiedProtocol": "1.0",
+  "unifiedContract": "1.0.0",
+  "bundleSha256": "9c018ecfee1b62eb0c3cea36b580edb9edcbda43f3772135b01191018d5eacad",
+  "canonicalization": "UTF8 sorted(path + NUL + sha256 + LF)",
+  "files": {
+    "voiceBridgeContract/build.gradle.kts": "484c18d86a70b930febc5bb773357608e8d61c230469bb3692189bab20f2d017",
+    "voiceBridgeContract/src/main/kotlin/com/jarvis/voice/bridge/BridgeMapper.kt": "dab603e164e5fbb867daaaea260647440cc8ec0397cd7c95a7b04b469a1a9cb9",
+    "voiceBridgeContract/src/main/kotlin/com/jarvis/voice/bridge/BridgeTypes.kt": "3beb6a7687f243b775990b9202c9cd78aeab3747b28e2b4382d22a7b036ea581",
+    "voiceBridgeContract/src/main/kotlin/com/jarvis/voice/bridge/SpeechJobCoordinator.kt": "0bb9a1b868e0448802006b215843133acdf86d389a050d51d78b87c555dc1c36",
+    "voiceBridgeContract/src/main/kotlin/com/jarvis/voice/bridge/StrictBridgeJson.kt": "c3ee526655b56bd35dec3858e95cda497001492cc076ab9fb4f0d117b29738e5",
+    "voiceBridgeContract/src/main/kotlin/com/jarvis/voice/bridge/UnifiedSchemas.kt": "ba1267a92f213899132cd767141cffa61fa5c49156e78c5c276cdb11f0a33739",
+    "voiceBridgeContract/src/main/resources/unified-v1/capability-manifest.schema.json": "fdeda2a14c9ea818ebfedaad43035b192ccddc8b941fa61d6c25fa8d98b03b9a",
+    "voiceBridgeContract/src/main/resources/unified-v1/health-status.schema.json": "84420f0f18763f557d1f14cd7a06be9bc1d05705e11c672c91d68ecfbadf2bd0",
+    "voiceBridgeContract/src/main/resources/unified-v1/request-envelope.schema.json": "9c13abea1907cccb7f01990888d4eeb4a81aad90b5d823213bb5fe75372450fc",
+    "voiceBridgeContract/src/main/resources/unified-v1/resource-lease.schema.json": "0cabee9828db1ee719d5d43ab3b1e268aeafce7af49755224c78bf705595343c",
+    "voiceBridgeContract/src/main/resources/unified-v1/response-envelope.schema.json": "3649f25aab483c20fc53e909a0b6486724abc050245e15acdb03f8f4b17edd38",
+    "voiceBridgeContract/src/main/resources/unified-v1/source-lock.json": "9d9c76a2358a460efc6502ea4179b92ab0b569f241d86ac3c904eeaa63d7c34d",
+    "voiceBridgeHarness/src/main/kotlin/com/jarvis/voice/bridge/harness/CoreRequestAdapter.kt": "277e50b37664ecbafa2ddc697110ab29f399acdb2b6bc6c8d615372c9634b7cb"
+  }
+}

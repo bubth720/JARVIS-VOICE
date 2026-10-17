@@ -7,12 +7,13 @@ import com.jarvis.voice.pocket.*
 
 /** JVM/test adapter only, never linked by a historical Android application. */
 object CoreRequestAdapter {
+    private val checkpoint=org.json.JSONObject(requireNotNull(javaClass.getResourceAsStream("/experimental-fp32-lock.json")).bufferedReader().use { it.readText() }).getString("checkpointSha256")
     fun request(job: SpeechJobRequest)=CoreVoiceRequestV1(job.text,VoiceIdentityId(job.binding.identityId),
         expressionIntent=job.options.intent,priority=job.options.priority,pauseMs=job.options.pauseMs,
         allowSentencePauses=job.options.allowSentencePauses)
     fun plan(job: SpeechJobRequest): VoiceExpressionPlan {
         val b=job.binding
-        require(b.engineId==PocketIdentity.ENGINE && b.packId==PocketIdentity.packId) { "INCOMPATIBLE" }
+        require(b.engineId==PocketIdentity.ENGINE && b.packId==PocketIdentity.packId && b.modelSha256==checkpoint) { "INCOMPATIBLE" }
         val binding=ExpressionVoiceBinding(VoiceIdentityId(b.identityId),b.profileId,b.profileSha256,b.conditioningSha256,b.engineId,b.packId)
         return ExpressionPolicy.plan(request(job),binding,QualitySampling(job.options.steps,job.options.temperature),job.options.seed)
     }

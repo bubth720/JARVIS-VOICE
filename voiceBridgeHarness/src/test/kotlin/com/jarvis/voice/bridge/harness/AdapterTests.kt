@@ -6,7 +6,7 @@ import org.junit.Assert.*
 import org.junit.Test
 class AdapterTests {
     private fun id(n: Int)="00000000-0000-4000-8000-"+n.toString().padStart(12,'0')
-    private fun job()=SpeechJobRequest(id(1),id(2),id(3),"Bonjour à tous.\nNous sommes prêts.",VoiceBinding(id(4),id(5),"a".repeat(64),"b".repeat(64),PocketIdentity.ENGINE,"c".repeat(64),PocketIdentity.packId),SpeechOptions(pauseMs=250,allowSentencePauses=true),90000)
+    private fun job()=SpeechJobRequest(id(1),id(2),id(3),"Bonjour à tous.\nNous sommes prêts.",VoiceBinding(id(4),id(5),"a".repeat(64),"b".repeat(64),PocketIdentity.ENGINE,"dd5fe98f5577ecfd56db9af8057cd05fe20cbc91560042aec8a56cfb01c34995",PocketIdentity.packId),SpeechOptions(pauseMs=250,allowSentencePauses=true),90000)
     @Test fun dtoMatchesUnchanged005iExactlyWithoutChangingTextOrSampling() {
         val j=job();val actual=CoreRequestAdapter.request(j);val old=CoreVoiceRequestV1(j.text,VoiceIdentityId(j.binding.identityId),pauseMs=250,allowSentencePauses=true)
         assertEquals(old,actual);assertEquals(j.text,CoreRequestAdapter.plan(j).request.utteranceText)

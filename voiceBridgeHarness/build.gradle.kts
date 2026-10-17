@@ -8,3 +8,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 }
 tasks.test { maxHeapSize="2g"; testLogging { events("passed","skipped","failed") } }
+tasks.register<JavaExec>("benchmark") { classpath=sourceSets["main"].runtimeClasspath;mainClass.set("com.jarvis.voice.bridge.harness.BridgeBenchmarkKt"); maxHeapSize="2g" }

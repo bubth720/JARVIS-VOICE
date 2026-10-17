@@ -24,7 +24,7 @@ class SchemaTests {
     @Test fun unknownStateCannotBeAvailableAndNoFakeQualifiedCapability() {
         Fixtures.reject { UnifiedSchemas.parse(Envelope.HEALTH,Fixtures.health().put("state","unknown").toString()) }
         val cap=Fixtures.capability();cap.getJSONArray("capabilities").getJSONObject(0).put("qualification","unknown");Fixtures.reject { UnifiedSchemas.parse(Envelope.CAPABILITY,cap.toString()) }
-        Fixtures.reject(BridgeError.MODULE_ABSENT) { Fixtures.mapper().requireCapability(Fixtures.capability().put("state","unknown").put("capabilities",JSONArray()).toString(),Fixtures.binding) }
+        Fixtures.reject(BridgeError.UNKNOWN) { Fixtures.mapper().requireCapability(Fixtures.capability().put("state","unknown").put("capabilities",JSONArray()).toString(),Fixtures.binding) }
     }
     @Test fun resultErrorAreExclusiveAndNoPrivateLogFlag() {
         val j=Fixtures.response().put("error",JSONObject().put("code","UNKNOWN").put("retryable",false));Fixtures.reject { UnifiedSchemas.parse(Envelope.RESPONSE,j.toString()) }
@@ -41,5 +41,13 @@ class SchemaTests {
         Fixtures.reject { UnifiedSchemas.parse(Envelope.REQUEST,Fixtures.request().put("correlation_id","1-1-1-1-1").toString()) }
         Fixtures.reject { UnifiedSchemas.parse(Envelope.REQUEST,Fixtures.request().toString().replace("\"core\"","\"\\ud800\"")) }
         Fixtures.reject { UnifiedSchemas.parse(Envelope.REQUEST,"{\"x\":\""+"x".repeat(32768)+"\"}") }
+    }
+    @Test fun refusedResultIsDistinctAndStatusErrorMismatchOrUnknownApiCannotSucceed() {
+        val j=Fixtures.response().put("status","unauthorized").put("result",JSONObject.NULL).put("error",JSONObject().put("code","UNAUTHORIZED").put("retryable",false))
+        assertEquals(GenerationOutcome.REFUSED,Fixtures.mapper().response(j.toString(),Fixtures.job(),Fixtures.id(3),200,true).generation)
+        j.getJSONObject("error").put("code","BUSY");Fixtures.reject { UnifiedSchemas.parse(Envelope.RESPONSE,j.toString()) }
+        val cap=Fixtures.capability();cap.getJSONObject("environment").put("min_android_api",JSONObject.NULL)
+        Fixtures.reject(BridgeError.INCOMPATIBLE) { Fixtures.mapper().requireCapability(cap.toString(),Fixtures.binding) }
+        Fixtures.reject { UnifiedSchemas.parse(Envelope.HEALTH,Fixtures.health().put("checked_at","2026-02-30T00:00:00Z").toString()) }
     }
 }

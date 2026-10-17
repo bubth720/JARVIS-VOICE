@@ -8,7 +8,7 @@ class CoordinatorTests {
     private fun finish(c: SpeechJobCoordinator,t: Reservation) { c.cancel(t);c.nativeDone(t);c.audioStopped(t);c.confirmUnloaded(t,false) }
     @Test fun oneHeavyWorkAndTwoGibFloorAreNeverRelaxed() {
         val c=SpeechJobCoordinator();val t=c.reserve(Fixtures.job(),guard,100)
-        Fixtures.reject(BridgeError.BUSY) { c.reserve(Fixtures.job(10),guard,100) };finish(c,t)
+        Fixtures.reject(BridgeError.BUSY) { c.reserve(Fixtures.job(10).copy(options=SpeechOptions(priority=3)),guard,100) };finish(c,t)
         Fixtures.reject(BridgeError.INSUFFICIENT_RESOURCES) { c.reserve(Fixtures.job(10),guard.copy(availableBytes=2147483647),100) }
         c.reserve(Fixtures.job(10),guard.copy(availableBytes=2147483648),100)
     }
@@ -49,5 +49,11 @@ class CoordinatorTests {
         val jobs=(20..27).map(Fixtures::job)
         val threads=jobs.map { r->Thread { start.await();try { c.reserve(r,guard,100);won.incrementAndGet() } catch(e: BridgeFailure) { assertEquals(BridgeError.BUSY,e.code);lost.incrementAndGet() } }.apply { start() } }
         start.countDown();threads.forEach { it.join(5000);assertFalse(it.isAlive) };assertEquals(1,won.get());assertEquals(7,lost.get())
+    }
+    @Test fun replayWindowSaturationRefusesWithoutEvictingLiveTombstones() {
+        val c=SpeechJobCoordinator()
+        for(n in 100..227) finish(c,c.reserve(Fixtures.job(n),guard,100))
+        Fixtures.reject(BridgeError.BUSY) { c.reserve(Fixtures.job(228),guard,100) }
+        c.reserve(Fixtures.job(229).copy(deadlineLocalMs=160000),guard,80101)
     }
 }

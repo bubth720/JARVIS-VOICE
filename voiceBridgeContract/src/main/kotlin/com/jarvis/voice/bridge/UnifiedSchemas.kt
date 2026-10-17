@@ -2,7 +2,10 @@ package com.jarvis.voice.bridge
 
 import org.json.*
 import java.security.MessageDigest
-import java.time.Instant
+import java.text.ParsePosition
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 enum class Envelope(val file: String) { CAPABILITY("capability-manifest"),REQUEST("request-envelope"),RESPONSE("response-envelope"),LEASE("resource-lease"),HEALTH("health-status") }
 /** Validator for exactly the pinned five UNIFIED schemas, not a general JSON Schema engine. */
@@ -63,7 +66,12 @@ object UnifiedSchemas {
             if(s.has("pattern")) checkBridge(Regex(s.getString("pattern")).matches(v))
             when(s.optString("format")) {
                 "uuid"->uuid(v)
-                "date-time"->{ checkBridge(v.endsWith("Z"));checkBridge(runCatching { Instant.parse(v) }.isSuccess) }
+                "date-time"->{
+                    checkBridge(v.matches(Regex("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z")))
+                    val base=v.take(19)+"Z";val pos=ParsePosition(0)
+                    val parser=SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",Locale.ROOT).apply { isLenient=false;timeZone=TimeZone.getTimeZone("UTC") }
+                    checkBridge(parser.parse(base,pos)!=null && pos.index==base.length)
+                }
                 ""->{}
                 else->throw BridgeFailure(BridgeError.INCOMPATIBLE)
             }

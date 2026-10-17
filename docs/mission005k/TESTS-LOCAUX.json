@@ -1,0 +1,43 @@
+{
+  "platform": "Linux JVM21",
+  "privatePackDownloaded": false,
+  "personalDataUsed": false,
+  "results": {
+    "voiceBridgeContract": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "voiceBridgeHarness": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "studioRuntime": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "expressionRuntime": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "identityRuntime": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pocketRuntime": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 11
+    }
+  }
+}

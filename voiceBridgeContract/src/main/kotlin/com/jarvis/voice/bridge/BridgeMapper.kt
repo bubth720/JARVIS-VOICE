@@ -57,16 +57,19 @@ class BridgeMapper(private val authorizer: AuthorizationPort=AuthorizationPort {
     }
     fun requireCapability(raw: String,binding: VoiceBinding) {
         val j=UnifiedSchemas.parse(Envelope.CAPABILITY,raw)
-        checkBridge(j.getString("module_id")=="voice" && j.getString("state")=="available",BridgeError.MODULE_ABSENT)
+        checkBridge(j.getString("module_id")=="voice",BridgeError.INCOMPATIBLE)
+        checkBridge(j.getString("state")!="unknown",BridgeError.UNKNOWN)
+        checkBridge(j.getString("state")=="available",BridgeError.MODULE_ABSENT)
         val caps=j.getJSONArray("capabilities")
         checkBridge((0 until caps.length()).any { caps.getJSONObject(it).let { c->c.getString("id")=="speech.synthesize" && c.getString("version")=="1.0.0" && c.getBoolean("available") } },BridgeError.INCOMPATIBLE)
         val matches=j.getJSONArray("compatibilities")
         checkBridge((0 until matches.length()).any { matches.getJSONObject(it).let { c->c.getString("engine_id")==binding.engineId && c.getString("model_sha256")==binding.modelSha256 && c.getString("profile_format")=="JVFP1" } },BridgeError.INCOMPATIBLE)
         val env=j.getJSONObject("environment")
-        checkBridge(env.getString("platform")=="android" && env.getInt("min_android_api")==26 && env.getString("abi") in setOf("arm64-v8a","x86_64"),BridgeError.INCOMPATIBLE)
+        checkBridge(env.getString("platform")=="android" && env.opt("min_android_api")==26 && env.getString("abi") in setOf("arm64-v8a","x86_64"),BridgeError.INCOMPATIBLE)
     }
     fun requireHealth(raw: String) {
-        val j=UnifiedSchemas.parse(Envelope.HEALTH,raw);checkBridge(j.getString("module_id")=="voice" && j.getString("state")=="available",BridgeError.MODULE_ABSENT)
+        val j=UnifiedSchemas.parse(Envelope.HEALTH,raw);checkBridge(j.getString("module_id")=="voice",BridgeError.INCOMPATIBLE)
+        if(j.getString("state")!="available") throw BridgeFailure(BridgeError.valueOf(j.getString("reason_code")))
         // Available is not hardware admission; reservation still requires independent, current guards.
     }
     fun requireLease(raw: String,request: SpeechJobRequest,generation: Long) {
