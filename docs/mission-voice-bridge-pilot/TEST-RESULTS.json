@@ -1,0 +1,83 @@
+{
+  "session": "2026-10-17",
+  "levels": {
+    "jvm": "EXECUTED",
+    "robolectric": "EXECUTED_API35",
+    "android_inter_apk_binder": "NOT_EXECUTED",
+    "public_native_engine": "NOT_EXECUTED",
+    "xiaomi_B": "NOT_ACCESSED_NOT_INSTALLED"
+  },
+  "modules": {
+    "voiceBridgeContract": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 29
+    },
+    "voiceBridgeHarness": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 3
+    },
+    "studioRuntime": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 9
+    },
+    "expressionRuntime": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 11
+    },
+    "identityRuntime": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 18
+    },
+    "pocketRuntime": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13,
+      "passed": 33
+    },
+    "voiceBridgePilot": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 17
+    }
+  },
+  "lint": {
+    "voiceBridgePilot/build/reports/lint-results-debug.xml": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 3
+    },
+    "voiceBridgePilotClient/build/reports/lint-results-authorizedDebug.xml": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 10
+    },
+    "voiceBridgePilotClient/build/reports/lint-results-wrongSignatureDebug.xml": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 10
+    },
+    "voiceBridgePilotClient/build/reports/lint-results-wrongPackageDebug.xml": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 10
+    }
+  }
+}

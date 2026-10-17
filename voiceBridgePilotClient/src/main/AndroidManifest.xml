@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="com.jarvis.voice.bridgepilot.permission.BIND" />
+    <queries><package android:name="com.jarvis.voice.bridgepilot" /></queries>
+    <application android:label="CORE Binder — client public V1" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:fullBackupContent="false">
+        <activity android:name="com.jarvis.core.voicepilot.fixture.ClientActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+    <service android:name=".LifetimeService" android:exported="false" android:process=":lifetime" /></application>
+</manifest>

@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <permission android:name="com.jarvis.voice.bridgepilot.permission.BIND" android:protectionLevel="signature" />
+    <queries><package android:name="com.jarvis.core.voicepilot.fixture" /></queries>
+    <application android:label="VOICE Binder — fixture V1" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/extraction" android:usesCleartextTraffic="false">
+        <activity android:name=".PilotActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+        <service android:name=".VoicePilotService" android:exported="true" android:permission="com.jarvis.voice.bridgepilot.permission.BIND" />
+    </application>
+</manifest>

@@ -1,0 +1,42 @@
+{
+  "level": "STATIC_APK_ONLY_NOT_KERNEL_BINDER",
+  "ephemeral_test_signing_only": true,
+  "apks": {
+    "com.jarvis.voice.bridgepilot": {
+      "apk": "voiceBridgePilot/build/outputs/apk/debug/voiceBridgePilot-debug.apk",
+      "sha256": "89454a24d4b99867d2acb5a1ab877baa0fe76cb94c7fcfb7cdf8bf0596616f75",
+      "certificate_sha256": "b984c4b0e20f61ca45911f8fce72b9e23dbdd931612577e7a8f14a8b054fdb96",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    },
+    "com.jarvis.core.voicepilot.fixture": {
+      "apk": "voiceBridgePilotClient/build/outputs/apk/authorized/debug/voiceBridgePilotClient-authorized-debug.apk",
+      "sha256": "b5ca360f18ec6d67141b9e5215c610ae6159627dd28e963206ca67b037131521",
+      "certificate_sha256": "b984c4b0e20f61ca45911f8fce72b9e23dbdd931612577e7a8f14a8b054fdb96",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    },
+    "com.jarvis.core.voicepilot.unknown": {
+      "apk": "voiceBridgePilotClient/build/outputs/apk/wrongPackage/debug/voiceBridgePilotClient-wrongPackage-debug.apk",
+      "sha256": "9eb52ca6c9bd2b888c9d703392e7feeb66c51a819cc288ed451f43faef716a51",
+      "certificate_sha256": "b984c4b0e20f61ca45911f8fce72b9e23dbdd931612577e7a8f14a8b054fdb96",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    },
+    "com.jarvis.core.voicepilot.untrusted": {
+      "apk": "voiceBridgePilotClient/build/outputs/apk/wrongSignature/debug/voiceBridgePilotClient-wrongSignature-debug.apk",
+      "sha256": "a11091c1a9b7c603d94d11592f56b668a8be19d7f099ad930ba006bfeaec8a39",
+      "certificate_sha256": "8becbf1d4ee04241d5a73d947f21640ab72b202962052227cb0f6b5108376661",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    }
+  }
+}

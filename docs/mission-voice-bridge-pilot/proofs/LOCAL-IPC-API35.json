@@ -1,0 +1,35 @@
+{
+  "code_commit": "ea37d5a461b94f64f3a89a2e655a7d47b0d1150d",
+  "android_api": 35,
+  "emulator": true,
+  "hardware_acceleration": false,
+  "kernel_binder": true,
+  "variants": {
+    "authorized": {
+      "declared": 9,
+      "passed": 9,
+      "skipped": 0,
+      "failed": 0,
+      "log_sha256": "cfef7c72115bc720058ceef327f0a451b9b8577469143ced4f946eed8d70b66d"
+    },
+    "wrongPackage": {
+      "declared": 9,
+      "passed": 2,
+      "skipped": 7,
+      "failed": 0,
+      "log_sha256": "cf158eccc4aef4d859966ddd1a4b8343f589c61c077951f54af5be6ba0528198"
+    },
+    "wrongSignature": {
+      "declared": 9,
+      "passed": 2,
+      "skipped": 7,
+      "failed": 0,
+      "log_sha256": "d568f10cab3e9b5820e9ae0089d8852aabbee95da967036e2f82b5320d5fce96"
+    }
+  },
+  "total_passed": 13,
+  "total_skipped": 14,
+  "failed": 0,
+  "native_generation": false,
+  "xiaomi": false
+}

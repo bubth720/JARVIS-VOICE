@@ -1,0 +1,13 @@
+{
+  "code_commit": "ea37d5a461b94f64f3a89a2e655a7d47b0d1150d",
+  "android_api": 35,
+  "kernel_binder": true,
+  "emulator": true,
+  "hardware_acceleration": false,
+  "test_cases": 9,
+  "passed": 9,
+  "failed": 0,
+  "skipped": 0,
+  "model_generation": false,
+  "xiaomi": false
+}

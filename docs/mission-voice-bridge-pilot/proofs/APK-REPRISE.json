@@ -1,0 +1,46 @@
+{
+  "level": "STATIC_APK_ONLY_NOT_KERNEL_BINDER",
+  "ephemeral_test_signing_only": true,
+  "apks": {
+    "com.jarvis.voice.bridgepilot": {
+      "apk": "voiceBridgePilot/build/outputs/apk/debug/voiceBridgePilot-debug.apk",
+      "size_bytes": 869159,
+      "sha256": "8866f02c77ff47954334a3c6db5d51e22b6ec4f351557976c43dd347aae4e8a6",
+      "certificate_sha256": "7e970be7bb8221af7c7ec28d7d27e231a5d2cc43c29106fad6738ffb5314fcb3",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    },
+    "com.jarvis.core.voicepilot.fixture": {
+      "apk": "voiceBridgePilotClient/build/outputs/apk/authorized/debug/voiceBridgePilotClient-authorized-debug.apk",
+      "size_bytes": 837042,
+      "sha256": "7b4c76eac83e72022373816852ef25779a27f3b452c062149979f4caeeb506c0",
+      "certificate_sha256": "7e970be7bb8221af7c7ec28d7d27e231a5d2cc43c29106fad6738ffb5314fcb3",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    },
+    "com.jarvis.core.voicepilot.unknown": {
+      "apk": "voiceBridgePilotClient/build/outputs/apk/wrongPackage/debug/voiceBridgePilotClient-wrongPackage-debug.apk",
+      "size_bytes": 837062,
+      "sha256": "e2586beaa8228a2726e4eadeddf146f5c4ffae57eb166ad89990b8489928ea55",
+      "certificate_sha256": "7e970be7bb8221af7c7ec28d7d27e231a5d2cc43c29106fad6738ffb5314fcb3",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    },
+    "com.jarvis.core.voicepilot.untrusted": {
+      "apk": "voiceBridgePilotClient/build/outputs/apk/wrongSignature/debug/voiceBridgePilotClient-wrongSignature-debug.apk",
+      "size_bytes": 837077,
+      "sha256": "9b4b99e35433eabac9fef7186384f9bf50a299a4d4da5eabb4feff5179ef8983",
+      "certificate_sha256": "cd6d6ce67dcccdf27d1d33905c106c8d787d84bb8b295b69be03bcd7856e325b",
+      "minSdk": 26,
+      "signature_verified": true,
+      "network_microphone_storage_permissions": false,
+      "model_profile_pcm_or_native_library_packaged": false
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "code_commit": "ea37d5a461b94f64f3a89a2e655a7d47b0d1150d",
+  "core_commit": "7426665f2794cba83646008fa0f342d102141201",
+  "contract_sha256": "cfbdff471ed0403113803a0f4c86ec75c57f723cc828f5af3c13fb3ef8042cf2",
+  "pilot_run": 39060156787,
+  "apis": [
+    {
+      "api": 26,
+      "job": 117476280550,
+      "variants": [
+        {
+          "name": "authorized",
+          "passed": 9,
+          "skipped": 0,
+          "failed": 0
+        },
+        {
+          "name": "wrongPackage",
+          "passed": 2,
+          "skipped": 7,
+          "failed": 0
+        },
+        {
+          "name": "wrongSignature",
+          "passed": 2,
+          "skipped": 7,
+          "failed": 0
+        }
+      ]
+    },
+    {
+      "api": 35,
+      "job": 117476280339,
+      "variants": [
+        {
+          "name": "authorized",
+          "passed": 9,
+          "skipped": 0,
+          "failed": 0
+        },
+        {
+          "name": "wrongPackage",
+          "passed": 2,
+          "skipped": 7,
+          "failed": 0
+        },
+        {
+          "name": "wrongSignature",
+          "passed": 2,
+          "skipped": 7,
+          "failed": 0
+        }
+      ]
+    }
+  ],
+  "historical_suites": [
+    {
+      "module": "005F",
+      "run": 39060156853,
+      "job": 117476280777,
+      "tests": 10,
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "module": "005G",
+      "run": 39060156834,
+      "job": 117476280435,
+      "tests": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "module": "005H",
+      "run": 39060156825,
+      "job": 117476293379,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0
+    },
+    {
+      "module": "005I",
+      "run": 39060156860,
+      "job": 117476294434,
+      "tests": 31,
+      "passed": 31,
+      "failed": 0
+    },
+    {
+      "module": "005J",
+      "run": 39060156804,
+      "job": 117476296068,
+      "tests": 24,
+      "passed": 24,
+      "failed": 0
+    },
+    {
+      "module": "005D",
+      "run": 39060156841,
+      "job": 117476280434,
+      "tests": 5,
+      "passed": 4,
+      "failed": 1,
+      "known_failure": "DeviceAudioTests.testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns; AudioTrack count=1 frames=72000 submitted=72000 expected0 but1"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12111560275,
+      "name": "voice-pilot-api26-reports",
+      "size_in_bytes": 31251,
+      "digest": "sha256:388b819eed94117bc2222c019cada6fd9242b001a05ac2cc84c450ade121ce2f",
+      "code_commit": "ea37d5a461b94f64f3a89a2e655a7d47b0d1150d",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/39060156787/artifacts/12111560275"
+    },
+    {
+      "id": 12111177535,
+      "name": "voice-pilot-api35-reports",
+      "size_in_bytes": 31294,
+      "digest": "sha256:e444f2df78b936ffe48c45d8a04cb8807010e9bd450aa0d0d4e26a25e02eacba",
+      "code_commit": "ea37d5a461b94f64f3a89a2e655a7d47b0d1150d",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/39060156787/artifacts/12111177535"
+    },
+    {
+      "id": 12111098020,
+      "name": "voice-pilot-fixture-only-apk-ephemeral-signature",
+      "size_in_bytes": 843857,
+      "digest": "sha256:0814a6254f69870838fc8a502c5eacdbb933bbc1500526e26c09b40be2565549",
+      "code_commit": "ea37d5a461b94f64f3a89a2e655a7d47b0d1150d",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/39060156787/artifacts/12111098020"
+    }
+  ],
+  "verification": "Workflow conclusions and decoded job logs read using GitHub connector; exported report archives not independently parsed in cloud runtime",
+  "private_audio_uploaded": false,
+  "native_model_generation": false,
+  "xiaomi_tested": false
+}
