@@ -5,7 +5,7 @@ Build/audit the seven signed fixture APKs first. No owner device or installation
 import argparse,json,subprocess
 from pathlib import Path
 from adb_shell.adb_device import AdbDeviceTcp
-p=argparse.ArgumentParser();p.add_argument('--out',default='work/voice-bridge-pilot/shared-android');p.add_argument('--variant',choices=['authorized','wrongPackage','wrongSignature']);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--out',default='work/voice-bridge-pilot/shared-android');p.add_argument('--variant',choices=['authorized','wrongPackage','wrongSignature']);p.add_argument('--preinstalled',action='store_true');a=p.parse_args()
 out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
 x=AdbDeviceTcp('127.0.0.1',5555,default_transport_timeout_s=30)
 assert x.connect(rsa_keys=[],auth_timeout_s=10)
@@ -18,7 +18,7 @@ files=[('voiceBridgePilot/build/outputs/apk/debug/voiceBridgePilot-debug.apk','p
 for flavor in ['authorized','wrongPackage','wrongSignature']:
  files += [(f'voiceBridgePilotClient/build/outputs/apk/{flavor}/debug/voiceBridgePilotClient-{flavor}-debug.apk',flavor),
            (f'voiceBridgePilotClient/build/outputs/apk/androidTest/{flavor}/debug/voiceBridgePilotClient-{flavor}-debug-androidTest.apk',flavor+'-test')]
-for src,name in files:
+for src,name in ([] if a.preinstalled else files):
  dst='/data/local/tmp/voice-pilot-'+name+'.apk';x.push(src,dst,read_timeout_s=60)
  result=shell('pm install -r -t '+dst)
  assert 'Success' in result,(name,result)
@@ -27,7 +27,7 @@ packages={'authorized':'com.jarvis.core.voicepilot.fixture','wrongPackage':'com.
 for flavor in ([a.variant] if a.variant else list(packages)):
  path=out/(flavor+'.txt')
  with path.open('w') as report:
-  for chunk in x.streaming_shell('am instrument -w -r '+packages[flavor]+'.test/androidx.test.runner.AndroidJUnitRunner',transport_timeout_s=90,read_timeout_s=90,timeout_s=900):
+  for chunk in x.streaming_shell('am instrument -w -r '+packages[flavor]+'.test/androidx.test.runner.AndroidJUnitRunner',transport_timeout_s=90,read_timeout_s=90):
    report.write(chunk);report.flush();print(chunk,end='',flush=True)
  subprocess.run(['python','scripts/bridge/check_instrumentation.py',str(path),'--expected','9','--skipped',str(0 if flavor=='authorized' else 7)],check=True)
 (out/'device.json').write_text(json.dumps({'api':api,'emulator':True,'hardware_acceleration':False,

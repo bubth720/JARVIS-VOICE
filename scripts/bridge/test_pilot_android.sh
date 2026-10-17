@@ -3,7 +3,8 @@
 set -euo pipefail
 serial="${ANDROID_SERIAL:-}"
 [[ "$serial" == emulator-* ]] || { echo 'Refusing a non-explicit emulator target' >&2; exit 2; }
-adb -s "$serial" shell getprop ro.kernel.qemu | tr -d '\r' | rg -x '1'
+qemu=$(adb -s "$serial" shell getprop ro.kernel.qemu | tr -d '\r')
+[[ "$qemu" == 1 ]] || { echo 'Refusing a non-emulator kernel' >&2; exit 2; }
 gradle_bin="${GRADLE_BIN:-./gradlew}"
 "$gradle_bin" -PincludeVoicePilot=true :voiceBridgePilot:assembleDebug \
   :voiceBridgePilotClient:assembleAuthorizedDebug :voiceBridgePilotClient:assembleWrongPackageDebug :voiceBridgePilotClient:assembleWrongSignatureDebug \
