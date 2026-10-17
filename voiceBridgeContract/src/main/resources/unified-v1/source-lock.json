@@ -1,0 +1,11 @@
+{
+  "repository": "bubth720/JARVIS-UNIFIED",
+  "commit": "41f53501fb18fe727d5fd453dd715f0811d2e897",
+  "sha256": {
+    "capability-manifest.schema.json": "fdeda2a14c9ea818ebfedaad43035b192ccddc8b941fa61d6c25fa8d98b03b9a",
+    "health-status.schema.json": "84420f0f18763f557d1f14cd7a06be9bc1d05705e11c672c91d68ecfbadf2bd0",
+    "resource-lease.schema.json": "0cabee9828db1ee719d5d43ab3b1e268aeafce7af49755224c78bf705595343c",
+    "response-envelope.schema.json": "3649f25aab483c20fc53e909a0b6486724abc050245e15acdb03f8f4b17edd38",
+    "request-envelope.schema.json": "9c13abea1907cccb7f01990888d4eeb4a81aad90b5d823213bb5fe75372450fc"
+  }
+}

@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jarvis:contracts:v1:response-envelope",
+  "title": "response-envelope",
+  "type": "object",
+  "properties": {
+    "protocol_version": {
+      "const": "1.0"
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "success",
+        "failure",
+        "refused",
+        "cancelled",
+        "expired",
+        "unavailable",
+        "incompatible",
+        "unauthorized",
+        "interrupted",
+        "unknown"
+      ]
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "enum": [
+                "text",
+                "audio",
+                "document_hits",
+                "health",
+                "confirmation_receipt"
+              ]
+            },
+            "artifact_ref": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "sha256": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "kind",
+            "artifact_ref",
+            "sha256"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "error": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "enum": [
+                "UNKNOWN",
+                "MODULE_ABSENT",
+                "INCOMPATIBLE",
+                "UNAUTHORIZED",
+                "INTERRUPTED",
+                "EXPIRED",
+                "CANCELLED",
+                "INSUFFICIENT_RESOURCES",
+                "INVALID_INPUT",
+                "BUSY",
+                "CLEANUP_FAILED"
+              ]
+            },
+            "retryable": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "module_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "enum": [
+            "core",
+            "llm",
+            "voice",
+            "interface",
+            "nexus",
+            "evolution",
+            "services",
+            "unified"
+          ]
+        },
+        "source_commit": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "engine_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[a-z0-9._-]+$"
+        },
+        "model_sha256": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "enum": [
+            "fixture",
+            "unverified",
+            "runtime"
+          ]
+        }
+      },
+      "required": [
+        "module_id",
+        "source_commit",
+        "engine_id",
+        "model_sha256",
+        "verification"
+      ],
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 90000
+        },
+        "native_stopped": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "data_logged": {
+          "const": false
+        }
+      },
+      "required": [
+        "duration_ms",
+        "native_stopped",
+        "data_logged"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "protocol_version",
+    "contract_version",
+    "correlation_id",
+    "status",
+    "result",
+    "error",
+    "provenance",
+    "execution"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "status": {
+          "const": "success"
+        },
+        "error": {
+          "type": "null"
+        },
+        "result": {
+          "type": "object"
+        }
+      }
+    },
+    {
+      "properties": {
+        "status": {
+          "enum": [
+            "failure",
+            "refused",
+            "cancelled",
+            "expired",
+            "unavailable",
+            "incompatible",
+            "unauthorized",
+            "interrupted",
+            "unknown"
+          ]
+        },
+        "result": {
+          "type": "null"
+        },
+        "error": {
+          "type": "object"
+        }
+      }
+    }
+  ]
+}

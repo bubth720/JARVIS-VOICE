@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jarvis:contracts:v1:capability-manifest",
+  "title": "capability-manifest",
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "module_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "core",
+        "llm",
+        "voice",
+        "interface",
+        "nexus",
+        "evolution",
+        "services",
+        "unified"
+      ]
+    },
+    "module_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[a-z0-9.-]+)?$"
+    },
+    "state": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "enum": [
+        "available",
+        "unavailable",
+        "unknown"
+      ]
+    },
+    "capabilities": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "enum": [
+              "text.generate",
+              "speech.synthesize",
+              "speech.transcribe",
+              "document.retrieve",
+              "memory.confirm",
+              "ui.render",
+              "tool.invoke",
+              "patch.propose",
+              "registry.read",
+              "health.read"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-[a-z0-9.-]+)?$"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "qualification": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "enum": [
+              "unknown",
+              "not_checked",
+              "code_verified",
+              "fixture_tested",
+              "simulated_android",
+              "physical_verified"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "available",
+          "qualification"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "enum": [
+            "android",
+            "linux",
+            "unknown"
+          ]
+        },
+        "min_android_api": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 24,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "abi": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "enum": [
+            "arm64-v8a",
+            "x86_64",
+            "unknown"
+          ]
+        },
+        "offline_required": {
+          "const": true
+        }
+      },
+      "required": [
+        "platform",
+        "min_android_api",
+        "abi",
+        "offline_required"
+      ],
+      "additionalProperties": false
+    },
+    "compatibilities": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "properties": {
+          "engine_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[a-z0-9._-]+$"
+          },
+          "model_sha256": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "profile_format": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9._-]+$"
+          }
+        },
+        "required": [
+          "engine_id",
+          "model_sha256",
+          "profile_format"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "contract_version",
+    "module_id",
+    "module_version",
+    "state",
+    "capabilities",
+    "environment",
+    "compatibilities"
+  ],
+  "additionalProperties": false
+}
