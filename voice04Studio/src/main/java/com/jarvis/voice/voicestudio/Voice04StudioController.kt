@@ -66,6 +66,13 @@ class StudioController(private val context: Context,private val backend: StudioB
     })
     private var measure: OperationMetrics?=null
     private var speedTrace: SpeedTrace?=null
+    @Volatile var progressiveEnabled=false;private set
+    @Volatile var progressivePreload=48000;private set
+    private val progressiveJob=AtomicReference<ProgressiveJob?>()
+    fun progressive(enabled: Boolean,preload: Int=48000) {
+        check(!busy);require(preload in setOf(24000,48000));progressiveEnabled=enabled;progressivePreload=preload
+        notice(if(enabled) "Progressif expérimental : prélecture ${preload/24000} s, repli avant lecture si débit insuffisant. Un flux interrompu n’est jamais complet." else "Lecture différée de référence.")
+    }
     @Volatile var speedReport: JSONObject?=null;private set
     @Volatile private var speedQuarantined=false
     fun exportSpeed(uri: Uri) {
@@ -83,14 +90,32 @@ class StudioController(private val context: Context,private val backend: StudioB
                 trace.first(SpeedPoint.ADMITTED);require(library.activeConfirmed()==p)
                 val voice=vault.binding().resolve(p.identityId,p.id,c)
                 val prosody=backend.prepare(pack,plan);prosody.tokenCounts.forEach(trace::tokens)
-                val pcm=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
-                    ExpressionRenderer.renderWith(prosody,c) { raw,seed,sink -> engine.generate(raw,c,seed,true,sink) }.pcm
+                val pcm=if(progressiveEnabled) {
+                    var job: ProgressiveJob?=null
+                    try {
+                        val m=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
+                            job=ProgressiveJob(c,{ Voice04StreamOutput(context,c,trace) { detail -> diagnostics=detail;emit() } },progressivePreload)
+                            progressiveJob.set(job)
+                            engine.generate(text,c,settings.seed,true) { requireNotNull(job).offer(it) }
+                        }
+                        val complete=requireNotNull(job).finish(m.eosReached)
+                        diagnostics="Politique ${job!!.mode} ; pic file ${job!!.peakQueuedSamples} échantillons.";emit()
+                        if(job!!.mode==ProgressiveMode.DEFERRED) play(complete,c)
+                        complete
+                    } finally {
+                        try { job?.close() } finally { if(job?.closeUnknown==true) speedQuarantined=true;progressiveJob.set(null) }
+                    }
+                } else {
+                    val complete=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
+                        ExpressionRenderer.renderWith(prosody,c) { raw,seed,sink -> engine.generate(raw,c,seed,true,sink) }.pcm
+                    }
+                    try { play(complete,c);complete } catch(t: Throwable) { complete.fill(0f);throw t }
                 }
-                try { play(pcm,c);trace.finish("COMPLETED") } finally { pcm.fill(0f) }
+                pcm.fill(0f);trace.finish("COMPLETED")
                 "Mesure terminée. Vérifier l’audibilité à l’oreille ; aucune vitesse Xiaomi présumée."
             } catch(t: Throwable) {
                 if(!trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
-                trace.finish(if(c.isCancelled()) "CANCELLED" else "FAILED");throw t
+                trace.finish(if(trace.has(SpeedPoint.PRESENTATION_ESTIMATED)) "INCOMPLETE" else if(c.isCancelled()) "CANCELLED" else "FAILED");throw t
             } finally {
                 speedReport=trace.json().put("samplingSteps",settings.steps).put("temperature",settings.temperature).put("deviceCounters",measure?.json() ?: JSONObject.NULL)
                 diagnostics=trace.summary()+"\n"+diagnostics;speedTrace=null
@@ -158,7 +183,7 @@ class StudioController(private val context: Context,private val backend: StudioB
         }
         return true
     }
-    fun stop() { sdkSession.get()?.requestStop();cancel?.cancel();player.get()?.stop();notice("Arrêt demandé. Lecture coupée ; annulation native en cours.") }
+    fun stop() { progressiveJob.get()?.stop();sdkSession.get()?.requestStop();cancel?.cancel();player.get()?.stop();notice("Arrêt demandé. Lecture coupée ; annulation native en cours.") }
     fun enableSdk(enabled: Boolean) {
         check(!busy) { "Attendre la fin de l’opération avant de changer de lecteur." }
         sdkEnabled=enabled

@@ -16,6 +16,9 @@ class AdvancedScreen(private val a: StudioActivity) {
         val page=u.column();
         fold(page,"VOICE-04 · Diagnostic de vitesse") { body ->
             u.text(body,"Laboratoire indépendant. Mesures locales sans texte ni profil exporté. Lecture différée de référence. Les chiffres ne prouvent pas que le son a été entendu.",14f)
+            val progressive=u.toggle(body,"Lecture progressive expérimentale · désactivée par défaut",c.progressiveEnabled)
+            progressive.setOnCheckedChangeListener { _,enabled -> a.guard { c.progressive(enabled) } }
+            u.text(body,"Prélecture 2 s ; 4 s maximum dans la file, PCM source limité à 20 s par job. Débit mesuré trop lent : différé avant le premier son, jamais double lecture.",14f,true)
             u.button(body,"Mesurer · phrase courte publique") { a.guard { c.speedDiagnostic("Bonjour à vous.") } }
             u.button(body,"Mesurer · deux phrases publiques") { a.guard { c.speedDiagnostic("Bonjour à vous. Le train arrive bientôt.") } }
             u.button(body,"Exporter les compteurs JSON expurgés") { a.speedExport() }
