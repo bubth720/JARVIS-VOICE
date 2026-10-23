@@ -18,7 +18,9 @@ jobs:
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
       - name: Prepare Android build tools only, no model or device
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+        run: |
+          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
       - name: Preserve engines, packs, identities, historical app and bridge
         run: git diff --exit-code 04c4ca1c050c16e097d27b08831544b66121128c -- app pocketRuntime identityRuntime expressionRuntime studioRuntime voiceBridgeContract voiceBridgeHarness voiceBridgePilot voiceBridgePilotClient deliveries
       - name: SDK tests and public synthetic demonstration

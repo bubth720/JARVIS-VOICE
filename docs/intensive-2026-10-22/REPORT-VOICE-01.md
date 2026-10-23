@@ -101,3 +101,15 @@ Prochaine mission : **VOICE-02 après livraison vérifiée de ID-01**. Les émot
 acoustiques restent indisponibles tant que le moteur ne les prend pas réellement
 en charge ; réutiliser LocalProsodyPlanner. Toute activation inter-APK, nouveau
 contrôle natif ou installation personnelle exige une autorisation distincte.
+
+## Publication et CI
+
+Implémentation publiée sans forçage : `eaa51bcd7c0fe8a57e4111ce7b0792e87c9329d9`.
+SHA distant vérifié ; main reste `b80b1728c481200b3b0e11c0843f1a268a184fa1`.
+Le premier run SDK [39951930805](https://github.com/bubth720/JARVIS-VOICE/actions/runs/39951930805)
+a échoué avant tests à l'étape de préparation SDK, code127. La commande utilisait
+sdkmanager par son nom court ; l'absence du PATH est le diagnostic retenu, les
+logs détaillés renvoyant HTTP404 dans cet accès. Le workflow utilise désormais le chemin des outils préinstallés
+`$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager`. Ce correctif ne change pas le
+runtime testé. Ne pas présenter la CI distante comme réussie avant observation
+de son nouveau résultat ; les résultats locaux ci-dessus sont effectivement acquis.
