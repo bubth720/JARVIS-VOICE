@@ -20,7 +20,8 @@ class CancellationToken {
     fun isCancelled() = cancelled.get()
     fun check() { if (isCancelled()) throw CancellationException("Annulé") }
     @Synchronized fun cancel() { cancelled.set(true); active?.setTerminate(true) }
-    internal fun <T> withOptions(block: (OrtSession.RunOptions) -> T): T {
+    /** Shared termination scope for the isolated VOICE-04 observer; unchanged cancellation semantics. */
+    fun <T> withOptions(block: (OrtSession.RunOptions) -> T): T {
         check()
         val options = OrtSession.RunOptions()
         synchronized(this) { active = options; if (isCancelled()) options.setTerminate(true) }

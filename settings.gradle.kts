@@ -23,3 +23,6 @@ include(":voiceBridgeContract", ":voiceBridgeHarness")
 if (providers.gradleProperty("includeVoicePilot").orNull == "true") {
     include(":voiceBridgePilot", ":voiceBridgePilotClient")
 }
+
+// VOICE-04 is isolated; historical application IDs stay unchanged.
+include(":voice04Runtime", ":voice04Studio")
