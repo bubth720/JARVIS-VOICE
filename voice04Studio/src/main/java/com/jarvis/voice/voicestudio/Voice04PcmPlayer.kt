@@ -44,6 +44,7 @@ class PcmPlayer(context: Context, private val token: CancellationToken,
             lastHead=Integer.toUnsignedLong(track.playbackHeadPosition)
             underruns=track.underrunCount
         }
+        speed?.audio(submitted,lastHead,writes,zeroWrites,underruns)
         val device=track?.routedDevice
         lastSnapshot="AudioTrack $phase : mode STATIC ${if(floatOutput) "FLOAT32" else "PCM16"} ; état ${track?.state ?: -1} ; playState ${track?.playState ?: -1} (3=play, 2=pause, 1=stop) ; fréquence ${track?.sampleRate ?: 24000} Hz ; volume piste 1,0 ; volume média ${manager.getStreamVolume(AudioManager.STREAM_MUSIC)}/${manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)}, muet ${manager.isStreamMute(AudioManager.STREAM_MUSIC)} ; focus $focus ; route type ${device?.type ?: -1}, id ${device?.id ?: -1} ; écritures $writes, nulles $zeroWrites ; submitted $submitted ; playbackHeadPosition $lastHead ; underruns $underruns ; preuve $evidence."
         diagnostic(lastSnapshot)

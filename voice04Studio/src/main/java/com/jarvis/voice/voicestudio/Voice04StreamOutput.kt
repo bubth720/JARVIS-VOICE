@@ -27,10 +27,10 @@ class Voice04StreamOutput(context: Context,private val cancel: CancellationToken
         },Handler(Looper.getMainLooper())).build()
     private fun checkLive() { if(focusLost) throw PlaybackFailure("FOCUS_PERDU");cancel.check() }
     private fun snapshot(phase: String) {
-        val t=active.get();diagnostic("STREAM $phase · état ${t?.state} · playState ${t?.playState} · fréquence ${t?.sampleRate} · volume piste 1, média ${manager.getStreamVolume(AudioManager.STREAM_MUSIC)} · muet ${manager.isStreamMute(AudioManager.STREAM_MUSIC)} · route type ${t?.routedDevice?.type ?: -1} · écritures $writes/nulles $zeros · submitted $submitted/head $head · underruns ${t?.underrunCount ?: 0}")
+        val t=active.get();trace.audio(submitted,head,writes,zeros,t?.underrunCount ?: 0);diagnostic("STREAM $phase · état ${t?.state} · playState ${t?.playState} · fréquence ${t?.sampleRate} · volume piste 1, média ${manager.getStreamVolume(AudioManager.STREAM_MUSIC)} · muet ${manager.isStreamMute(AudioManager.STREAM_MUSIC)} · route type ${t?.routedDevice?.type ?: -1} · écritures $writes/nulles $zeros · submitted $submitted/head $head · underruns ${t?.underrunCount ?: 0}")
     }
     override fun start(preload: FloatArray) {
-        checkLive();require(preload.size in 24000..48000 && preload.all { it.isFinite() })
+        checkLive();if(Build.VERSION.SDK_INT<31) throw PlaybackFailure("STREAM_API_NON_QUALIFIEE");require(preload.size in 24000..48000 && preload.all { it.isFinite() })
         val min=AudioTrack.getMinBufferSize(24000,AudioFormat.CHANNEL_OUT_MONO,AudioFormat.ENCODING_PCM_16BIT)
         if(min<=0 || min>preload.size*2) throw PlaybackFailure("PRELECTURE_INSUFFISANTE")
         val t=AudioTrack.Builder().setAudioAttributes(attributes)

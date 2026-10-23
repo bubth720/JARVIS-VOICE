@@ -15,7 +15,7 @@ class ProgressiveFailure(val afterStart: Boolean,cause: Throwable): IllegalState
 
 /** Experimental job <=20s. Gate measures producer throughput before the first sound, not a Xiaomi promise. */
 class ProgressiveJob(private val cancel: CancellationToken,private val output: ()->ProgressiveOutput,
-    val preload: Int=48000,private val clock: ()->Long=System::nanoTime) : AutoCloseable {
+    val preload: Int=48000,private val devicePermitted: Boolean=true,private val clock: ()->Long=System::nanoTime) : AutoCloseable {
     private val ring=BoundedPcmPipe()
     private val pcm=FloatArray(480000)
     private var count=0
@@ -30,14 +30,14 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
     val peakQueuedSamples get()=ring.peak
     init { require(preload in setOf(24000,48000)) }
     fun offer(block: FloatArray) {
-        cancel.check();failure.get()?.let { throw ProgressiveFailure(started,it) }
+        throwIfFailed();cancel.check()
         require(block.isNotEmpty() && block.all { it.isFinite() }) { "INVALID_PCM" }
         require(block.size<=480000-count) { "JOB_PCM_LIMIT" }
         block.copyInto(pcm,count);count+=block.size
         val now=clock();maxGapNs=maxOf(maxGapNs,now-previous);previous=now
         if(mode==ProgressiveMode.UNDECIDED && count>=preload) {
             val audioNs=count*1000000000L/24000
-            val canStream=count<=ring.capacity && now-began<=audioNs*65/100 && maxGapNs<=preload*1000000000L/24000/2
+            val canStream=devicePermitted && count<=ring.capacity && now-began<=audioNs*65/100 && maxGapNs<=preload*1000000000L/24000/2
             if(!canStream) mode=ProgressiveMode.DEFERRED
             else {
                 mode=ProgressiveMode.STREAM
@@ -63,7 +63,9 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
         }
     }
     /** Call only after reliable EOS and native engine closure. Never falls back after stream selection. */
+    fun throwIfFailed() { failure.get()?.let { if(it !is java.util.concurrent.CancellationException) throw ProgressiveFailure(started,it) } }
     fun finish(eos: Boolean): FloatArray {
+        throwIfFailed()
         require(eos && count>0) { "UNRELIABLE_EOS" }
         if(mode==ProgressiveMode.UNDECIDED) mode=ProgressiveMode.DEFERRED
         if(mode==ProgressiveMode.STREAM) {

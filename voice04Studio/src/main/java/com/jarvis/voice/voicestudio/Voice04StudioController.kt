@@ -66,12 +66,13 @@ class StudioController(private val context: Context,private val backend: StudioB
     })
     private var measure: OperationMetrics?=null
     private var speedTrace: SpeedTrace?=null
+    @Volatile private var speedInterrupted=false
     @Volatile var progressiveEnabled=false;private set
     @Volatile var progressivePreload=48000;private set
     private val progressiveJob=AtomicReference<ProgressiveJob?>()
     fun progressive(enabled: Boolean,preload: Int=48000) {
         check(!busy);require(preload in setOf(24000,48000));progressiveEnabled=enabled;progressivePreload=preload
-        notice(if(enabled) "Progressif expérimental : prélecture ${preload/24000} s, repli avant lecture si débit insuffisant. Un flux interrompu n’est jamais complet." else "Lecture différée de référence.")
+        notice(if(enabled && android.os.Build.VERSION.SDK_INT<31) "Cette API reste en lecture différée : le streaming n’est pas qualifié après sous-alimentation observée en laboratoire." else if(enabled) "Progressif expérimental : prélecture ${preload/24000} s, repli avant lecture si débit insuffisant. Un flux interrompu n’est jamais complet." else "Lecture différée de référence.")
     }
     @Volatile var speedReport: JSONObject?=null;private set
     @Volatile private var speedQuarantined=false
@@ -82,22 +83,23 @@ class StudioController(private val context: Context,private val backend: StudioB
     }
     fun speedDiagnostic(text: String) {
         val trace=SpeedTrace();val p=library.activeConfirmed();val settings=state.settings
-        val plan=ExpressionPolicy.plan(CoreVoiceRequestV1(text,p.identityId),ExpressionVoiceBinding.from(p),settings.sampling(),settings.seed)
         check(!speedQuarantined) { "Fermeture native inconnue : redémarrer le processus avant un nouvel essai." }
-        run("VOICE-04 : mesure locale, lecture différée…",true) { c ->
+        val accepted=run("VOICE-04 : mesure locale, lecture selon l’option expérimentale…",true) { c ->
             speedTrace=trace
             try {
                 trace.first(SpeedPoint.ADMITTED);require(library.activeConfirmed()==p)
                 speedRender(text,p,trace,c,settings)
                 "Mesure terminée. Vérifier l’audibilité à l’oreille ; aucune vitesse Xiaomi présumée."
             } catch(t: Throwable) {
-                if(!trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
+                if(trace.has(SpeedPoint.NATIVE_OPEN_STARTED) && !trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
+                speedInterrupted=trace.has(SpeedPoint.PRESENTATION_ESTIMATED)
                 trace.finish(if(trace.has(SpeedPoint.PRESENTATION_ESTIMATED)) "INCOMPLETE" else if(c.isCancelled()) "CANCELLED" else "FAILED");throw t
             } finally {
                 speedReport=trace.json().put("samplingSteps",settings.steps).put("temperature",settings.temperature).put("deviceCounters",measure?.json() ?: JSONObject.NULL)
                 diagnostics=trace.summary()+"\n"+diagnostics;speedTrace=null
             }
         }
+        if(!accepted) { trace.finish("REFUSED");speedReport=trace.json();diagnostics=trace.summary() }
     }
     private fun speedRender(text: String,p: VoiceProfile,trace: SpeedTrace,c: CancellationToken,settings: StudioSettings) {
         require(library.activeConfirmed()==p)
@@ -108,7 +110,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             var job: ProgressiveJob?=null
             try {
                 val m=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
-                    job=ProgressiveJob(c,{ Voice04StreamOutput(context,c,trace) { detail -> diagnostics=detail;emit() } },progressivePreload)
+                    job=ProgressiveJob(c,{ Voice04StreamOutput(context,c,trace) { detail -> diagnostics=detail;emit() } },progressivePreload,devicePermitted=android.os.Build.VERSION.SDK_INT>=31)
                     progressiveJob.set(job)
                     engine.generate(text,c,settings.seed,true) { requireNotNull(job).offer(it) }
                 }
@@ -116,7 +118,7 @@ class StudioController(private val context: Context,private val backend: StudioB
                 diagnostics="Politique ${job!!.mode} ; pic file ${job!!.peakQueuedSamples} échantillons.";emit()
                 if(job!!.mode==ProgressiveMode.DEFERRED) play(complete,c)
                 complete
-            } finally {
+            } catch(t: Throwable) { job?.throwIfFailed();throw t } finally {
                 try { job?.close() } finally { if(job?.closeUnknown==true) speedQuarantined=true;progressiveJob.set(null) }
             }
         } else {
@@ -162,7 +164,8 @@ class StudioController(private val context: Context,private val backend: StudioB
                     diagnostics="Job ${index+1}/${cursor.plan.segments.size}. Les jobs déjà terminés ne seront pas rejoués.";emit()
                     try { speedRender(segment.text,p,trace,c,settings) }
                     catch(t: Throwable) {
-                        if(!trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
+                        if(trace.has(SpeedPoint.NATIVE_OPEN_STARTED) && !trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
+                        speedInterrupted=trace.has(SpeedPoint.PRESENTATION_ESTIMATED)
                         trace.finish(if(trace.has(SpeedPoint.PRESENTATION_ESTIMATED)) "INCOMPLETE" else if(c.isCancelled()) "CANCELLED" else "FAILED");throw t
                     } finally { all.put(trace.json().put("jobStartAfterPressMs",jobOffsetMs));speedTrace=null }
                 }
@@ -228,11 +231,11 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun run(title: String,heavy: Boolean=false,cleanup: ()->Unit={},action: (CancellationToken)->String): Boolean {
         if(busy) { cleanup();notice("Une opération est déjà en cours. Arrêter avant d’en lancer une autre.");return false }
         try { require(!DeviceMetrics.isThermallySevere(context)) { "Protection thermique : laisser refroidir le téléphone." };if(heavy) admission() } catch(t: Exception) { cleanup();error(t);return false }
-        val token=CancellationToken();cancel=token;busy=true;message=title;emit(true)
+        val token=CancellationToken();cancel=token;speedInterrupted=false;busy=true;message=title;emit(true)
         worker.execute {
             val m=OperationMetrics(context);measure=m
-            try { m.start { token.cancel();player.get()?.stop() };token.check();if(heavy) admission();message=action(token);token.check() }
-            catch(t: Throwable) { message=if(token.isCancelled()) "Annulé ou protection mémoire/thermique déclenchée. Les éléments validés restent conservés." else safeError(t) }
+            try { m.start { token.cancel();progressiveJob.get()?.stop();player.get()?.stop() };token.check();if(heavy) admission();message=action(token);token.check() }
+            catch(t: Throwable) { message=if(speedInterrupted) "Lecture interrompue/incomplète. Consulter les mesures conservées ; aucun succès de lecture annoncé." else if(t is ProgressiveFailure) safeError(t) else if(token.isCancelled()) "Annulé ou protection mémoire/thermique déclenchée. Les éléments validés restent conservés." else safeError(t) }
             finally { cleanup();m.close();metrics=m.summary();measure=null;cancel=null;busy=false;emit(true) }
         }
         return true
@@ -459,7 +462,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             "Notes d’écoute conservées localement ; aucune qualité inventée."
         }
     }
-    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans 005J seulement." } }
+    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans VOICE-04 seulement." } }
     fun clearAudio(id: VoiceIdentityId) { run("Effacement des seules réécoutes de cette voix…") { expressions(id).delete();single(id).delete();profiles(id).delete();styleComparisons(id).delete();audition=null;"Audios effacés ; profils et références conservés." } }
-    fun removeIdentity(id: VoiceIdentityId) { run("Suppression de cette voix 005J…") { c -> check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Voix supprimée de 005J seulement. Les anciennes applications restent intactes." } }
+    fun removeIdentity(id: VoiceIdentityId) { run("Suppression de cette voix VOICE-04…") { c -> check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Voix supprimée de VOICE-04 seulement. Les anciennes applications restent intactes." } }
 }

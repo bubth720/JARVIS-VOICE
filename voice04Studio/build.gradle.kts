@@ -6,6 +6,8 @@ val sharedStudio by tasks.registering(Sync::class) {
     from("../voiceStudio/src/main/java") {
         exclude("**/StudioController.kt", "**/AdvancedScreen.kt", "**/StudioActivity.kt", "**/PcmPlayer.kt", "**/OperationMetrics.kt")
     }
+    // Branding only; source files and all archive/profile operations remain unchanged.
+    filter { line: String -> line.replace("005J", "VOICE-04") }
     into(layout.buildDirectory.dir("generated/sharedStudio"))
 }
 tasks.matching { it.name == "preBuild" }.configureEach { dependsOn(sharedStudio) }

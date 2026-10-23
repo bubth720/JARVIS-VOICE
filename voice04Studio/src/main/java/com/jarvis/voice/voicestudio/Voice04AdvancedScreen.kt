@@ -19,7 +19,7 @@ class AdvancedScreen(private val a: StudioActivity) {
             u.text(body,"Laboratoire indépendant. Mesures locales sans texte ni profil exporté. Lecture différée de référence. Les chiffres ne prouvent pas que le son a été entendu.",14f)
             val progressive=u.toggle(body,"Lecture progressive expérimentale · désactivée par défaut",c.progressiveEnabled)
             progressive.setOnCheckedChangeListener { _,enabled -> a.guard { c.progressive(enabled) } }
-            u.text(body,"Diagnostic et Texte long uniquement ; Parler reste différé. Prélecture 2 s ; 4 s maximum dans la file, PCM source limité à 20 s par job. Débit mesuré trop lent : différé avant le premier son, jamais double lecture.",14f,true)
+            u.text(body,"Diagnostic et Texte long uniquement ; Parler reste différé. API26–30 : repli différé obligatoire (streaming non qualifié). Prélecture 2 s ; 4 s maximum dans la file, PCM source limité à 20 s par job. Débit mesuré trop lent : différé avant le premier son, jamais double lecture.",14f,true)
             u.button(body,"Mesurer · phrase courte publique") { a.guard { c.speedDiagnostic("Bonjour à vous.") } }
             u.button(body,"Mesurer · deux phrases publiques") { a.guard { c.speedDiagnostic("Bonjour à vous. Le train arrive bientôt.") } }
             u.button(body,"Exporter les compteurs JSON expurgés") { a.speedExport() }
@@ -35,6 +35,21 @@ class AdvancedScreen(private val a: StudioActivity) {
             cuts.setOnCheckedChangeListener { _,checked -> a.guard { c.editLong(input.text.toString(),checked);preview.text=c.longPreview } }
             u.button(body,"Lire le plan préparé") { a.confirm("Lire les segments préparés ?",c.longPreview+"\nLe mode progressif choisi dans Diagnostic est appliqué. Aucune modification de la voix.") { c.speakLong() } }
             u.button(body,"Reprendre après les jobs terminés") { a.confirm("Reprendre explicitement ?","Aucun job terminé ne sera rejoué. Le premier job incomplet recommencera depuis son début, même si une partie en a déjà été entendue. Même profil et réglages conservés.") { c.speakLong(true) } }
+        }
+        fold(page,"VOICE-04 · Émotions (expérimental)") { body ->
+            u.text(body,"Neutre : voix de référence inchangée. Surprise, joie et tristesse ne sont pas encore des commandes acoustiques validées dans Pocket French 6L. Les intentions et pauses existantes restent distinctes des émotions audibles. Aucun filtre ajouté pour les simuler.",14f)
+            for(intent in com.jarvis.voice.speed.EmotionalIntentV1.entries.filter { it!=com.jarvis.voice.speed.EmotionalIntentV1.NEUTRAL }) {
+                val title=when(intent) {
+                    com.jarvis.voice.speed.EmotionalIntentV1.JOY->"Joie"
+                    com.jarvis.voice.speed.EmotionalIntentV1.SURPRISE->"Surprise"
+                    com.jarvis.voice.speed.EmotionalIntentV1.SADNESS->"Tristesse"
+                    com.jarvis.voice.speed.EmotionalIntentV1.CALM->"Calme"
+                    com.jarvis.voice.speed.EmotionalIntentV1.SERIOUS->"Sérieux"
+                    else->"Curiosité"
+                }
+                u.button(body,"$title · indisponible acoustiquement") {}.isEnabled=false
+            }
+            u.text(body,"Les modèles expressifs alternatifs nécessitent une qualification séparée sur matériel adapté. Aucun téléchargement ni transfert de B.",14f,true)
         }
         fold(page,"Synthèse · graine, LSD, température") { body ->
             val s=c.state.settings;val seed=u.input(body,"Graine aléatoire",s.seed.toString(),20)
@@ -104,7 +119,7 @@ class AdvancedScreen(private val a: StudioActivity) {
         u.text(diag,c.diagnostics+"\n"+c.metrics,13f,true).id=R.id.live_diagnostics
         u.button(diag,"Tester le lecteur (signal synthétique)") { c.testSignal() }
         u.button(page,"Installer le ZIP FP32 existant") { a.choose(200) }
-        u.button(page,"Licences et confidentialité") { MaterialAlertDialogBuilder(a).setTitle("JARVIS Voice Studio 005J")
+        u.button(page,"Licences et confidentialité") { MaterialAlertDialogBuilder(a).setTitle("JARVIS VOICE-04 · Laboratoire")
             .setMessage(a.assets.open("THIRD_PARTY_NOTICES.txt").bufferedReader().use { it.readText() }).setPositiveButton("Fermer",null).showPrivate() }
         return u.page(page)
     }

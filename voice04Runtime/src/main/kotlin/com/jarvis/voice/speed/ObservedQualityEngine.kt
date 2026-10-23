@@ -51,6 +51,7 @@ class ObservedQualityEngine(private val root: File, private val profile: Persona
         opts.setInterOpNumThreads(1)
         opts.setExecutionMode(OrtSession.SessionOptions.ExecutionMode.SEQUENTIAL)
         opts.setSessionLogLevel(OrtLoggingLevel.ORT_LOGGING_LEVEL_ERROR)
+        trace.first(SpeedPoint.NATIVE_OPEN_STARTED)
         env.createSession(File(root, name).absolutePath, opts).also { opened.add(it); loadCancel.check() }
     }
 
@@ -104,7 +105,7 @@ class ObservedQualityEngine(private val root: File, private val profile: Persona
                                     if (lastPcmNs != 0L) maxGapNs = maxOf(maxGapNs, sinkStart - lastPcmNs)
                                     lastPcmNs = sinkStart
                                     trace.first(SpeedPoint.FIRST_PCM)
-                                    trace.chunk(pcm.size)
+                                    trace.chunk(pcm)
                                     onPcm(pcm)
                                     sinkNs += System.nanoTime() - sinkStart
                                     samples += pcm.size
@@ -138,7 +139,7 @@ class ObservedQualityEngine(private val root: File, private val profile: Persona
                                 }
                                 pending.add(previous)
                                 frames++
-                                if (pending.size >= 4) decodePending() // bounded decoder batches; the UI defers playback until completion
+                                if (pending.size >= 4) decodePending() // unchanged bounded decoder batches; experimental sink owns playback policy
                             } finally { seq.close() }
                         }
                         require(eosFrame != null && frames < 250) { "Limite de 20 secondes atteinte sans fin de phrase fiable" }

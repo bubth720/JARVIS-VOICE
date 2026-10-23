@@ -66,4 +66,10 @@ class ProgressiveTests {
         finally { job.close() }
     }
 
+    @Test fun unsupportedDeviceAlwaysFallsBackBeforeAnyWriteEvenWhenFast() {
+        ProgressiveJob(CancellationToken(),{ error("unsupported must not open") },24000,devicePermitted=false) { 0L }.use { job ->
+            job.offer(FloatArray(24000));assertEquals(ProgressiveMode.DEFERRED,job.mode);assertEquals(24000,job.finish(true).size);assertFalse(job.started)
+        }
+    }
+
 }
