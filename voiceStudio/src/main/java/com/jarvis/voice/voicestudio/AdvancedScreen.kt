@@ -30,6 +30,13 @@ class AdvancedScreen(private val a: StudioActivity) {
             u.button(body,"Générer B avec mes options") { a.guard { c.generate("B") } }
             u.button(body,"Réécouter A") { a.guard { c.replay("A") } };u.button(body,"Réécouter B") { a.guard { c.replay("B") } }
         }
+        fold(page,"Styles logiciels · comparaison publique neutre / Athéna") { body ->
+            u.text(body,"Essai explicite : même profil, texte public fixe, graine et sampler. A sans pause ; B pause de 500 ms entre deux phrases explicites. Aucun effet émotionnel natif, aucun nouveau profil. Les PCM32 restent dans le cache privé et peuvent être effacés avec les réécoutes.",14f)
+            u.button(body,"Générer style A neutre") { a.guard { c.generateStyleComparison("A") } }
+            u.button(body,"Générer style B Athéna (pauses seulement)") { a.guard { c.generateStyleComparison("B") } }
+            u.button(body,"Réécouter style A") { a.guard { c.replayStyle("A") } }
+            u.button(body,"Réécouter style B") { a.guard { c.replayStyle("B") } }
+        }
         fold(page,"Comparer deux profils de la même identité") { body ->
             val identity=c.currentIdentity();val profiles=identity?.profiles?.filter { it.status==ProfileStatus.VALID }.orEmpty()
             u.text(body,"Expérience distincte : changer de profil exige votre choix explicite. La voix principale n’est pas remplacée. Pas de pauses ajoutées pour cette comparaison de conditionnements.",14f)

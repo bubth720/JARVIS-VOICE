@@ -63,3 +63,27 @@ Vérification sans poids ni appareil :
 La démo distingue le vrai refus de l'adaptateur (pack absent) de la simulation
 explicitement synthétique des ports PCM. Elle ne valide ni synthèse native,
 clonage, écoute réelle, faible latence sur appareil, ni libération JNI.
+
+## VOICE-02 — styles logiciels et chronologie
+
+`ProsodyPlannerAdapter` et `ExpressionStyleProfiles` réutilisent le planificateur
+existant : pause/segmentation explicites uniquement. Les labels publics CORE ID-01
+`context/style/tutoiement` se mappent à `PublicPersonaStyleIntent` sans accès aux
+profils CORE, mémoires ou pourcentages. Le tutoiement ne réécrit pas le texte parlé.
+Intensité, rythme et émotion native exigée retournent `STYLE_UNSUPPORTED`.
+
+`ExpressionSpeechAdapter` conserve le même worker/admission/moteur et produit une
+`ExpressionTimeline` calculée sur les échantillons réellement rendus et leurs
+métriques cohérentes. Les cues sont des offsets PCM relatifs, sans texte/PCM/profil,
+sans phonèmes ni ancre de lecture. `AvatarTimingCuePort` est une interface locale,
+aucune connexion à un avatar ou IPC n'est activée.
+
+Studio → Réglages avancés → Styles logiciels offre A neutre / B Athéna pour deux
+phrases **publiques fixes**, même profil/graine/sampler, avec réécoute manuelle.
+Le cache PCM32 existant préserve les bits et les validations du vault ; aucun
+nouveau format de profil/archive, aucune note de qualité automatique.
+
+`./gradlew :voiceSdk:styleDemo` exerce les pauses via ports synthétiques clairement
+annoncés. La modulation native et l'écoute sur appareil restent non qualifiées :
+VOICE-02 est une livraison logicielle **PARTIAL**, pas une personnalité audible
+physiquement validée.

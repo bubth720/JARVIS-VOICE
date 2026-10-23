@@ -5,7 +5,7 @@ import com.jarvis.voice.pocket.CancellationToken
 import java.util.UUID
 
 enum class SpeechState { IDLE, PREPARING, PLAYING, STOPPING, RELEASED }
-enum class SpeechRefusal { BUSY, RELEASED, DUPLICATE_REQUEST, CANCELLED, INVALID_REQUEST, MODEL_UNAVAILABLE, PROFILE_UNAVAILABLE,
+enum class SpeechRefusal { BUSY, RELEASED, DUPLICATE_REQUEST, CANCELLED, INVALID_REQUEST, STYLE_UNSUPPORTED, MODEL_UNAVAILABLE, PROFILE_UNAVAILABLE,
     NON_VERIFIED, AUDIO_UNAVAILABLE, ENGINE_FAILED, LIMIT_EXCEEDED }
 class SpeechRejected(val reason: SpeechRefusal) : IllegalStateException(reason.name)
 

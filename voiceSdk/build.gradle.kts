@@ -15,3 +15,8 @@ tasks.register<JavaExec>("demo") {
     classpath = sourceSets["test"].runtimeClasspath
     mainClass.set("com.jarvis.voice.sdk.SdkDemoKt")
 }
+tasks.register<JavaExec>("styleDemo") {
+    dependsOn(tasks.testClasses)
+    classpath = sourceSets["test"].runtimeClasspath
+    mainClass.set("com.jarvis.voice.sdk.ExpressionDemoKt")
+}

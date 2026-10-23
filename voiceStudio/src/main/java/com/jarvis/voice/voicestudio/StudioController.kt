@@ -37,7 +37,26 @@ class StudioController(private val context: Context,private val backend: StudioB
     // Transient opt-in only. Existing admission/worker and PcmPlayer remain the resource owners.
     @Volatile var sdkEnabled=false; private set
     private val sdkSession=AtomicReference<SpeechSession?>()
+    private var styleSelection: ExpressionStyleProfile?=null
+    private var lastStylePlan: LocalProsodyPlan?=null
+    @Volatile var styleTimeline: ExpressionTimeline?=null; private set
+    private val styleEngine by lazy {
+        ExpressionSpeechAdapter(ExpressionRenderPort { request,c ->
+            val style=requireNotNull(styleSelection)
+            if(ProsodyPlannerAdapter.unsupported(request.plan).isNotEmpty()) throw SpeechRejected(SpeechRefusal.STYLE_UNSUPPORTED)
+            val voice=VoicePackResolver(vault,pack).resolve(request,c)
+            val planning=try { ProsodyPlannerAdapter.prepare(request.plan,style,{ backend.prepare(pack,it) }) }
+                catch(_: IllegalArgumentException) { throw SpeechRejected(SpeechRefusal.INVALID_REQUEST) }
+            val prosody=when(planning) {
+                is ProsodyPlanningResult.Ready -> planning.plan
+                is ProsodyPlanningResult.Unsupported -> throw SpeechRejected(SpeechRefusal.STYLE_UNSUPPORTED)
+            }
+            val result=backend.render(pack,voice,prosody,c);lastStylePlan=prosody
+            PlannedExpressionRender(prosody,result)
+        },AvatarTimingCuePort { styleTimeline=it })
+    }
     private val sdkSessions=SpeechSessionRepository(LocalSpeechEnginePort { request,c ->
+        if(styleSelection!=null) return@LocalSpeechEnginePort styleEngine.render(request,c)
         val voice=VoicePackResolver(vault,pack).resolve(request,c)
         val prosody=try { backend.prepare(pack,request.plan) }
             catch(_: IllegalArgumentException) { throw SpeechRejected(SpeechRefusal.INVALID_REQUEST) }
@@ -52,6 +71,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun expressions(id: VoiceIdentityId)=ExpressionComparisonStore(File(audioRoot(id),"expression"))
     fun single(id: VoiceIdentityId)=ExpressionComparisonStore(File(audioRoot(id),"single"),comparison=false)
     fun profiles(id: VoiceIdentityId)=IdentityComparisonStore(File(audioRoot(id),"profiles"))
+    private fun styleComparisons(id: VoiceIdentityId)=AudibleComparisonStore(File(audioRoot(id),"style-comparison"))
     private val archive get()=VoiceIdentityArchive(File(root,"archive-work"))
     init { worker.execute { File(root,"incoming.candidate").delete();File(root,"archive-work").listFiles()?.forEach { it.deleteRecursively() } } }
     fun observe(owner: Any,listener: (Boolean)->Unit) { observerOwner=owner;observer=listener }
@@ -74,6 +94,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             SpeechRefusal.DUPLICATE_REQUEST -> "Cette demande a déjà été consommée ; aucun rejeu automatique."
             SpeechRefusal.CANCELLED -> "Lecture SDK annulée. Vos profils sont conservés."
             SpeechRefusal.INVALID_REQUEST -> "Phrase ou pauses incompatibles. Garder des phrases complètes, au plus 50 jetons chacune ; aucune troncature automatique."
+            SpeechRefusal.STYLE_UNSUPPORTED -> "STYLE_UNSUPPORTED : ce moteur ne permet pas de régler l’intensité, le rythme ou une émotion native."
             SpeechRefusal.NON_VERIFIED -> "Lecture locale non vérifiée. Aucun remplacement automatique par un TTS Android."
             SpeechRefusal.AUDIO_UNAVAILABLE -> "Lecture audio incomplète ou focus indisponible. Aucun succès d’écoute déclaré."
             SpeechRefusal.ENGINE_FAILED -> "SDK bloqué après un échec moteur ou de nettoyage. Aucun nouveau chargement automatique."
@@ -240,6 +261,50 @@ class StudioController(private val context: Context,private val backend: StudioB
             "Lecture terminée. Réécouter est disponible sans recalcul du modèle."
         }
     }
+    fun generateStyleComparison(slot: String) {
+        require(slot in setOf("A","B"))
+        val p=library.activeConfirmed();require(hasModel()) { "Importer le pack FP32 existant." }
+        val settings=state.settings
+        // Public fixture only: no implicit persistence of the user's conversation or persona settings.
+        val text="Bonjour à vous.\nLe test est prêt."
+        val policy=ExpressionPolicy.plan(CoreVoiceRequestV1(text,p.identityId,allowSentencePauses=slot=="B"),
+            ExpressionVoiceBinding.from(p),settings.sampling(),settings.seed)
+        val style=if(slot=="A") ExpressionStyleProfiles.neutral() else ExpressionStyleProfiles.athena()
+        run("Comparaison de styles $slot : pauses logicielles, même voix…",true) { c ->
+            require(library.activeConfirmed()==p)
+            val target=styleComparisons(p.identityId)
+            if(slot=="B") target.requireB(p,text,settings.seed,settings.sampling(),c)
+            styleSelection=style;lastStylePlan=null;styleTimeline=null
+            val output=object: OutputAudioPort {
+                override val focusController=AudioFocusController()
+                override fun play(pcm: FloatArray,cancel: CancellationToken): AudioReceipt {
+                    target.save(slot,p,requireNotNull(lastStylePlan),pcm,cancel)
+                    return try { this@StudioController.play(pcm,cancel,focusController) }
+                        catch(_: PlaybackFailure) { throw SpeechRejected(SpeechRefusal.AUDIO_UNAVAILABLE) }
+                }
+                override fun requestStop() { player.get()?.stop() }
+                override fun close() {}
+            }
+            val session=sdkSessions.open(output);sdkSession.set(session)
+            try {
+                when(val outcome=session.speak(SpeechQueue(listOf(SpeechRequest(java.util.UUID.randomUUID().toString(),policy))),c)) {
+                    is SpeechOutcome.Refused -> throw SpeechRejected(outcome.reason)
+                    is SpeechOutcome.Completed -> {
+                        val timeline=requireNotNull(styleTimeline)
+                        diagnostics="Style ${style.id}, ${timeline.cues.size} marqueurs relatifs PCM, ${timeline.samples} échantillons. Pas de phonèmes, d’émotion native ni d’ancre d’horloge AVATAR."
+                        "Style $slot présenté. PCM32 privé conservé pour la comparaison manuelle ; aucune qualité vocale attribuée automatiquement."
+                    }
+                }
+            } finally { session.close();sdkSession.compareAndSet(session,null);styleSelection=null;lastStylePlan=null }
+        }
+    }
+    fun replayStyle(slot: String) {
+        val p=library.activeConfirmed()
+        run("Réécoute du style $slot sans modèle…") { c ->
+            val pcm=styleComparisons(p.identityId).load(slot,vault,c)
+            try { play(pcm,c);"Style $slot présenté ; évaluation manuelle uniquement." } finally { pcm.fill(0f) }
+        }
+    }
     fun replay(slot: String="main") {
         val p=library.activeConfirmed();val target=if(slot=="main") single(p.identityId) else expressions(p.identityId);val side=if(slot=="main") "A" else slot
         run("Réécoute locale sans modèle…") { c ->
@@ -280,7 +345,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             "Notes d’écoute conservées localement ; aucune qualité inventée."
         }
     }
-    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans 005J seulement." } }
-    fun clearAudio(id: VoiceIdentityId) { run("Effacement des seules réécoutes de cette voix…") { expressions(id).delete();single(id).delete();profiles(id).delete();audition=null;"Audios effacés ; profils et références conservés." } }
+    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans 005J seulement." } }
+    fun clearAudio(id: VoiceIdentityId) { run("Effacement des seules réécoutes de cette voix…") { expressions(id).delete();single(id).delete();profiles(id).delete();styleComparisons(id).delete();audition=null;"Audios effacés ; profils et références conservés." } }
     fun removeIdentity(id: VoiceIdentityId) { run("Suppression de cette voix 005J…") { c -> check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Voix supprimée de 005J seulement. Les anciennes applications restent intactes." } }
 }

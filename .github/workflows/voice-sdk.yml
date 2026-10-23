@@ -1,9 +1,9 @@
-name: VOICE-01 local SDK
+name: VOICE SDK and expression styles
 on:
   push:
-    branches: ['feat/voice-01-intensive']
+    branches: ['feat/voice-01-intensive', 'feat/voice-02-intensive']
   pull_request:
-    paths: ['voiceSdk/**', 'voiceStudio/**', 'settings.gradle.kts', '.github/workflows/voice-sdk.yml']
+    paths: ['voiceSdk/**', 'expressionRuntime/**', 'voiceStudio/**', 'scripts/voice_sdk/**', 'settings.gradle.kts', '.github/workflows/voice-sdk.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,9 +22,9 @@ jobs:
           test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
       - name: Preserve engines, packs, identities, historical app and bridge
-        run: git diff --exit-code 04c4ca1c050c16e097d27b08831544b66121128c -- app pocketRuntime identityRuntime expressionRuntime studioRuntime voiceBridgeContract voiceBridgeHarness voiceBridgePilot voiceBridgePilotClient deliveries
+        run: python scripts/voice_sdk/check_style_preservation.py
       - name: SDK tests and public synthetic demonstration
-        run: ./gradlew :voiceSdk:test :voiceSdk:demo :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test :app:testDebugUnitTest --no-daemon --max-workers=2
+        run: ./gradlew :voiceSdk:test :voiceSdk:demo :voiceSdk:styleDemo :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test :app:testDebugUnitTest --no-daemon --max-workers=2
       - name: Build Studio and lint without installation
         run: ./gradlew :voiceStudio:assembleDebug :voiceStudio:lintDebug --no-daemon --max-workers=2
       - uses: actions/upload-artifact@v4
@@ -34,4 +34,6 @@ jobs:
           path: |
             voiceSdk/build/reports/**
             voiceSdk/build/test-results/**
+            expressionRuntime/build/reports/**
+            expressionRuntime/build/test-results/**
             voiceStudio/build/reports/lint-results-debug.*
