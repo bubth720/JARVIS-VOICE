@@ -13,6 +13,6 @@ adb -s "$ANDROID_SERIAL" shell am instrument -w -r -e class com.jarvis.voice.voi
 python - <<'PY'
 from pathlib import Path
 s=Path('voice04Studio/build/device-proof/audio.txt').read_text()
-assert 'OK (9 tests)' in s and 'FAILURES!!!' not in s and 'shortMsg=' not in s,s
-print('VOICE04_REAL_AUDIOTRACK_9_TESTS_PASSED')
+assert 'OK (11 tests)' in s and 'FAILURES!!!' not in s and 'shortMsg=' not in s,s
+print('VOICE04_REAL_AUDIOTRACK_11_TESTS_PASSED')
 PY

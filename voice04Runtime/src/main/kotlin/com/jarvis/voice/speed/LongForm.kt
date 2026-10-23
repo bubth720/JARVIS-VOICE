@@ -42,7 +42,7 @@ object LongFormPlanner {
             text.forEachIndexed { i,c -> if(c=='\n') cuts.add(i+1) }
             if(cuts.lastOrNull()!=text.length) cuts.add(text.length)
         } else {
-            if(text.any { it in "\"«»“”()[]" }) reject(LongFormRefusal.AMBIGUOUS_BOUNDARY)
+            if(text.any { it in "\"«»“”()[]" } || Regex("\\b[A-ZÀ-ÖØ-Þ]{2,}\\b").containsMatchIn(text)) reject(LongFormRefusal.AMBIGUOUS_BOUNDARY)
             var i=0
             while(i<text.length) {
                 if(text[i] in ".!?…") {

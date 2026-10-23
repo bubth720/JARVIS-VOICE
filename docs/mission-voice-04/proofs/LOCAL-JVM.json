@@ -1,0 +1,77 @@
+{
+  "note": "Local XML snapshots; contracts/app Gradle UP-TO-DATE during broad qualification, other suites executed. VOICE04 optional public tests are rerun separately with explicit fixtures.",
+  "suites": [
+    {
+      "module": "voice04Runtime",
+      "declared": 30,
+      "passed": 27,
+      "skipped": 3,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "voiceSdk",
+      "declared": 29,
+      "passed": 29,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "studioRuntime",
+      "declared": 10,
+      "passed": 9,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "expressionRuntime",
+      "declared": 20,
+      "passed": 19,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "identityRuntime",
+      "declared": 19,
+      "passed": 18,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "pocketRuntime",
+      "declared": 46,
+      "passed": 33,
+      "skipped": 13,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "voiceBridgeContract",
+      "declared": 29,
+      "passed": 29,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "voiceBridgeHarness",
+      "declared": 3,
+      "passed": 3,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "module": "app",
+      "declared": 8,
+      "passed": 8,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    }
+  ]
+}

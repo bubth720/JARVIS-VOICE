@@ -69,7 +69,7 @@ jobs:
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
       - run: ./gradlew :voice04Studio:assembleDebug :voice04Studio:lintDebug --no-daemon --max-workers=2
-      - run: python scripts/pocket/verify_experimental_apk.py voice04Studio/build/outputs/apk/debug/voice04Studio-debug.apk --application-id com.jarvis.voice.studio.voice04 --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voice04Studio/build/apk-verification.json
+      - run: python scripts/voice04/verify_apk.py voice04Studio/build/outputs/apk/debug/voice04Studio-debug.apk --application-id com.jarvis.voice.studio.voice04 --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voice04Studio/build/apk-verification.json
       - uses: actions/upload-artifact@v4
         with:
           name: jarvis-voice04-independent-laboratory-apk

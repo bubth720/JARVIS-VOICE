@@ -82,7 +82,9 @@ class StudioController(private val context: Context,private val backend: StudioB
         notice("Rapport numérique expurgé exporté volontairement. Aucun texte, UUID ni audio.")
     }
     fun speedDiagnostic(text: String) {
-        val trace=SpeedTrace();val p=library.activeConfirmed();val settings=state.settings
+        val trace=SpeedTrace()
+        val p=try { library.activeConfirmed() } catch(t: Throwable) { trace.finish("REFUSED");speedReport=trace.json();diagnostics=trace.summary();throw t }
+        val settings=state.settings
         check(!speedQuarantined) { "Fermeture native inconnue : redémarrer le processus avant un nouvel essai." }
         val accepted=run("VOICE-04 : mesure locale, lecture selon l’option expérimentale…",true) { c ->
             speedTrace=trace

@@ -12,7 +12,7 @@ class LongFormTests {
         assertEquals(plan.toString(),prepare(text).toString());assertFalse(plan.toString().contains("Paris"))
     }
     @Test fun quotedOrDecimalOrAbbreviationRequiresHumanCuts() {
-        for(text in listOf("Bonjour M. Dupont.","Le coût est 3.14 euros.","Il dit « Bonjour ».")) {
+        for(text in listOf("Le train SNCF arrive.","Bonjour M. Dupont.","Le coût est 3.14 euros.","Il dit « Bonjour ».")) {
             try { prepare(text);fail(text) } catch(e: LongFormRejected) { assertEquals(LongFormRefusal.AMBIGUOUS_BOUNDARY,e.reason) }
         }
     }

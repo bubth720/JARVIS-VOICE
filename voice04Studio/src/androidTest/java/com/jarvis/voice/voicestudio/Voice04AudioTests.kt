@@ -102,4 +102,30 @@ class Voice04AudioTests {
         assertTrue(c.message.startsWith("Signal de test terminé"))
     }
 
+    @Test fun actualAudioFocusLossInterruptsDeferredOutput() {
+        val c=CancellationToken();val trace=SpeedTrace();val error=java.util.concurrent.atomic.AtomicReference<Throwable?>()
+        val manager=context.getSystemService(android.content.Context.AUDIO_SERVICE) as android.media.AudioManager
+        val attributes=android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_MEDIA).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build()
+        val competing=android.media.AudioFocusRequest.Builder(android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT).setAudioAttributes(attributes)
+            .setOnAudioFocusChangeListener({},android.os.Handler(android.os.Looper.getMainLooper())).build()
+        try {
+            PcmPlayer(context,c,speed=trace).use { player ->
+                player.write(signal(72000))
+                val thread=Thread { try { player.drain() } catch(t: Throwable) { error.set(t) } };thread.start()
+                val until=System.nanoTime()+3000000000L
+                while(!trace.has(SpeedPoint.PRESENTATION_ESTIMATED) && System.nanoTime()<until) Thread.sleep(10)
+                assertTrue(trace.has(SpeedPoint.PRESENTATION_ESTIMATED))
+                assertEquals(android.media.AudioManager.AUDIOFOCUS_REQUEST_GRANTED,manager.requestAudioFocus(competing))
+                thread.join(2000)
+                if(thread.isAlive) { player.stop();thread.join(2000);fail("Focus loss did not interrupt output") }
+                assertTrue(error.get() is PlaybackFailure);assertEquals("FOCUS_PERDU",(error.get() as PlaybackFailure).reason);assertFalse(player.completed)
+            }
+        } finally { manager.abandonAudioFocusRequest(competing) }
+    }
+    @Test fun apkIdentityIsIndependentAndHasNoNetworkOrMicrophonePermission() {
+        assertEquals("com.jarvis.voice.studio.voice04",context.packageName)
+        val info=context.packageManager.getPackageInfo(context.packageName,android.content.pm.PackageManager.GET_PERMISSIONS)
+        assertTrue(info.requestedPermissions.orEmpty().none { it in setOf("android.permission.INTERNET","android.permission.RECORD_AUDIO","android.permission.READ_EXTERNAL_STORAGE","android.permission.MANAGE_EXTERNAL_STORAGE") })
+    }
+
 }
