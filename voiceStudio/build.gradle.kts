@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":identityRuntime"))
     implementation(project(":expressionRuntime"))
     implementation(project(":studioRuntime"))
+    implementation(project(":voiceSdk"))
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.27.0")
     androidTestImplementation("androidx.test:runner:1.6.2")

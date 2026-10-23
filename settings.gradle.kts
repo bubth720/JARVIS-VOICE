@@ -15,6 +15,7 @@ include(":expressionRuntime")
 include(":voiceExpression")
 
 include(":studioRuntime", ":voiceStudio")
+include(":voiceSdk")
 
 include(":voiceBridgeContract", ":voiceBridgeHarness")
 

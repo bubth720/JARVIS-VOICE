@@ -9,6 +9,7 @@ import com.jarvis.voice.identity.VoiceProfile
 import com.jarvis.voice.expression.*
 import com.jarvis.voice.pocket.*
 import com.jarvis.voice.studio.*
+import com.jarvis.voice.sdk.*
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.Executors
@@ -33,6 +34,16 @@ class StudioController(private val context: Context,private val backend: StudioB
     private var observerOwner: Any?=null
     private var cancel: CancellationToken?=null
     private val player=AtomicReference<PcmPlayer?>()
+    // Transient opt-in only. Existing admission/worker and PcmPlayer remain the resource owners.
+    @Volatile var sdkEnabled=false; private set
+    private val sdkSession=AtomicReference<SpeechSession?>()
+    private val sdkSessions=SpeechSessionRepository(LocalSpeechEnginePort { request,c ->
+        val voice=VoicePackResolver(vault,pack).resolve(request,c)
+        val prosody=try { backend.prepare(pack,request.plan) }
+            catch(_: IllegalArgumentException) { throw SpeechRejected(SpeechRefusal.INVALID_REQUEST) }
+        val result=backend.render(pack,voice,prosody,c)
+        RenderedSpeech(result.pcm,result.metrics.all { it.eosReached })
+    })
     private var measure: OperationMetrics?=null
     val pack get()=File(root,"models/fp32")
     val source get()=File(root,"wizard-source.private")
@@ -55,6 +66,19 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun error(t: Throwable) { message=safeError(t);emit() }
     fun notice(text: String) { message=text;emit() }
     fun safeError(t: Throwable): String=when(t) {
+        is SpeechRejected -> when(t.reason) {
+            SpeechRefusal.MODEL_UNAVAILABLE -> "Pack vocal local absent. Importer le pack existant ; aucune autre voix n’a été choisie."
+            SpeechRefusal.PROFILE_UNAVAILABLE -> "Profil vocal absent, désactivé ou incompatible. Choisir explicitement votre profil dans Mes voix."
+            SpeechRefusal.BUSY -> "Le SDK est occupé. Attendre le retour de l’opération en cours."
+            SpeechRefusal.RELEASED -> "Session SDK fermée. Démarrer explicitement une nouvelle session."
+            SpeechRefusal.DUPLICATE_REQUEST -> "Cette demande a déjà été consommée ; aucun rejeu automatique."
+            SpeechRefusal.CANCELLED -> "Lecture SDK annulée. Vos profils sont conservés."
+            SpeechRefusal.INVALID_REQUEST -> "Phrase ou pauses incompatibles. Garder des phrases complètes, au plus 50 jetons chacune ; aucune troncature automatique."
+            SpeechRefusal.NON_VERIFIED -> "Lecture locale non vérifiée. Aucun remplacement automatique par un TTS Android."
+            SpeechRefusal.AUDIO_UNAVAILABLE -> "Lecture audio incomplète ou focus indisponible. Aucun succès d’écoute déclaré."
+            SpeechRefusal.ENGINE_FAILED -> "SDK bloqué après un échec moteur ou de nettoyage. Aucun nouveau chargement automatique."
+            SpeechRefusal.LIMIT_EXCEEDED -> "La file dépasse les limites vocales existantes. Réduire le lot sans modifier les protections."
+        }
         is java.util.concurrent.CancellationException -> "Annulé. Vos profils et références déjà validés sont conservés."
         is PlaybackFailure -> "Lecture interrompue : ${t.reason}. Le PCM complet reste disponible pour Réécouter."
         is FP32ImportException -> t.message.orEmpty().take(250)
@@ -62,7 +86,11 @@ class StudioController(private val context: Context,private val backend: StudioB
         is IllegalArgumentException,is IllegalStateException -> t.message.orEmpty().take(220).takeIf { !it.contains('/') && !it.contains("content:") } ?: "Données incompatibles. Réessayer avec un document local valide ; rien n’a été effacé."
         else -> "Opération impossible (${t.javaClass.simpleName}). Données conservées ; réessayer depuis cet écran."
     }
-    private fun admission() { val m=ActivityManager.MemoryInfo();(context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(m);IdentityAdmission.requireHeavy(m.availMem,m.lowMemory,DeviceMetrics.thermal(context)) }
+    private fun admission() {
+        if(sdkSessions.isQuarantined) throw SpeechRejected(SpeechRefusal.ENGINE_FAILED)
+        val m=ActivityManager.MemoryInfo();(context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(m)
+        IdentityAdmission.requireHeavy(m.availMem,m.lowMemory,DeviceMetrics.thermal(context))
+    }
     fun run(title: String,heavy: Boolean=false,cleanup: ()->Unit={},action: (CancellationToken)->String): Boolean {
         if(busy) { cleanup();notice("Une opération est déjà en cours. Arrêter avant d’en lancer une autre.");return false }
         try { require(!DeviceMetrics.isThermallySevere(context)) { "Protection thermique : laisser refroidir le téléphone." };if(heavy) admission() } catch(t: Exception) { cleanup();error(t);return false }
@@ -75,7 +103,37 @@ class StudioController(private val context: Context,private val backend: StudioB
         }
         return true
     }
-    fun stop() { cancel?.cancel();player.get()?.stop();notice("Arrêt demandé. Lecture coupée ; annulation native en cours.") }
+    fun stop() { sdkSession.get()?.requestStop();cancel?.cancel();player.get()?.stop();notice("Arrêt demandé. Lecture coupée ; annulation native en cours.") }
+    fun enableSdk(enabled: Boolean) {
+        check(!busy) { "Attendre la fin de l’opération avant de changer de lecteur." }
+        sdkEnabled=enabled
+        notice(if(enabled) "SDK local activé pour cette exécution de Studio. Aucun changement de voix, de pack ou de droits." else "Lecteur historique rétabli.")
+    }
+    fun generateSdk() {
+        val p=library.activeConfirmed()
+        require(hasModel()) { "Modèle absent. Importer le ZIP FP32 existant dans Réglages avancés." }
+        val plan=StudioRendering.plan(state,p)
+        run("SDK : préparation locale de la phrase…",true) { c ->
+            require(library.activeConfirmed()==p)
+            val output=object: OutputAudioPort {
+                override val focusController=AudioFocusController()
+                override fun play(pcm: FloatArray,cancel: CancellationToken): AudioReceipt {
+                    return try { this@StudioController.play(pcm,cancel,focusController) }
+                        catch(_: PlaybackFailure) { throw SpeechRejected(SpeechRefusal.AUDIO_UNAVAILABLE) }
+                }
+                override fun requestStop() { player.get()?.stop() }
+                override fun close() { /* The existing play() closes its AudioTrack in finally. */ }
+            }
+            val session=sdkSessions.open(output) { phase -> diagnostics="SDK ${phase.name} ; PCM différé borné ; aucune attestation mémoire Android.";emit() }
+            sdkSession.set(session)
+            try {
+                when(val result=session.speak(SpeechQueue(listOf(SpeechRequest(java.util.UUID.randomUUID().toString(),plan))),c)) {
+                    is SpeechOutcome.Completed -> "SDK : lecture terminée (${result.metrics.presentedSamples} échantillons présentés). Aucun nouvel audio enregistré."
+                    is SpeechOutcome.Refused -> throw SpeechRejected(result.reason)
+                }
+            } finally { session.close();sdkSession.compareAndSet(session,null) }
+        }
+    }
     fun currentIdentity()=vault.list().singleOrNull { it.id==vault.selected() }
     fun wizardIdentity()=state.wizard.identityId?.let { value -> vault.list().singleOrNull { it.id.value==value } }
     fun confirmedProfile()=runCatching { library.activeConfirmed() }.getOrNull()
@@ -204,11 +262,14 @@ class StudioController(private val context: Context,private val backend: StudioB
         }
     }
     fun replayProfile(slot: String) { val id=library.activeConfirmed().identityId;run("Réécoute du profil $slot…") { c -> val t=profiles(id);play(t.load(slot,vault,c),c);audition=("profile$slot") to t.metadata(slot);"Profil $slot réécouté sans modèle." } }
-    private fun play(pcm: FloatArray,c: CancellationToken) {
+    private fun play(pcm: FloatArray,c: CancellationToken,focus: AudioFocusController?=null): AudioReceipt {
+        if(sdkSessions.isQuarantined) throw SpeechRejected(SpeechRefusal.ENGINE_FAILED)
         audition=null;val stats=PcmStatistics.measure(pcm);require(stats.samples>0 && stats.nonFinite==0)
         val prefix=diagnostics
-        val audio=PcmPlayer(context,c,{ detail -> diagnostics=prefix+"\n"+stats.summary()+"\n"+detail;emit() },{message="Lecture commencée — progression mesurée.";emit()})
-        player.set(audio);try { audio.write(pcm);audio.drain();check(audio.completed) } finally { audio.close();player.compareAndSet(audio,null) }
+        val audio=PcmPlayer(context,c,{ detail -> diagnostics=prefix+"\n"+stats.summary()+"\n"+detail;emit() },{focus?.granted();message="Lecture commencée — progression mesurée.";emit()})
+        player.set(audio);try { audio.write(pcm);audio.drain();check(audio.completed);return AudioReceipt(pcm.size,audio.underruns) }
+        catch(t: PlaybackFailure) { if(t.reason=="FOCUS_PERDU") focus?.lost();throw t }
+        finally { audio.close();player.compareAndSet(audio,null) }
     }
     fun testSignal() { run("Test synthétique du lecteur…") { c -> play(FloatArray(24000) { (kotlin.math.sin(it*2*kotlin.math.PI*440/24000)*.1).toFloat() },c);"Signal de test terminé ; vérifier son audibilité réelle." } }
     fun note(scores: List<Int>,heard: Boolean) {

@@ -16,11 +16,15 @@ class SpeakScreen(private val a: StudioActivity) {
         if(!c.hasModel()) u.button(page,"Installer mon modèle") { a.choose(200) }
         val input=u.input(page,"Que voulez-vous faire dire à JARVIS ?",c.state.text,300,R.id.phrase,true)
         input.doAfterTextChanged { c.text(it.toString()) }
-        u.button(page,"Parler",R.id.talk,true) { a.guard { c.generate() } }.isEnabled=voice!=null && c.hasModel() && !c.busy
+        u.button(page,"Parler",R.id.talk,true) { a.guard { if(c.sdkEnabled) c.generateSdk() else c.generate() } }.isEnabled=voice!=null && c.hasModel() && !c.busy
         if(c.hasReplay()) u.button(page,"Réécouter",R.id.replay) { a.guard { c.replay() } }
         val options=LinearLayout(a).apply { orientation=LinearLayout.VERTICAL;visibility=View.GONE }
         u.button(page,"Options · pauses et contexte") { options.visibility=if(options.visibility==View.VISIBLE) View.GONE else View.VISIBLE }
         page.addView(options)
+        val sdk=u.toggle(options,"SDK vocal expérimental · cette exécution seulement",c.sdkEnabled)
+        sdk.isEnabled=!c.busy
+        sdk.setOnCheckedChangeListener { _,enabled -> a.guard { c.enableSdk(enabled) } }
+        u.text(options,"Désactivé par défaut. Même moteur, même profil et protections Studio. PCM complet différé ; aucun streaming natif garanti, aucune réécoute enregistrée par ce parcours.",14f,true)
         val pause=u.toggle(options,"Pauses entre phrases",c.state.settings.pauses,R.id.pause_switch)
         val durations=u.spinner(options,"Silence entre phrases (ms)",listOf("0","250","500","1000","1500"),listOf(0,250,500,1000,1500).indexOf(c.state.settings.pauseMs))
         u.text(options,"Option explicite : écrire 2 ou 3 phrases complètes, une par ligne. Pas de découpage automatique. Désactiver si le texte est ambigu.",14f,true)

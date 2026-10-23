@@ -1,0 +1,30 @@
+{
+  "format": "jarvis.campaign-validation/1",
+  "mission": "VOICE-01",
+  "base_commit": "04c4ca1c050c16e097d27b08831544b66121128c",
+  "qualification": "software_tested",
+  "capabilities": [
+    "voice.sdk.session",
+    "voice.sdk.bounded-pcm",
+    "voice.sdk.explicit-local-refusals"
+  ],
+  "checks": [
+    {
+      "command": [
+        "bash",
+        "/workspace/JAVIS-Local-v2/tools/identity-cloud-env.sh",
+        "./gradlew",
+        ":voiceSdk:test",
+        ":voiceSdk:demo",
+        ":voiceStudio:assembleDebug",
+        ":voiceStudio:lintDebug",
+        "--no-daemon",
+        "--max-workers=1"
+      ],
+      "exit_code": 0,
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0
+    }
+  ]
+}
