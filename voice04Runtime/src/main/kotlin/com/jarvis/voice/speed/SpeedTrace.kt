@@ -15,6 +15,11 @@ class SpeedTrace(private val clock: () -> Long = System::nanoTime) {
     private var samples=0L
     private var tokens=0
     private var outcome="PREPARING"
+    private var pcmStats: JSONObject?=null
+    @Synchronized fun pcm(pcm: FloatArray) {
+        val s=com.jarvis.voice.pocket.PcmStatistics.measure(pcm)
+        pcmStats=JSONObject().put("samples",s.samples).put("nonFinite",s.nonFinite).put("peak",s.peak).put("rms",s.rms).put("silencePercent",s.silencePercent).put("clippedPercent",s.clippedPercent)
+    }
     @Synchronized fun first(point: SpeedPoint) {
         val now=(clock()-start)/1e6
         check(now.isFinite() && now>=last) { "Non-monotonic clock" }
@@ -41,6 +46,7 @@ class SpeedTrace(private val clock: () -> Long = System::nanoTime) {
         put("schema","voice04.speed/1");put("clock","monotonic-relative-ms");put("outcome",outcome)
         put("engine","pocket-french-6l-fp32-observed");put("threads",1)
         put("chunks",chunks);put("samples",samples);put("pcmSeconds",samples/24000.0);put("tokens",tokens)
+        put("pcmStats",pcmStats ?: JSONObject.NULL)
         put("audibilityHumanVerified",false);put("nativeMemoryReleaseVerified",false)
         put("eventsMs",JSONObject().apply { SpeedPoint.entries.forEach { put(it.name,points[it] ?: JSONObject.NULL) } })
         put("durationsMs",JSONObject().apply { SpeedPoint.entries.forEach { put(it.name,durations[it] ?: JSONObject.NULL) } })

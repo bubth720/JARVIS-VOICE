@@ -88,30 +88,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             speedTrace=trace
             try {
                 trace.first(SpeedPoint.ADMITTED);require(library.activeConfirmed()==p)
-                val voice=vault.binding().resolve(p.identityId,p.id,c)
-                val prosody=backend.prepare(pack,plan);prosody.tokenCounts.forEach(trace::tokens)
-                val pcm=if(progressiveEnabled) {
-                    var job: ProgressiveJob?=null
-                    try {
-                        val m=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
-                            job=ProgressiveJob(c,{ Voice04StreamOutput(context,c,trace) { detail -> diagnostics=detail;emit() } },progressivePreload)
-                            progressiveJob.set(job)
-                            engine.generate(text,c,settings.seed,true) { requireNotNull(job).offer(it) }
-                        }
-                        val complete=requireNotNull(job).finish(m.eosReached)
-                        diagnostics="Politique ${job!!.mode} ; pic file ${job!!.peakQueuedSamples} échantillons.";emit()
-                        if(job!!.mode==ProgressiveMode.DEFERRED) play(complete,c)
-                        complete
-                    } finally {
-                        try { job?.close() } finally { if(job?.closeUnknown==true) speedQuarantined=true;progressiveJob.set(null) }
-                    }
-                } else {
-                    val complete=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
-                        ExpressionRenderer.renderWith(prosody,c) { raw,seed,sink -> engine.generate(raw,c,seed,true,sink) }.pcm
-                    }
-                    try { play(complete,c);complete } catch(t: Throwable) { complete.fill(0f);throw t }
-                }
-                pcm.fill(0f);trace.finish("COMPLETED")
+                speedRender(text,p,trace,c,settings)
                 "Mesure terminée. Vérifier l’audibilité à l’oreille ; aucune vitesse Xiaomi présumée."
             } catch(t: Throwable) {
                 if(!trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
@@ -119,6 +96,81 @@ class StudioController(private val context: Context,private val backend: StudioB
             } finally {
                 speedReport=trace.json().put("samplingSteps",settings.steps).put("temperature",settings.temperature).put("deviceCounters",measure?.json() ?: JSONObject.NULL)
                 diagnostics=trace.summary()+"\n"+diagnostics;speedTrace=null
+            }
+        }
+    }
+    private fun speedRender(text: String,p: VoiceProfile,trace: SpeedTrace,c: CancellationToken,settings: StudioSettings) {
+        require(library.activeConfirmed()==p)
+        val plan=ExpressionPolicy.plan(CoreVoiceRequestV1(text,p.identityId),ExpressionVoiceBinding.from(p),settings.sampling(),settings.seed)
+        val voice=vault.binding().resolve(p.identityId,p.id,c)
+        val prosody=backend.prepare(pack,plan);prosody.tokenCounts.forEach(trace::tokens)
+        val pcm=if(progressiveEnabled) {
+            var job: ProgressiveJob?=null
+            try {
+                val m=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
+                    job=ProgressiveJob(c,{ Voice04StreamOutput(context,c,trace) { detail -> diagnostics=detail;emit() } },progressivePreload)
+                    progressiveJob.set(job)
+                    engine.generate(text,c,settings.seed,true) { requireNotNull(job).offer(it) }
+                }
+                val complete=requireNotNull(job).finish(m.eosReached)
+                diagnostics="Politique ${job!!.mode} ; pic file ${job!!.peakQueuedSamples} échantillons.";emit()
+                if(job!!.mode==ProgressiveMode.DEFERRED) play(complete,c)
+                complete
+            } finally {
+                try { job?.close() } finally { if(job?.closeUnknown==true) speedQuarantined=true;progressiveJob.set(null) }
+            }
+        } else {
+            val complete=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
+                ExpressionRenderer.renderWith(prosody,c) { raw,seed,sink -> engine.generate(raw,c,seed,true,sink) }.pcm
+            }
+            try { play(complete,c);complete } catch(t: Throwable) { complete.fill(0f);throw t }
+        }
+        trace.pcm(pcm);diagnostics+= "\n"+PcmStatistics.measure(pcm).summary();pcm.fill(0f);trace.finish("COMPLETED")
+    }
+    @Volatile var longDraft="";private set
+    @Volatile var longManual=false;private set
+    fun editLong(text: String,manual: Boolean=longManual) {
+        require(!busy);require(text.length<=1800)
+        if(text!=longDraft || manual!=longManual) { longDraft=text;longManual=manual;longCursor=null;longProfile=null;longSettings=null;longPreview="Texte modifié : prévisualiser tous les segments avant lecture." }
+    }
+    @Volatile var longCursor: LongFormCursor?=null;private set
+    private var longProfile: VoiceProfile?=null
+    private var longSettings: StudioSettings?=null
+    @Volatile var longPreview="Aucun texte long préparé.";private set
+    fun prepareLong(text: String,manualCuts: Boolean) {
+        editLong(text,manualCuts)
+        run("Préparation des segments au tokenizer officiel…") { c ->
+            longCursor=null;longProfile=null;longSettings=null
+            ExperimentalModelPack.verify(pack,c::isCancelled)
+            val frontend=FrenchFrontend(JSONObject(File(pack,"tokenizer.json").readText()))
+            val plan=LongFormPlanner.prepare(LongFormSpeechRequestV1(text,manualCuts),frontend)
+            longCursor=LongFormCursor(plan);longProfile=library.activeConfirmed();longSettings=state.settings
+            longPreview="${plan.segments.size} jobs / ${plan.tokens} tokens ; "+plan.segments.mapIndexed { i,seg -> "${i+1}: ${seg.tokens} tokens [${seg.start},${seg.end}[" }.joinToString(" ; ")+
+                "\nTexte exact conservé. Une seule phrase complète par job ; 20 s max par job ; aucun PCM de narration entière. Chargement et garde répétés entre jobs."
+            longPreview
+        }
+    }
+    fun speakLong(resume: Boolean=false) {
+        val cursor=requireNotNull(longCursor);val p=requireNotNull(longProfile);val settings=requireNotNull(longSettings)
+        val all=org.json.JSONArray();val pressedNs=System.nanoTime();val initialCompleted=cursor.completedJobs
+        run(if(resume) "Reprise explicite au premier job incomplet…" else "Texte long : jobs séquentiels bornés…",true) { c ->
+            try {
+                cursor.run(c,resume) { index,segment ->
+                    admission();require(library.activeConfirmed()==p)
+                    val jobOffsetMs=(System.nanoTime()-pressedNs)/1e6
+                    val trace=SpeedTrace();trace.first(SpeedPoint.ADMITTED);speedTrace=trace
+                    diagnostics="Job ${index+1}/${cursor.plan.segments.size}. Les jobs déjà terminés ne seront pas rejoués.";emit()
+                    try { speedRender(segment.text,p,trace,c,settings) }
+                    catch(t: Throwable) {
+                        if(!trace.has(SpeedPoint.CLOSE_RETURNED)) speedQuarantined=true
+                        trace.finish(if(trace.has(SpeedPoint.PRESENTATION_ESTIMATED)) "INCOMPLETE" else if(c.isCancelled()) "CANCELLED" else "FAILED");throw t
+                    } finally { all.put(trace.json().put("jobStartAfterPressMs",jobOffsetMs));speedTrace=null }
+                }
+                "Texte long terminé : ${cursor.completedJobs}/${cursor.plan.segments.size} jobs présentés. Audibilité à confirmer humainement."
+            } finally {
+                speedReport=JSONObject().put("schema","voice04.longform/1").put("completedJobs",cursor.completedJobs).put("plannedJobs",cursor.plan.segments.size)
+                    .put("attemptStartCompletedJobs",initialCompleted).put("elapsedAfterPressMs",(System.nanoTime()-pressedNs)/1e6).put("jobs",all).put("deviceCounters",measure?.json() ?: JSONObject.NULL).put("samplingSteps",settings.steps).put("temperature",settings.temperature)
+                diagnostics=longPreview+"\nJobs terminés : ${cursor.completedJobs}. Reprise uniquement explicite ; le job interrompu sera repris depuis son début."
             }
         }
     }
@@ -159,7 +211,9 @@ class StudioController(private val context: Context,private val backend: StudioB
             SpeechRefusal.LIMIT_EXCEEDED -> "La file dépasse les limites vocales existantes. Réduire le lot sans modifier les protections."
         }
         is java.util.concurrent.CancellationException -> "Annulé. Vos profils et références déjà validés sont conservés."
-        is PlaybackFailure -> "Lecture interrompue : ${t.reason}. Le PCM complet reste disponible pour Réécouter."
+        is PlaybackFailure -> "Lecture interrompue : ${t.reason}. Consulter les compteurs ; aucune lecture complète revendiquée."
+        is ProgressiveFailure -> "Flux interrompu/incomplet (${if(t.afterStart) "après démarrage" else "démarrage non confirmé"}). Aucun repli avec double lecture."
+        is LongFormRejected -> "Texte refusé : ${t.reason}. Vérifier les phrases complètes, les coupes manuelles et les limites avant de préparer à nouveau."
         is FP32ImportException -> t.message.orEmpty().take(250)
         is ReferenceFailure -> "Audio non décodé (${t.diagnostic()}). Choisir un MP3 ou WAV local valide."
         is IllegalArgumentException,is IllegalStateException -> t.message.orEmpty().take(220).takeIf { !it.contains('/') && !it.contains("content:") } ?: "Données incompatibles. Réessayer avec un document local valide ; rien n’a été effacé."
@@ -387,6 +441,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     }
     fun replayProfile(slot: String) { val id=library.activeConfirmed().identityId;run("Réécoute du profil $slot…") { c -> val t=profiles(id);play(t.load(slot,vault,c),c);audition=("profile$slot") to t.metadata(slot);"Profil $slot réécouté sans modèle." } }
     private fun play(pcm: FloatArray,c: CancellationToken,focus: AudioFocusController?=null): AudioReceipt {
+        check(!speedQuarantined) { "Fermeture native inconnue : redémarrer avant lecture." }
         if(sdkSessions.isQuarantined) throw SpeechRejected(SpeechRefusal.ENGINE_FAILED)
         audition=null;val stats=PcmStatistics.measure(pcm);require(stats.samples>0 && stats.nonFinite==0)
         val prefix=diagnostics

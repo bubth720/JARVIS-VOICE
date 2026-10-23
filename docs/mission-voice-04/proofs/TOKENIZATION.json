@@ -1,0 +1,40 @@
+{
+  "rows": [
+    {
+      "publicCountingFixture": "Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.",
+      "jobs": 1,
+      "requestedTokens": 50,
+      "lossless": true,
+      "actualTokens": 50
+    },
+    {
+      "publicCountingFixture": "Bonjour le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour bonjour bonjour bonjour bonjour bonjour bonjour bonjour bonjour bonjour bonjour bonjour.",
+      "jobs": 2,
+      "requestedTokens": 51,
+      "lossless": true,
+      "actualTokens": 51
+    },
+    {
+      "publicCountingFixture": "Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.",
+      "jobs": 2,
+      "requestedTokens": 100,
+      "lossless": true,
+      "actualTokens": 100
+    },
+    {
+      "publicCountingFixture": "Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.",
+      "jobs": 3,
+      "requestedTokens": 150,
+      "lossless": true,
+      "actualTokens": 150
+    },
+    {
+      "publicCountingFixture": "Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.  Bonjour le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le le.",
+      "jobs": 4,
+      "requestedTokens": 200,
+      "lossless": true,
+      "actualTokens": 200
+    }
+  ],
+  "tokenizer": "official pinned French Unigram"
+}

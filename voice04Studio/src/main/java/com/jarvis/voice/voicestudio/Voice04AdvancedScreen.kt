@@ -1,4 +1,5 @@
 package com.jarvis.voice.voicestudio
+import androidx.core.widget.doAfterTextChanged
 import android.view.View
 import android.widget.LinearLayout
 import com.jarvis.voice.studio.*
@@ -18,12 +19,23 @@ class AdvancedScreen(private val a: StudioActivity) {
             u.text(body,"Laboratoire indépendant. Mesures locales sans texte ni profil exporté. Lecture différée de référence. Les chiffres ne prouvent pas que le son a été entendu.",14f)
             val progressive=u.toggle(body,"Lecture progressive expérimentale · désactivée par défaut",c.progressiveEnabled)
             progressive.setOnCheckedChangeListener { _,enabled -> a.guard { c.progressive(enabled) } }
-            u.text(body,"Prélecture 2 s ; 4 s maximum dans la file, PCM source limité à 20 s par job. Débit mesuré trop lent : différé avant le premier son, jamais double lecture.",14f,true)
+            u.text(body,"Diagnostic et Texte long uniquement ; Parler reste différé. Prélecture 2 s ; 4 s maximum dans la file, PCM source limité à 20 s par job. Débit mesuré trop lent : différé avant le premier son, jamais double lecture.",14f,true)
             u.button(body,"Mesurer · phrase courte publique") { a.guard { c.speedDiagnostic("Bonjour à vous.") } }
             u.button(body,"Mesurer · deux phrases publiques") { a.guard { c.speedDiagnostic("Bonjour à vous. Le train arrive bientôt.") } }
             u.button(body,"Exporter les compteurs JSON expurgés") { a.speedExport() }
         }
         u.text(page,"Réglages avancés",30f);u.text(page,"Le mode courant reste simple. Ces réglages sont manuels et ne créent aucune émotion native.",14f,true)
+        fold(page,"VOICE-04 · Texte long expérimental") { body ->
+            u.text(body,"2–6 phrases complètes recommandées, chacune <=50 tokens/300 caractères ; entrée <=1800 caractères. Pas de suppression ni réécriture. Décimales, sigles et citations demandent vos points de coupe explicites. Les silences de rechargement peuvent être longs.",14f)
+            val input=u.input(body,"Texte long local (en mémoire seulement)",c.longDraft,1800,multiline=true)
+            val cuts=u.check(body,"J’ai choisi les points de coupe : une phrase complète par ligne.",c.longManual)
+            u.button(body,"Prévisualiser et vérifier tous les segments") { a.guard { c.prepareLong(input.text.toString(),cuts.isChecked) } }
+            val preview=u.text(body,c.longPreview,14f)
+            input.doAfterTextChanged { a.guard { c.editLong(it.toString());preview.text=c.longPreview } }
+            cuts.setOnCheckedChangeListener { _,checked -> a.guard { c.editLong(input.text.toString(),checked);preview.text=c.longPreview } }
+            u.button(body,"Lire le plan préparé") { a.confirm("Lire les segments préparés ?",c.longPreview+"\nLe mode progressif choisi dans Diagnostic est appliqué. Aucune modification de la voix.") { c.speakLong() } }
+            u.button(body,"Reprendre après les jobs terminés") { a.confirm("Reprendre explicitement ?","Aucun job terminé ne sera rejoué. Le premier job incomplet recommencera depuis son début, même si une partie en a déjà été entendue. Même profil et réglages conservés.") { c.speakLong(true) } }
+        }
         fold(page,"Synthèse · graine, LSD, température") { body ->
             val s=c.state.settings;val seed=u.input(body,"Graine aléatoire",s.seed.toString(),20)
             val steps=u.spinner(body,"Étapes LSD",listOf("1","2","3","5"),listOf(1,2,3,5).indexOf(s.steps))
