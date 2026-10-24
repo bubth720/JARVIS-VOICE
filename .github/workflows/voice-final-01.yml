@@ -1,0 +1,81 @@
+name: VOICE FINAL-01 independent studio
+on:
+  push:
+    branches: ['feat/voice-final-01']
+  pull_request:
+    paths: ['voiceFinalSdk/**', 'voiceFinalRuntime/**', 'voiceFinalStudio/**', 'scripts/voice-final-01/**', '.github/workflows/voice-final-01.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: voice-final01-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: python scripts/voice-final-01/check_scope.py
+      - run: ./gradlew :voiceFinalSdk:test :voiceFinalSdk:jar :voiceFinalRuntime:test :voice04Runtime:test :voiceSdk:test :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test :voiceBridgeContract:test :voiceBridgeHarness:test :app:testDebugUnitTest --no-daemon --max-workers=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: voice-final01-jvm-reports
+          path: |
+            */build/test-results/**
+            */build/reports/tests/**
+  audio:
+    needs: unit
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [26, 35]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - name: KVM fixture only
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          ram-size: 4096M
+          disable-animations: true
+          script: ANDROID_SERIAL=emulator-5554 bash scripts/voice-final-01/android_audio.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: voice-final01-audio-api${{ matrix.api }}
+          path: voiceFinalStudio/build/device-proof/**
+  apk:
+    needs: [unit, audio]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :voiceFinalSdk:jar :voiceFinalStudio:assembleDebug :voiceFinalStudio:lintDebug --no-daemon --max-workers=2
+      - run: python scripts/voice-final-01/verify_apk.py voiceFinalStudio/build/outputs/apk/debug/voiceFinalStudio-debug.apk --application-id com.jarvis.voice.studio.final01 --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voiceFinalStudio/build/apk-verification.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-voice-final01-independent-laboratory-apk
+          retention-days: 30
+          path: |
+            voiceFinalStudio/build/outputs/apk/debug/*.apk
+            voiceFinalSdk/build/libs/*.jar
+            voiceFinalStudio/build/apk-verification.json
+            voiceFinalStudio/build/reports/lint-results-debug.*
