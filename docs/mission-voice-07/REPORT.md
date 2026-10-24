@@ -23,7 +23,7 @@ Le service, la permission, les identités/signatures, l'AIDL, le codeonTransact 
 
 ## Tests, démonstration et mesures
 
-Exécutionlocale réelle :4tests clientJVM +6tests gatewayRobolectric +17tests pilote antérieurs, **27réussis,0échec/saut**. Cas : autorisation/refus, identité, expiration/révocation, texte privé interdit, V1fermée, rejeu entre réarmements, génération périmée, deux appels concurrents, statut/cancel idempotent, libération logique≠native, disconnect pendant transport réel inter-thread et ancienne réponse rejetée.
+Exécutionlocale réelle :4tests clientJVM +6tests gatewayRobolectric +17tests pilote antérieurs, **27réussis,0échec/saut**. Cas : autorisation/refus, identité, expiration/révocation, texte privé interdit, V1fermée, rejeu entre réarmements, génération périmée, deux appels concurrents, statut/cancel idempotent, libération logique≠native, disconnect pendant transport réel inter-thread et ancienne réponse rejetée. Un appel encore en transport reste exclusif même après disconnect jusqu’à son retour ; son résultat est invalidé et ne peut changer le mode client.
 
 Robolectric simuleAndroid/Binder : il ne remplace pas une preuvekernel. La CI prépare la **suitekernelV1 existante** surAPI26/35 (UID/certificat/permission,60s réelle,mortBinder dans un autre processus,3clients). Le nouveauV2 n'étant pas raccordé àl'IPC, ne pas annoncer des tests BinderV2.
 

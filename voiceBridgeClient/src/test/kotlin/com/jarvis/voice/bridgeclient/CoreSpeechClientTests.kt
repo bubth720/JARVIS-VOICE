@@ -21,7 +21,7 @@ class CoreSpeechClientTests {
         val entered=CountDownLatch(1);val release=CountDownLatch(1);var stale=false
         val c=CoreSpeechClientPort(PublicSpeechTransport { r->entered.countDown();check(release.await(2,TimeUnit.SECONDS));refused(r) })
         val thread=Thread { try { c.submit(request()) } catch(_: IllegalStateException) { stale=true } };thread.start();assertTrue(entered.await(2,TimeUnit.SECONDS))
-        assertThrows(IllegalStateException::class.java) { c.submit(request()) };c.disconnect();release.countDown();thread.join(2000)
+        assertThrows(IllegalStateException::class.java) { c.submit(request()) };c.disconnect();assertThrows(IllegalStateException::class.java) { c.submit(request()) };release.countDown();thread.join(2000)
         assertFalse(thread.isAlive);assertTrue(stale);assertEquals(SpeechConnectionMode.TEXT_ONLY,c.mode)
     }
     @Test fun invalidVersionsAndFakeCuesCannotBeConstructed() {

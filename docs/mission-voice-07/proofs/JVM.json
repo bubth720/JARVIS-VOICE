@@ -7,8 +7,8 @@
       "skipped": "0",
       "failures": "0",
       "errors": "0",
-      "timestamp": "2026-10-24T11:21:52.355Z",
-      "time": "0.029"
+      "timestamp": "2026-10-24T11:26:46.167Z",
+      "time": "0.02"
     },
     {
       "name": "com.jarvis.voice.bridgepilot.PilotTests",
@@ -16,8 +16,8 @@
       "skipped": "0",
       "failures": "0",
       "errors": "0",
-      "timestamp": "2026-10-24T11:21:54.134Z",
-      "time": "5.253"
+      "timestamp": "2026-10-24T11:26:47.667Z",
+      "time": "5.398"
     },
     {
       "name": "com.jarvis.voice.bridgepilot.SpeechGatewayTests",
@@ -25,9 +25,9 @@
       "skipped": "0",
       "failures": "0",
       "errors": "0",
-      "timestamp": "2026-10-24T11:21:59.395Z",
-      "time": "0.182"
+      "timestamp": "2026-10-24T11:26:53.070Z",
+      "time": "0.165"
     }
   ],
-  "cli": "VOICE07 SYNTHETIC_IN_MEMORY_TRANSPORT_ONLY REFUSED NATIVE_AUTHORITY_UNAVAILABLE; audio=false; nativeReleaseVerified=false; coreConnected=false; elapsedMs=1.022751"
+  "cli": "VOICE07 SYNTHETIC_IN_MEMORY_TRANSPORT_ONLY REFUSED NATIVE_AUTHORITY_UNAVAILABLE; audio=false; nativeReleaseVerified=false; coreConnected=false; elapsedMs=1.430384"
 }
