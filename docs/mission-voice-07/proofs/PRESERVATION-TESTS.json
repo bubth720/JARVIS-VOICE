@@ -1,0 +1,47 @@
+{
+  "scope": "Actual local Gradle execution with up-to-date reused suites where reported; no Xiaomi",
+  "modules": [
+    {
+      "module": "voiceBridgeContract",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "voiceBridgeHarness",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "module": "studioRuntime",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "module": "expressionRuntime",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "module": "identityRuntime",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "module": "pocketRuntime",
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    }
+  ]
+}

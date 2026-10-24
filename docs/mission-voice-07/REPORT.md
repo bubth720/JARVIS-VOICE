@@ -25,7 +25,7 @@ Le service, la permission, les identités/signatures, l'AIDL, le codeonTransact 
 
 Exécutionlocale réelle :4tests clientJVM +6tests gatewayRobolectric +17tests pilote antérieurs, **27réussis,0échec/saut**. Cas : autorisation/refus, identité, expiration/révocation, texte privé interdit, V1fermée, rejeu entre réarmements, génération périmée, deux appels concurrents, statut/cancel idempotent, libération logique≠native, disconnect pendant transport réel inter-thread et ancienne réponse rejetée. Un appel encore en transport reste exclusif même après disconnect jusqu’à son retour ; son résultat est invalidé et ne peut changer le mode client.
 
-Robolectric simuleAndroid/Binder : il ne remplace pas une preuvekernel. La CI prépare la **suitekernelV1 existante** surAPI26/35 (UID/certificat/permission,60s réelle,mortBinder dans un autre processus,3clients). Le nouveauV2 n'étant pas raccordé àl'IPC, ne pas annoncer des tests BinderV2.
+Robolectric simuleAndroid/Binder : il ne remplace pas une preuvekernel. La CI exécute la **suite kernel V1 existante** surAPI26/35 (UID/certificat/permission,60s réelle,mortBinder dans un autre processus,3clients). Le nouveauV2 n'étant pas raccordé àl'IPC, ne pas annoncer des tests BinderV2.
 
 CLI effectivement exécutée : `SYNTHETIC_IN_MEMORY_TRANSPORT_ONLY REFUSED NATIVE_AUTHORITY_UNAVAILABLE; audio=false; nativeReleaseVerified=false; coreConnected=false`, durée réelle du chemin mémoire imprimée enms (pas une latenceTTS). Génération de la distributionZip réussie. AucunAudioTrack, modèle, PSS/énergie/thermique voix ou essai physiqueCORE/Xiaomi exécuté par ce gateway.
 
@@ -48,4 +48,25 @@ Prochaine action : revue du contratV2 et du diff d'adaptateur proposé, puis mis
 
 Premier passage du code745cc45, run40089961814 : API26 réussie ; API35 échoue sur absentGrantStaleKeyAndIdempotentCancelNeverGrantResources, hello refusé par SecurityException avant les assertions du scénario. Les huit autres cas autorisés passent ; les variantes négatives API35 ne sont pas exécutées après cet échec.
 
-La fixture historique cliquait sur Autoriser sans attendre l’état armé et partageait le processus serveur entre tests malgré les révocations asynchrones de onUnbind. Le log ne permet pas de départager ces deux courses. Correction exclusivement dans le setup Android de test : redémarrage du processus de fixture avant chaque test, puis attente de l’état visible armé après confirmation. Aucun retry de requête, attente d’expiration raccourcie, assertion supprimée ou changement du service/de la confiance. Les 9 scénarios et les comptes attendus restent identiques. La garde07 autorise exactement ces deux additions dans ce seul fichier de test ; tous les autres fichiers du client pilote restent protégés. Nouvelle qualification nécessaire avant d’annoncer API35 réussie.
+La fixture historique cliquait sur Autoriser sans attendre l’état armé et partageait le processus serveur entre tests malgré les révocations asynchrones de onUnbind. Le log ne permet pas de départager ces deux courses. Correction exclusivement dans le setup Android de test : redémarrage du processus de fixture avant chaque test, puis attente de l’état visible armé après confirmation. Aucun retry de requête, attente d’expiration raccourcie, assertion supprimée ou changement du service/de la confiance. Les 9 scénarios et les comptes attendus restent identiques. La garde07 autorise exactement ces deux additions dans ce seul fichier de test ; tous les autres fichiers du client pilote restent protégés. La nouvelle qualification ci-dessous valide les deux API ; le premier échec reste conservé dans CI-INITIAL.json.
+
+## Qualification finale et livraison
+
+Code qualifié : **0b1d879f36e2aa61269a3841cc3e1305b394a5a0**, précédé du client/gateway b0a79a6 et de la correction d’exclusivité 745cc45. [CI 40090529698](https://github.com/bubth720/JARVIS-VOICE/actions/runs/40090529698) réussie sur les deux API : JVM/Robolectric et bibliothèques préservées, kernel Binder V1, lint et audit des quatre APK de fixture. [Preuve CI](proofs/CI.json).
+
+| Émulateur | Client autorisé | Mauvais package | Mauvaise signature | Total |
+|---|---|---|---|---|
+| API 26 | 9 réussis, 0 saut | 2 réussis, 7 sauts | 2 réussis, 7 sauts | 13 réussis, 14 sauts, 0 échec |
+| API 35 | 9 réussis, 0 saut | 2 réussis, 7 sauts | 2 réussis, 7 sauts | 13 réussis, 14 sauts, 0 échec |
+
+Les sauts sont les scénarios autorisés inapplicables aux deux identités négatives ; ils ne sont pas comptés comme des succès. Fin réelle du grant de 60 secondes et mort Binder dans un second processus testées. **Aucun test kernel V2 ni rendu vocal inter-applications revendiqué.** Les 27 tests locaux client/pilote et les 118 succès / 16 sauts des autres bibliothèques sont distincts de ces essais kernel ; des suites locales Gradle étaient réutilisées UP-TO-DATE. [Snapshot](proofs/PRESERVATION-TESTS.json).
+
+[Distribution client CLI sans modèle](https://github.com/bubth720/JARVIS-VOICE/actions/runs/40090529698/artifacts/12559280968) : artefact extérieur de 1 652 080 octets, SHA256 **92988c101aac5355d4f2dccb9f7ae4a639afc13cbb37bd2f84d1b528bb8009e1** selon métadonnées GitHub. Il contient voiceBridgeClient.zip et les documents présents au commit de code. L’archive CI n’a pas été reparsée indépendamment dans ce Cloud ; la distribution construite localement a été inspectée, extraite et exécutée séparément ([preuve locale](proofs/CLI-LOCAL.json)). Ses octets ne sont pas présumés identiques au ZIP CI.
+
+CLI CI : refus synthétique en mémoire mesuré à 0,798 ms et 1,174 ms ; pas une latence TTS, Binder ou Xiaomi. Aucun APK pilote signé éphémèrement proposé pour installation personnelle. Le [guide de raccordement](CORE-CLIENT-GUIDE.md) fournit le point d’appel et les conditions de revue pour l’agent CORE, sans modifier son dépôt.
+
+Les workflows historiques Binder/005K/SDK échouent à leurs gardes de portée sur cette extension : [étapes vérifiées](proofs/LEGACY-SCOPE.json). Ils ne sont pas annoncés verts ; la CI dédiée et la garde07 sont rapportées séparément. L’échec initial API35 est conservé dans [CI-INITIAL](proofs/CI-INITIAL.json), sans modification des refus de sécurité.
+
+Préservation supplémentaire vérifiée : ZIP FP32 privé original toujours 234 932 686 octets, SHA2569436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd ; jamais publié ni reconstruit. Profil B et archives personnelles n’ont pas été importés dans le Cloud. Les fichiers critiques de toutes les anciennes applications restent identiques à la base qualifiée.
+
+Statut **PARTIAL / BLOCKED pour connexion vocale réelle**. Livrables non sensibles exécutables acquis, [PR #19 brouillon](https://github.com/bubth720/JARVIS-VOICE/pull/19), aucune fusion ni installation personnelle. Prochaine action : revue V2, preuve native CORE/UNIFIED et plan de confiance des signatures avant autorisation distincte de raccordement.

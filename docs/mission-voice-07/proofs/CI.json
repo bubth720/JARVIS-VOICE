@@ -1,0 +1,92 @@
+{
+  "sourceCommit": "0b1d879f36e2aa61269a3841cc3e1305b394a5a0",
+  "run": 40090529698,
+  "jobs": [
+    {
+      "id": 120862099758,
+      "name": "android-fixtures (35)",
+      "conclusion": "success"
+    },
+    {
+      "id": 120862099883,
+      "name": "android-fixtures (26)",
+      "conclusion": "success"
+    }
+  ],
+  "kernelV1": [
+    {
+      "api": 26,
+      "variants": [
+        {
+          "tests_passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "tests_passed": 2,
+          "failed": 0,
+          "skipped": 7
+        },
+        {
+          "tests_passed": 2,
+          "failed": 0,
+          "skipped": 7
+        }
+      ],
+      "cli": [
+        "2026-10-24T11:36:37.6036588Z VOICE07 SYNTHETIC_IN_MEMORY_TRANSPORT_ONLY REFUSED NATIVE_AUTHORITY_UNAVAILABLE; audio=false; nativeReleaseVerified=false; coreConnected=false; elapsedMs=1.173775"
+      ],
+      "scope": "Frozen V1 kernel Binder; not V2 IPC or Xiaomi"
+    },
+    {
+      "api": 35,
+      "variants": [
+        {
+          "tests_passed": 9,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "tests_passed": 2,
+          "failed": 0,
+          "skipped": 7
+        },
+        {
+          "tests_passed": 2,
+          "failed": 0,
+          "skipped": 7
+        }
+      ],
+      "cli": [
+        "2026-10-24T11:36:33.4976503Z VOICE07 SYNTHETIC_IN_MEMORY_TRANSPORT_ONLY REFUSED NATIVE_AUTHORITY_UNAVAILABLE; audio=false; nativeReleaseVerified=false; coreConnected=false; elapsedMs=0.797829"
+      ],
+      "scope": "Frozen V1 kernel Binder; not V2 IPC or Xiaomi"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12559280968,
+      "name": "voice07-model-free-client-cli",
+      "bytes": 1652080,
+      "digest": "sha256:92988c101aac5355d4f2dccb9f7ae4a639afc13cbb37bd2f84d1b528bb8009e1",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40090529698/artifacts/12559280968"
+    },
+    {
+      "id": 12558927606,
+      "name": "voice07-api35-reports",
+      "bytes": 35219,
+      "digest": "sha256:ccfc226c185c51b409d3115a0c7c4ea8ca139f553ca1d5aed40bc586c1e876a7",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40090529698/artifacts/12558927606"
+    },
+    {
+      "id": 12558442872,
+      "name": "voice07-api26-reports",
+      "bytes": 35201,
+      "digest": "sha256:c5236558883cd95731cdddb5dd28472775c890ae48a3fe5492b95b9e79a0393f",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40090529698/artifacts/12558442872"
+    }
+  ],
+  "verificationScope": "Decoded logs and provider artifact metadata. No independently parsed CI archive. Local CLI distribution independently inspected/executed separately.",
+  "coreConnected": false,
+  "nativeGeneration": false
+}
