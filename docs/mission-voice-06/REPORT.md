@@ -30,7 +30,7 @@ Première phrase :113280samples,113047changés pour chacun des trois effets ; co
 
 Les WAV sont volontairement ajoutés malgré la règle générale *.wav ignorée : **uniquement ces20 dérivés publics vérifiés**, dans public-generated, attributionCCBY4.0/Kyutai/Alba et modifications fournies. Aucun poids gated ou enregistrement personnel publié. Ils ne sont pas embarqués dans l'APK. Les noms sont révélés : l'écoute comparative offerte n'est pas une étude aveugle ; une étude doit masquer les noms/contrebalancer les ordres.
 
-Tests JVM réels : neutral/fallback exacts, trois waveforms différentes, déterminisme, intensité0, pas de modification source, bornes20s, clipping/non-finis, annulation et refus de capacités/consentement. Test public sur les cinq phrases. Build/Lint et APKtests locaux réussis ; CIAPI26/35 en cours à la publication initiale. Les observations humaines sont simulées comme entrées de test, **aucune écoute humaine réelle déduite** de ces tests.
+Tests JVM réels : neutral/fallback exacts, trois waveforms différentes, déterminisme, intensité0, pas de modification source, bornes20s, clipping/non-finis, annulation et refus de capacités/consentement. Test public sur les cinq phrases. Build/Lint et APKtests locaux réussis ; qualification au code **326c98f2d2ec6e714fac949816ff17e5e5526ed7** : [CI40088416948](https://github.com/bubth720/JARVIS-VOICE/actions/runs/40088416948) entièrement réussie, **16/16 parAPI26/35**, JVM/buildARM64/Lint/audit. [Preuves](proofs/CI.json). Les anciennes gardes de portéeVOICE04/05 restent inchangées et refusent les ajouts expressionRuntime autorisés ici ; leurs contrôles rouges ne sont pas présentés comme des régressions masquées ou des workflows réussis. Les observations humaines sont simulées comme entrées de test, **aucune écoute humaine réelle déduite** de ces tests.
 
 ## Cues AVA-05 et moteurs alternatifs
 
@@ -49,3 +49,9 @@ ANDROID_SERIAL=emulator-5554 bash scripts/voice06/android_audio.sh
 ```
 
 Statut PARTIEL : effets logiciels et comparaison exécutables ; **émotions sémantiques et qualité perceptive NO-GO/non validées**. Prochaine action : écouter les sorties publiques sans envoyerB, puis évaluer en aveugle émotion reconnue/naturel/timbre/intelligibilité/artefacts. L'essai B/installation personnelle reste ultérieur, volontaire et hors Cloud. Aucun résultat Xiaomi inventé.
+
+## Livraison
+
+[APK laboratoireVOICE06](https://github.com/bubth720/JARVIS-VOICE/actions/runs/40088416948/artifacts/12558103479), compteGitHub autorisé requis, extraire voice04Studio-debug.apk. IDcom.jarvis.voice.studio.voice06 ;34 254 869octets, SHA2566641929db3f52004b5881a0e8b7803a01c9522dbaa35c12493971312396f7766. Signaturelaboratoire distincte, pas une mise à jour005J/VOICE04/05 ; aucune désinstallation requise. Ni poids, ni enregistrement personnel, ni réseau. Aucun essai Xiaomi ni jugement perceptif acquis.
+
+Exemple public sans installation : [neutre](public-generated/neutral-1.wav), [JOY logiciel](public-generated/joy-1.wav), [SURPRISE logiciel](public-generated/surprise-1.wav), [CALM logiciel](public-generated/calm-1.wav). Noms révélés : comparer le son ne constitue pas une validation aveugle des émotions. Les quatre autres textes sont disponibles dans le même dossier. Le profilB reste uniquement sur le téléphone.
