@@ -134,8 +134,11 @@ class StudioController(private val context: Context,private val backend: StudioB
     @Volatile var longDraft="";private set
     @Volatile var longManual=false;private set
     fun editLong(text: String,manual: Boolean=longManual) {
-        require(!busy);require(text.length<=1800)
-        if(text!=longDraft || manual!=longManual) { longDraft=text;longManual=manual;longCursor=null;longProfile=null;longSettings=null;longPreview="Texte modifié : prévisualiser tous les segments avant lecture." }
+        require(!busy)
+        if(text!=longDraft || manual!=longManual) {
+            longCursor=null;longProfile=null;longSettings=null;longPreview="Texte modifié : prévisualiser tous les segments avant lecture."
+            require(text.length<=1800) { "LONGFORM_INPUT_LIMIT" };longDraft=text;longManual=manual
+        }
     }
     @Volatile var longCursor: LongFormCursor?=null;private set
     private var longProfile: VoiceProfile?=null

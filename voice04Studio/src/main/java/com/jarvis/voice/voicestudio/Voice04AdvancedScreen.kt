@@ -28,6 +28,7 @@ class AdvancedScreen(private val a: StudioActivity) {
         fold(page,"VOICE-04 · Texte long expérimental") { body ->
             u.text(body,"2–6 phrases complètes recommandées, chacune <=50 tokens/300 caractères ; entrée <=1800 caractères. Pas de suppression ni réécriture. Décimales, sigles et citations demandent vos points de coupe explicites. Les silences de rechargement peuvent être longs.",14f)
             val input=u.input(body,"Texte long local (en mémoire seulement)",c.longDraft,1800,multiline=true)
+            input.filters=arrayOf(Voice04LongTextFilter { c.notice("Insertion refusée en entier : maximum 1800 caractères. Choisir des lots distincts ; aucun préfixe tronqué n’a été accepté.") })
             val cuts=u.check(body,"J’ai choisi les points de coupe : une phrase complète par ligne.",c.longManual)
             u.button(body,"Prévisualiser et vérifier tous les segments") { a.guard { c.prepareLong(input.text.toString(),cuts.isChecked) } }
             val preview=u.text(body,c.longPreview,14f)

@@ -128,4 +128,15 @@ class Voice04AudioTests {
         assertTrue(info.requestedPermissions.orEmpty().none { it in setOf("android.permission.INTERNET","android.permission.RECORD_AUDIO","android.permission.READ_EXTERNAL_STORAGE","android.permission.MANAGE_EXTERNAL_STORAGE") })
     }
 
+    @Test fun oversizedPasteIsRejectedWholeAndPreservesReplacedSelection() {
+        val i=InstrumentationRegistry.getInstrumentation();val rejected=java.util.concurrent.atomic.AtomicInteger()
+        i.runOnMainSync {
+            val input=android.widget.EditText(requireNotNull(activity));input.setText("Texte déjà validé.")
+            input.filters=arrayOf(Voice04LongTextFilter { rejected.incrementAndGet() })
+            input.text.replace(0,input.length(),"X".repeat(1801))
+            assertEquals("Texte déjà validé.",input.text.toString());assertEquals(1,rejected.get())
+            input.text.append(" Suite.");assertEquals("Texte déjà validé. Suite.",input.text.toString())
+        }
+    }
+
 }
