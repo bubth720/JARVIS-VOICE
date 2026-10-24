@@ -33,7 +33,7 @@ Option volatile **OFF par défaut**, uniquement Diagnostic/Texte long ; Parler/S
 
 Les six jobs natifs publics sont trop lents pour ce gate : **tous restent différés avant toute sortie**. Aucune accélération acquise par streaming revendiquée. L'option ne réduit ni LSD, ni température, ni nombre de tokens, ni queue EOS. Optimisation d'ouvertures/allocations/caches natifs durable : non appliquée faute de preuve suffisante mémoire/arbitre inter-applications.
 
-Première CI : API26 échoue1/6 sur UNDERRUN_STREAM pendant la finalisation. API35 échoue3/6, focus refusé car l'instrumentation n'avait pas d'Activity visible. Correction du setup API35 ; **API26–30 restent explicitement exclus du STREAM**, repli différé avant création AudioTrack. La garde d'underrun n'a pas été retirée. Résultats de la nouvelle qualification dans RESULTATS.md ; le défaut005D historique est distinct et n'est pas masqué.
+Première CI : API26 échoue1/6 sur UNDERRUN_STREAM pendant la finalisation. API35 échoue3/6, focus refusé car l'instrumentation n'avait pas d'Activity visible. Correction du setup API35 ; **API26–30 restent explicitement exclus du STREAM**, repli différé avant création AudioTrack. La garde d'underrun n'a pas été retirée. Nouvelle passe :11/11 sur26,10/11 sur35 ; compteur stagnant causé par finish() écrasant l'historique avant health(). Correction sans changer les seuils ; qualification finale **12/12 parAPI26/35**, flux complet35 inclus. Résultats dans RESULTATS.md ; le défaut005D historique est distinct et n'est pas masqué.
 
 ## Suite physique requise
 

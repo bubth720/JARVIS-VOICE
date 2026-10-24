@@ -1,0 +1,108 @@
+{
+  "sourceCommit": "b4a98dfe433361470bdc764e2e45b385b5365d82",
+  "run": 40080095168,
+  "jobs": [
+    {
+      "id": 120831742979,
+      "name": "unit",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 120832053756,
+      "name": "audio (35)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 120832053804,
+      "name": "audio (26)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 120832795884,
+      "name": "apk",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "audioTests": {
+    "api26": {
+      "passed": 12,
+      "skipped": 0,
+      "failed": 0,
+      "streamPolicy": "DEFERRED, STREAM excluded"
+    },
+    "api35": {
+      "passed": 12,
+      "skipped": 0,
+      "failed": 0,
+      "streamPolicy": "real complete STREAM and deferred tested"
+    }
+  },
+  "artifacts": [
+    {
+      "id": 12555415059,
+      "name": "voice04-audio-api26",
+      "bytes": 792,
+      "digest": "sha256:de1fde6cc275ee0000f7a53c4f6d0a1b9e195f1978be292e07d8b76df5b9e27c",
+      "expiresAt": "2027-01-22T08:58:14Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40080095168/artifacts/12555415059"
+    },
+    {
+      "id": 12555240869,
+      "name": "voice04-audio-api35",
+      "bytes": 845,
+      "digest": "sha256:69e1b06fffc55c9c6d63446441ac0c919e723e56763fd01149ded30a30de0be5",
+      "expiresAt": "2027-01-22T08:58:14Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40080095168/artifacts/12555240869"
+    },
+    {
+      "id": 12554812007,
+      "name": "voice04-jvm-reports",
+      "bytes": 135818,
+      "digest": "sha256:44f8956b936a9f0056110157deed6c7d53fcee205cb4fe3a39e3fae32e1f94a0",
+      "expiresAt": "2027-01-22T08:58:14Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40080095168/artifacts/12554812007"
+    },
+    {
+      "id": 12554654424,
+      "name": "jarvis-voice04-independent-laboratory-apk",
+      "bytes": 15887567,
+      "digest": "sha256:32001e09248ba05648db857dfd419c715fc4dad42d3b9fd5f29ea3c4b6411da6",
+      "expiresAt": "2026-11-23T09:06:24Z",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40080095168/artifacts/12554654424"
+    }
+  ],
+  "apkAudit": {
+    "apkSha256": "ff5f37ef657dc0abc25bf678a48bc69cb3f26126c96facd785b18b61492be150",
+    "apkBytes": 34222109,
+    "applicationId": "com.jarvis.voice.studio.voice04",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "a491f592fadd797c2fff5ed4466ae069f860204cb1e07f6e9f028123cd77dd4a",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "evidenceScope": "Job conclusions, decoded logs and provider artifact metadata verified via GitHub connector. CI ZIP archives not independently downloaded/parsed locally. No signed URL published."
+}
