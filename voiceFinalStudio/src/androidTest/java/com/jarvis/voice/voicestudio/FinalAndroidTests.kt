@@ -51,6 +51,21 @@ class FinalAndroidTests {
         while(app.controller.busy && System.nanoTime()<deadline) Thread.sleep(10)
         assertFalse(app.controller.busy);assertFalse(File(context.noBackupFilesDir,"final01-audio/B.wav").exists())
     }
+    @Test fun unpreparedLongDraftSurvivesActualActivityRecreationWithoutBundleText() {
+        fun input(v: android.view.View): android.widget.EditText? {
+            if(v is android.widget.EditText) return v
+            if(v is android.view.ViewGroup) for(i in 0 until v.childCount) input(v.getChildAt(i))?.let { return it }
+            return null
+        }
+        val original=requireNotNull(activity);val expected=List(300) { "Brouillon public français à conserver. " }.joinToString("")
+        val monitor=instrumentation.addMonitor(FinalActivity::class.java.name,null,false)
+        try {
+            instrumentation.runOnMainSync { requireNotNull(input(original.window.decorView)).setText(expected);original.recreate() }
+            val recreated=instrumentation.waitForMonitorWithTimeout(monitor,10000) as? FinalActivity
+            assertNotNull(recreated);activity=recreated;instrumentation.waitForIdleSync()
+            instrumentation.runOnMainSync { val field=requireNotNull(input(requireNotNull(recreated).window.decorView));assertEquals(expected,field.text.toString());assertFalse(field.isSaveEnabled) }
+        } finally { instrumentation.removeMonitor(monitor) }
+    }
     @Test fun oversizedPasteRefusesWholeReplacementAndDoesNotDeleteSelectedText() {
         var refused=false;val filter=FinalTextFilter { refused=true };val existing=SpannableString("Texte conservé.")
         assertEquals(existing.toString(),filter.filter("x".repeat(200001),0,200001,existing,0,existing.length).toString());assertTrue(refused)

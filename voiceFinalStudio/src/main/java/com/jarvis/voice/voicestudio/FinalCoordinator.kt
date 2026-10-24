@@ -24,6 +24,8 @@ class FinalCoordinator(private val context: Context,val controller: StudioContro
     private val cache=LocalAudioCache(File(context.noBackupFilesDir,"final01-audio"))
     private val main=android.os.Handler(android.os.Looper.getMainLooper())
     var listener: (()->Unit)?=null
+    // RAM-only draft survives Activity recreation, not process death; never exported in metrics.
+    var draftText: String?=null
     @Volatile var status="Expérimental · aucun essai POCO ni émotion validée.";private set
     @Volatile var session: DocumentSession?=null;private set
     @Volatile var report=JSONObject();private set

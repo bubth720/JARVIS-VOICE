@@ -25,7 +25,7 @@ class FinalActivity: AppCompatActivity() {
     private val preferences get()=getSharedPreferences("final01-settings",0)
     private fun guard(block: ()->Unit) { try { block() } catch(t: Exception) { c.error(t);refresh() } }
     override fun onCreate(saved: Bundle?) {
-        super.onCreate(saved);window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        super.onCreate(saved);side=saved?.getString("exportSide")?.takeIf { it in setOf("A","B") } ?: "B";window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         val col=LinearLayout(this).apply { orientation=LinearLayout.VERTICAL;setPadding(24,32,24,24) }
         setContentView(ScrollView(this).apply { addView(col) })
         fun label(value: String) { col.addView(TextView(this).apply { this.text=value;setPadding(0,12,0,8) }) }
@@ -36,7 +36,7 @@ class FinalActivity: AppCompatActivity() {
             check(!FinalSafety.quarantined);startActivity(Intent(this,StudioActivity::class.java))
         }
         label("Texte privé : jusqu’à 200 000 caractères / 4 000 segments. Le frontend officiel peut normaliser ponctuation et nombres. La longue narration reste à qualifier à l’oreille.")
-        text=EditText(this).apply { minLines=4;maxLines=10;setText(voice.session?.plan?.text ?: "Demain, je prendrai le train pour Paris.")
+        text=EditText(this).apply { minLines=4;maxLines=10;isSaveEnabled=false;setText(voice.draftText ?: voice.session?.plan?.text ?: "Demain, je prendrai le train pour Paris.")
             filters=arrayOf(FinalTextFilter { c.notice("Texte trop long : modification entière refusée, aucun préfixe tronqué.") });col.addView(this) }
         button("Importer un texte UTF-8 local") { choose(700,"text/plain",false) }
         label("Profil de ressources : un thread ONNX dans tous les modes ; ÉCO ajoute du repos entre segments, AUTO s’adapte à la batterie et au thermique.")
@@ -116,5 +116,6 @@ class FinalActivity: AppCompatActivity() {
         if(jobs!=null && jobs.length()>0) summary.put("lastStagesMs",jobs.optJSONObject(jobs.length()-1)?.optJSONObject("stagesMs"))
         status.text=voice.status+"\n"+c.message+"\n"+c.metrics+"\n"+summary.toString(2)+"\nDétail complet disponible par export volontaire des compteurs.";idleButtons.forEach { it.isEnabled=!c.busy };text.isEnabled=!c.busy;steps.isEnabled=!c.busy;temperature.isEnabled=!c.busy;mode.isEnabled=!c.busy;emotion.isEnabled=!c.busy }
     override fun onStart() { super.onStart();voice.listener={refresh()};c.observe(this) { refresh() };refresh() }
-    override fun onStop() { if(!isChangingConfigurations) voice.stop();voice.listener=null;c.unobserve(this);super.onStop() }
+    override fun onSaveInstanceState(out: Bundle) { out.putString("exportSide",side);super.onSaveInstanceState(out) }
+    override fun onStop() { if(::text.isInitialized) voice.draftText=text.text.toString();if(!isChangingConfigurations) voice.stop();voice.listener=null;c.unobserve(this);super.onStop() }
 }
