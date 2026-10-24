@@ -1,0 +1,10 @@
+{
+  "suite": "com.jarvis.voice.bridgepilot.PilotTests",
+  "tests": 17,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0,
+  "timestamp": "2026-10-24T08:54:36.980Z",
+  "kind": "Robolectric simulation, not kernel Binder nor native resources",
+  "command": "gradle -PincludeVoicePilot=true -PpilotRobolectricDir=<workspace-public-sdk-cache> :voiceBridgePilot:cleanTestDebugUnitTest :voiceBridgePilot:testDebugUnitTest --offline --no-daemon --max-workers=2"
+}

@@ -1,0 +1,17 @@
+{
+  "sourceCommit": "b4a98dfe433361470bdc764e2e45b385b5365d82",
+  "baseline": "4f47eb3",
+  "preservationGuardPassed": true,
+  "005jArchiveSha256": "82db41ca499077fc062d6300c6ee48f816cca728d346588de5ee2cc3a04260b0",
+  "privateFp32OriginalZip": {
+    "available": true,
+    "published": false,
+    "bytes": 234932686,
+    "sha256": "9436555c6965e3480c06f51fedced0f512a8316e482a7e54df0f4ee83d0a01cd"
+  },
+  "profileBInspectedOrUploaded": false,
+  "historicalApplicationsModified": false,
+  "coreBinderActivation": false,
+  "modelWeightsRebuilt": false,
+  "exception": "CancellationToken.withOptions visibility only, body unchanged; original QualityEngine unchanged"
+}
