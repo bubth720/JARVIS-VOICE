@@ -15,6 +15,24 @@ class AdvancedScreen(private val a: StudioActivity) {
     }
     fun view(): View {
         val page=u.column();
+        if(a.packageName!="com.jarvis.voice.studio.voice04") fold(page,"VOICE-05 · Narration et comparaison A/B") { body ->
+            u.text(body,"Opt-in indépendant. <=6 phrases/1800 caractères, <=50 tokens/20s par job. Un thread ONNX et ouverture/fermeture par phrase. Le pool conserve seulement des tableaux PCM effacés, jamais de modèle.",14f)
+            val input=u.input(body,"Narration locale",c.longDraft,1800,multiline=true)
+            input.filters=arrayOf(Voice04LongTextFilter { c.notice("Collage refusé en entier : créer des lots distincts.") })
+            val manual=u.check(body,"Coupes manuelles : une phrase complète par ligne",c.longManual)
+            input.doAfterTextChanged { a.guard { c.editLong(it.toString()) } }
+            manual.setOnCheckedChangeListener { _,value->a.guard { c.editLong(input.text.toString(),value) } }
+            val modes=com.jarvis.voice.speed.SafePlaybackMode.entries
+            val policy=u.spinner(body,"Politique audio",modes.map { it.name },c.narrativeMode.ordinal)
+            u.button(body,"Préparer toutes les phrases") { a.guard { c.narrativePolicy(modes[policy.selectedItemPosition]);c.prepareNarrative(input.text.toString(),manual.isChecked) } }
+            u.text(body,c.narrativeStatus,14f)
+            u.button(body,"Lire le plan préparé") { a.guard { c.narrativePolicy(modes[policy.selectedItemPosition]);c.speakNarrative() } }
+            u.button(body,"Pause après la phrase en cours") { c.pauseNarrative() }.tag="voice05-pause"
+            u.button(body,"Reprendre explicitement") { a.guard { c.speakNarrative(true) } }
+            u.button(body,"A · référence différée") { a.guard { c.compareNarrative("A") } }
+            u.button(body,"B · même voix/texte/graine, politique choisie") { a.guard { c.narrativePolicy(modes[policy.selectedItemPosition]);c.compareNarrative("B") } }
+            u.button(body,"Exporter les mesures expurgées") { a.speedExport() }
+        }
         fold(page,"VOICE-04 · Diagnostic de vitesse") { body ->
             u.text(body,"Laboratoire indépendant. Mesures locales sans texte ni profil exporté. Lecture différée de référence. Les chiffres ne prouvent pas que le son a été entendu.",14f)
             val progressive=u.toggle(body,"Lecture progressive expérimentale · désactivée par défaut",c.progressiveEnabled)

@@ -1,0 +1,77 @@
+{
+  "suites": [
+    {
+      "name": "com.jarvis.voice.speed.ProgressiveTests",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:54.655Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.NarrativePublicDemoTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:54.652Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.PublicTokenizationTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:55.570Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.SpeedTraceTests",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:55.614Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.PublicObservationParityTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:55.564Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.EmotionTests",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:54.133Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.NarrativeDeliveryTests",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:54.275Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.PublicLongFormPerformanceTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:55.563Z"
+    },
+    {
+      "name": "com.jarvis.voice.speed.LongFormTests",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:19:54.154Z"
+    }
+  ],
+  "note": "Final software pass does not activate optional native fixtures; separate native demonstration passed earlier with same generation code."
+}

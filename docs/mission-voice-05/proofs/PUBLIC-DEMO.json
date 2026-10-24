@@ -1,0 +1,77 @@
+{
+  "schema": "voice05.public-demo/1",
+  "poolBorrows": 6,
+  "poolLargeArrayCreations": 1,
+  "jobs": [
+    {
+      "pooledMs": 7098.319446,
+      "baselineMs": 7440.047784,
+      "pcmBitIdentical": true,
+      "tokens": 25,
+      "wavSha256": "2ac18e5aacdc2025a141d0435d43fc4f7e7790bc40b92f2b50a49dad29bbbd39",
+      "job": 1,
+      "wav": "job-1.wav",
+      "samples": 113280,
+      "order": "AB"
+    },
+    {
+      "pooledMs": 7244.133321,
+      "baselineMs": 6795.173695,
+      "pcmBitIdentical": true,
+      "tokens": 28,
+      "wavSha256": "6dc39659d4f0f14c1b37732bf5b0086ce1a8767a4c9a69a54dd7bbdddec7da02",
+      "job": 2,
+      "wav": "job-2.wav",
+      "samples": 105600,
+      "order": "BA"
+    },
+    {
+      "pooledMs": 7852.367122,
+      "baselineMs": 7226.953807,
+      "pcmBitIdentical": true,
+      "tokens": 29,
+      "wavSha256": "f5f27cfa9cac1a2ad407bfd1736d466ea1bbae06d643090dcf3fb9013d75482c",
+      "job": 3,
+      "wav": "job-3.wav",
+      "samples": 120960,
+      "order": "AB"
+    },
+    {
+      "pooledMs": 8101.293003,
+      "baselineMs": 7384.750189,
+      "pcmBitIdentical": true,
+      "tokens": 33,
+      "wavSha256": "b814e7b6a74582bca15104bfe3e81f46b0e233d1e555d31124f59bc6a28e5e79",
+      "job": 4,
+      "wav": "job-4.wav",
+      "samples": 122880,
+      "order": "BA"
+    },
+    {
+      "pooledMs": 6582.993066,
+      "baselineMs": 6181.628509,
+      "pcmBitIdentical": true,
+      "tokens": 32,
+      "wavSha256": "50e76423fe14be548dc02b21a89583fce65a7b2a93f3d5d02c3de29c5234e4bf",
+      "job": 5,
+      "wav": "job-5.wav",
+      "samples": 109440,
+      "order": "AB"
+    },
+    {
+      "pooledMs": 7092.220674,
+      "baselineMs": 7199.018959,
+      "pcmBitIdentical": true,
+      "tokens": 31,
+      "wavSha256": "a614e477d474f9bdf50d95122dc0bce1f9e8eb27acfa791ed6eb04826633ac9d",
+      "job": 6,
+      "wav": "job-6.wav",
+      "samples": 119040,
+      "order": "BA"
+    }
+  ],
+  "attribution": "Alba public Kyutai tts-voices, CC BY4.0; no personal data or weights",
+  "tokens": 178,
+  "source": "Linux CPU1, public Alba; not Android/Xiaomi",
+  "humanListening": false
+}

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:name=".StudioApplication" android:label="JARVIS VOICE-04 · Expérimental" android:icon="@drawable/ic_studio"
+    <application android:name=".StudioApplication" android:label="${voiceLabLabel}" android:icon="@drawable/ic_studio"
         android:theme="@style/Theme.JarvisStudio" android:allowBackup="false" android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules" android:usesCleartextTraffic="false" android:supportsRtl="true">
         <activity android:name=".StudioActivity" android:exported="true" android:windowSoftInputMode="adjustResize">

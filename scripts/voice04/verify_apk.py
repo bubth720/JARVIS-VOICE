@@ -22,7 +22,7 @@ def main():
     p.add_argument("apk", type=Path)
     p.add_argument("--build-tools", type=Path, required=True)
     p.add_argument("--report", type=Path, required=True)
-    p.add_argument("--application-id", choices=["com.jarvis.voice.studio.voice04"], default="com.jarvis.voice.studio.voice04")
+    p.add_argument("--application-id", choices=["com.jarvis.voice.studio.voice04","com.jarvis.voice.studio.voice05","com.jarvis.voice.studio.voice06","com.jarvis.voice.studio.voice07"], default="com.jarvis.voice.studio.voice04")
     args = p.parse_args()
     signer = run([args.build_tools / "apksigner", "verify", "--print-certs", args.apk])
     run([args.build_tools / "zipalign", "-c", "-P", "16", "4", args.apk])

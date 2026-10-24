@@ -49,31 +49,31 @@ class PcmPlayer(context: Context, private val token: CancellationToken,
         lastSnapshot="AudioTrack $phase : mode STATIC ${if(floatOutput) "FLOAT32" else "PCM16"} ; état ${track?.state ?: -1} ; playState ${track?.playState ?: -1} (3=play, 2=pause, 1=stop) ; fréquence ${track?.sampleRate ?: 24000} Hz ; volume piste 1,0 ; volume média ${manager.getStreamVolume(AudioManager.STREAM_MUSIC)}/${manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)}, muet ${manager.isStreamMute(AudioManager.STREAM_MUSIC)} ; focus $focus ; route type ${device?.type ?: -1}, id ${device?.id ?: -1} ; écritures $writes, nulles $zeroWrites ; submitted $submitted ; playbackHeadPosition $lastHead ; underruns $underruns ; preuve $evidence."
         diagnostic(lastSnapshot)
     }
-    fun write(pcm: FloatArray) {
+    fun write(pcm: FloatArray,sampleCount: Int=pcm.size) {
         checkRunning()
-        require(pcm.size in 1..480000 && pcm.all { it.isFinite() }) { "PCM non fini, vide ou supérieur à 20 secondes" }
+        require(sampleCount in 1..minOf(pcm.size,480000) && (0 until sampleCount).all { pcm[it].isFinite() }) { "PCM non fini, vide ou supérieur à 20 secondes" }
         check(active.get()==null) { "Une seule phrase complète par AudioTrack STATIC" }
         val track=AudioTrack.Builder().setAudioAttributes(attributes)
             .setAudioFormat(AudioFormat.Builder().setSampleRate(24000).setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
                 .setEncoding(if(floatOutput) AudioFormat.ENCODING_PCM_FLOAT else AudioFormat.ENCODING_PCM_16BIT).build())
-            .setBufferSizeInBytes(pcm.size*(if(floatOutput) 4 else 2)).setTransferMode(AudioTrack.MODE_STATIC).build()
+            .setBufferSizeInBytes(sampleCount*(if(floatOutput) 4 else 2)).setTransferMode(AudioTrack.MODE_STATIC).build()
         active.set(track)
         try {
             snapshot("créé")
             if(track.setVolume(1f)!=AudioTrack.SUCCESS) throw PlaybackFailure("VOLUME_REFUSE")
             checkRunning()
             val count=if(floatOutput) {
-                val converted=FloatArray(pcm.size) { i -> if(i%4096==0) checkRunning();pcm[i].coerceIn(-1f,1f) }
+                val converted=FloatArray(sampleCount) { i -> if(i%4096==0) checkRunning();pcm[i].coerceIn(-1f,1f) }
                 track.write(converted,0,converted.size,AudioTrack.WRITE_NON_BLOCKING)
             } else {
-                val converted=ShortArray(pcm.size) { i -> if(i%4096==0) checkRunning();(pcm[i].coerceIn(-1f,1f)*32767).roundToInt().toShort() }
+                val converted=ShortArray(sampleCount) { i -> if(i%4096==0) checkRunning();(pcm[i].coerceIn(-1f,1f)*32767).roundToInt().toShort() }
                 track.write(converted,0,converted.size,AudioTrack.WRITE_NON_BLOCKING)
             }
             writes++; if(count==0) zeroWrites++
             if(count>0) { submitted=count.toLong();speed?.first(com.jarvis.voice.speed.SpeedPoint.FIRST_WRITE) }
             snapshot("chargé")
             if(count<0) throw PlaybackFailure("ECRITURE_$count")
-            if(count!=pcm.size) throw PlaybackFailure(if(count==0) "ECRITURE_NULLE" else "ECRITURE_INCOMPLETE")
+            if(count!=sampleCount) throw PlaybackFailure(if(count==0) "ECRITURE_NULLE" else "ECRITURE_INCOMPLETE")
             if(track.state!=AudioTrack.STATE_INITIALIZED) throw PlaybackFailure("NON_INITIALISE")
         } catch(error: Throwable) { snapshot("échec chargement"); throw error }
     }
