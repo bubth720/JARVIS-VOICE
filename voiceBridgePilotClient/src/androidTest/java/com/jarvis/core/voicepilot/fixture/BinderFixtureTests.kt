@@ -26,6 +26,8 @@ class BinderFixtureTests {
     private fun base()=mapOf("version" to "voice.bridge.fixture/1","contract_sha256" to BuildConfig.CONTRACT_SHA,"session_id" to id())
     @Before fun emulatorOnlyAndRevoke() {
         Assume.assumeTrue(Build.HARDWARE in setOf("ranchu","goldfish") || Build.FINGERPRINT.startsWith("generic"))
+        // Isolate lifecycle callbacks and pending onUnbind from the preceding fixture test.
+        device.executeShellCommand("am force-stop ${component.packageName}")
         device.wakeUp();device.executeShellCommand("wm dismiss-keyguard")
         context.startActivity(Intent().setComponent(ComponentName(component.packageName,"${component.packageName}.PilotActivity")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         val revoke=device.wait(Until.findObject(By.res(component.packageName,"pilot_revoke")),5000) ?: error("Fixture visible required")
@@ -47,6 +49,8 @@ class BinderFixtureTests {
         device.findObject(By.res(component.packageName,"pilot_arm")).click()
         val allow=device.wait(Until.findObject(By.res("android","button1").pkg(component.packageName)),3000) ?: error("Certificate confirmation missing")
         allow.click()
+        assertTrue("Visible consent must be armed before any authorized IPC",
+            device.wait(Until.hasObject(By.pkg(component.packageName).textStartsWith("Fixture autorisée temporairement")),5000))
     }
     private fun authorizedOnly() { Assume.assumeTrue(context.packageName=="com.jarvis.core.voicepilot.fixture") }
     private fun request(h: JSONObject,hello: Map<String,String>)=hello+mapOf(

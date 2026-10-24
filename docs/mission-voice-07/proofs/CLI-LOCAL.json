@@ -1,0 +1,10 @@
+{
+  "scope": "Local distribution independently inspected and executed, not CI archive",
+  "file": "voiceBridgeClient.zip",
+  "bytes": 1645271,
+  "sha256": "0b5b26872184049ae5927dc16acecd15655e6560fa24e2ee7485ee44c12b7d39",
+  "java": "17+ required; executed with existing JDK21",
+  "cli": "SYNTHETIC_IN_MEMORY_TRANSPORT_ONLY REFUSED NATIVE_AUTHORITY_UNAVAILABLE; audio=false; nativeReleaseVerified=false; coreConnected=false; elapsedMs=1.413959",
+  "modelWeightsIncluded": false,
+  "personalRecordingIncluded": false
+}

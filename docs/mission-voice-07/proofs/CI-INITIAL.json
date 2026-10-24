@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "745cc45ff627d2f1c43f821a0baa86c03dfa9816",
+  "run": 40089961814,
+  "api26": {
+    "passed": 13,
+    "skipped": 14,
+    "failed": 0,
+    "audit": "passed"
+  },
+  "api35": {
+    "authorizedPassed": 8,
+    "authorizedFailed": 1,
+    "negativeVariantsExecuted": false,
+    "failedTest": "absentGrantStaleKeyAndIdempotentCancelNeverGrantResources",
+    "failure": "SecurityException in hello after authorizeVisible",
+    "causeNotDisambiguated": [
+      "consent click returned before armed state",
+      "late lifecycle revocation across fixture tests"
+    ]
+  },
+  "fixScope": "test setup only: fresh fixture process and observable armed state wait; no service/permission/signature/JNI change"
+}

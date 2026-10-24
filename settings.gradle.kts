@@ -26,3 +26,6 @@ if (providers.gradleProperty("includeVoicePilot").orNull == "true") {
 
 // VOICE-04 is isolated; historical application IDs stay unchanged.
 include(":voice04Runtime", ":voice04Studio")
+
+// Model-free reference client; no Android transport or endpoint activated.
+include(":voiceBridgeClient")

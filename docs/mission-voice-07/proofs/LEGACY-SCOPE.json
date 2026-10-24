@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "0b1d879f36e2aa61269a3841cc3e1305b394a5a0",
+  "verifiedFailureSteps": [
+    {
+      "run": 40090529704,
+      "workflow": "VOICE Binder V1 isolated public fixtures",
+      "failureStep": "Run python scripts/bridge/verify_pilot_scope.py"
+    },
+    {
+      "run": 40090529713,
+      "workflow": "Voice Bridge 005K contracts only",
+      "failureStep": "Prove historical applications and inactive transport preserved"
+    },
+    {
+      "run": 40090529710,
+      "workflow": "VOICE SDK and expression styles",
+      "failureStep": "Preserve engines, packs, identities, historical app and bridge"
+    }
+  ],
+  "interpretation": "Historical scope guards refuse later additions. These workflows are failed, not passed. Dedicated mission07 scope and functional results reported separately. No historical assertion changed."
+}
