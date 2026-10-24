@@ -1,0 +1,94 @@
+{
+  "sourceCommit": "326c98f2d2ec6e714fac949816ff17e5e5526ed7",
+  "run": 40088416948,
+  "jobs": [
+    {
+      "id": 120856086979,
+      "name": "unit",
+      "conclusion": "success"
+    },
+    {
+      "id": 120856505722,
+      "name": "audio (26)",
+      "conclusion": "success"
+    },
+    {
+      "id": 120856505767,
+      "name": "audio (35)",
+      "conclusion": "success"
+    },
+    {
+      "id": 120857242910,
+      "name": "apk",
+      "conclusion": "success"
+    }
+  ],
+  "audioAssertions": [
+    [
+      "2026-10-24T11:10:57.0902231Z VOICE06_REAL_AUDIOTRACK_16_TESTS_PASSED"
+    ],
+    [
+      "2026-10-24T11:10:27.1541619Z VOICE06_REAL_AUDIOTRACK_16_TESTS_PASSED"
+    ]
+  ],
+  "apkAudit": {
+    "apkSha256": "6641929db3f52004b5881a0e8b7803a01c9522dbaa35c12493971312396f7766",
+    "apkBytes": 34254869,
+    "applicationId": "com.jarvis.voice.studio.voice06",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "e3948d8494d6cdf5a22359dd00e00508153b91aaae30fea67b5b5bb9ec880820",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "artifacts": [
+    {
+      "id": 12558103479,
+      "name": "jarvis-voice06-independent-laboratory-apk",
+      "bytes": 15930104,
+      "digest": "sha256:4bdcc5f7eb6f0218b28dc5a6d4fbdcd424f1cc382703b4faca49f0a46002f11f",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40088416948/artifacts/12558103479"
+    },
+    {
+      "id": 12557804191,
+      "name": "voice06-audio-api26",
+      "bytes": 993,
+      "digest": "sha256:67b622b85b187a09b1ffac2636990ab0f161be7af4f7a23523059b2a7522c268",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40088416948/artifacts/12557804191"
+    },
+    {
+      "id": 12557708037,
+      "name": "voice06-audio-api35",
+      "bytes": 1057,
+      "digest": "sha256:288f1e69d3a72a21d31ab4da605b275b3e8617e46559c48a992a1dc68ad85639",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40088416948/artifacts/12557708037"
+    },
+    {
+      "id": 12557194416,
+      "name": "voice06-jvm-reports",
+      "bytes": 144275,
+      "digest": "sha256:edaf57aa4ecaff0a065d7feee38700cb2d05c74403434acc4946e6c62ff2d925",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40088416948/artifacts/12557194416"
+    }
+  ],
+  "scope": "Decoded logs, job conclusions and artifact metadata. No independently reparsed archive. No human listening proven."
+}

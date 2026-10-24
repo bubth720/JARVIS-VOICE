@@ -33,6 +33,22 @@ class AdvancedScreen(private val a: StudioActivity) {
             u.button(body,"B · même voix/texte/graine, politique choisie") { a.guard { c.narrativePolicy(modes[policy.selectedItemPosition]);c.compareNarrative("B") } }
             u.button(body,"Exporter les mesures expurgées") { a.speedExport() }
         }
+        if(a.packageName.endsWith("voice06") || a.packageName.endsWith("voice07")) fold(page,"VOICE-06 · Effets logiciels A/B, émotions non validées") { body ->
+            u.text(body,"Enveloppes d’énergie seulement : aucun changement de pitch/débit, pas d’émotion native, pas de rires ajoutés. Le modèle génère A une seule fois ; B transforme ce même PCM en mémoire privée. NEUTRAL et fallback restent exacts.",14f)
+            val phrase=u.spinner(body,"Phrase publique de comparaison",c.emotionPhrases)
+            val styles=listOf(com.jarvis.voice.expression.VoiceEmotionIntent.JOY,com.jarvis.voice.expression.VoiceEmotionIntent.SURPRISE,com.jarvis.voice.expression.VoiceEmotionIntent.CALM)
+            val style=u.spinner(body,"Intention d’essai logiciel (pas une émotion validée)",styles.map { it.name })
+            val intensity=u.spinner(body,"Intensité de l’effet logiciel",listOf("0","1","2"),1)
+            val consent=u.check(body,"J’autorise cet effet logiciel expérimental sur le PCM généré, sans modifier ma voix enregistrée.")
+            u.button(body,"Générer et écouter A neutre") { a.guard { c.emotionBaseline(phrase.selectedItemPosition) } }
+            u.button(body,"Créer et écouter B logiciel") { a.guard { c.emotionEffect(styles[style.selectedItemPosition],intensity.selectedItemPosition,consent.isChecked) } }
+            u.button(body,"Réécouter A") { a.guard { c.replayEmotion("A") } }
+            u.button(body,"Réécouter B") { a.guard { c.replayEmotion("B") } }
+            val heard=u.check(body,"J’ai réellement entendu A et B en entier.")
+            u.button(body,"Noter cette observation d’écoute locale") { a.guard { c.emotionReview(heard.isChecked) } }
+            u.text(body,c.emotionDiagnostic,14f)
+            u.text(body,"CONCERN / THOUGHTFUL / SADNESS / LAUGH : STYLE_UNSUPPORTED. Sourire/rire facial et chronologie phonétique : non disponibles. Autres moteurs désactivés, aucun nouveau modèle téléchargé.",14f,true)
+        }
         fold(page,"VOICE-04 · Diagnostic de vitesse") { body ->
             u.text(body,"Laboratoire indépendant. Mesures locales sans texte ni profil exporté. Lecture différée de référence. Les chiffres ne prouvent pas que le son a été entendu.",14f)
             val progressive=u.toggle(body,"Lecture progressive expérimentale · désactivée par défaut",c.progressiveEnabled)
