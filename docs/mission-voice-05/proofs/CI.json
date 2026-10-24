@@ -1,0 +1,94 @@
+{
+  "sourceCommit": "b90cea0bb9d113e65a67d1a02bb64dd087129d87",
+  "run": 40085735780,
+  "jobs": [
+    {
+      "id": 120848229633,
+      "name": "unit",
+      "conclusion": "success"
+    },
+    {
+      "id": 120848569490,
+      "name": "audio (35)",
+      "conclusion": "success"
+    },
+    {
+      "id": 120848569578,
+      "name": "audio (26)",
+      "conclusion": "success"
+    },
+    {
+      "id": 120849279747,
+      "name": "apk",
+      "conclusion": "success"
+    }
+  ],
+  "audioAssertions": [
+    [
+      "2026-10-24T10:28:35.1035191Z VOICE05_REAL_AUDIOTRACK_14_TESTS_PASSED"
+    ],
+    [
+      "2026-10-24T10:29:22.4159661Z VOICE05_REAL_AUDIOTRACK_14_TESTS_PASSED"
+    ]
+  ],
+  "apkAudit": {
+    "apkSha256": "9c221fa9802a49f72a0bbd675778d8b0e615c13570182f4ac667adaa68dd1839",
+    "apkBytes": 34238485,
+    "applicationId": "com.jarvis.voice.studio.voice05",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "fa50c7bdabd3abf5e4e1491433ff6c9b4197eda867e80f3cc04ac8e706002af0",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "artifacts": [
+    {
+      "id": 12557430283,
+      "name": "voice05-jvm-reports",
+      "bytes": 140137,
+      "digest": "sha256:581e4f12181c1f27b44ce940afb6095d627d4c33d8327e57878322ddf9da4731",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40085735780/artifacts/12557430283"
+    },
+    {
+      "id": 12557425748,
+      "name": "voice05-audio-api26",
+      "bytes": 888,
+      "digest": "sha256:103054d2820e2725da3c20cf7a7d084cd4cd7e94975bb0b0b8c43de36f85c275",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40085735780/artifacts/12557425748"
+    },
+    {
+      "id": 12557136574,
+      "name": "jarvis-voice05-independent-laboratory-apk",
+      "bytes": 15911158,
+      "digest": "sha256:02f148346adf99a5e6a32451fc650b6b1b469a41edf066fe6dfc8a1e8b08d1ac",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40085735780/artifacts/12557136574"
+    },
+    {
+      "id": 12556828770,
+      "name": "voice05-audio-api35",
+      "bytes": 945,
+      "digest": "sha256:0e58816484090ce6813fe0a64b98f19ea46aa5ec8e4f39416e903294c3dd830a",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40085735780/artifacts/12556828770"
+    }
+  ],
+  "scope": "Provider metadata and decoded logs; no independently parsed CI ZIP."
+}

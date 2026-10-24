@@ -15,7 +15,7 @@ Le module Android existant est réutilisé, sans copie divergente : `-PvoiceLab=
 
 ## Exécutions et mesures
 
-[JVM](proofs/JVM.json) : tests réels d'ordre/pause/reprise/réentrance, annulation, budget/ownership/pool, fermeture inconnue et intégrité ; ancienne suite VOICE04 conservée. CI Android API26/35 en cours à la publication initiale ; les assertions ne seront pas annoncées réussies avant observation.
+[JVM](proofs/JVM.json) : tests réels d'ordre/pause/reprise/réentrance, annulation, budget/ownership/pool, fermeture inconnue et intégrité ; ancienne suite VOICE04 conservée. QualificationCI réussie au code **b90cea0bb9d113e65a67d1a02bb64dd087129d87** : [40085735780](https://github.com/bubth720/JARVIS-VOICE/actions/runs/40085735780), JVM, **14/14 surAPI26 et14/14 surAPI35**, ARM64/Lint/audit. La suiteVOICE04 de12cas reste intacte et deux tests vérifient le préfixe effectivement présenté et la réutilisation entre deux vrais AudioTrack. [Preuve](proofs/CI.json). Passe logicielle locale :41déclarés,37succès,4sauts optionnels ; la démonstration native supplémentaire est exécutée séparément avec succès.
 
 [Démo native publique](proofs/PUBLIC-DEMO.json) : packFP32 existant, Alba publique CC BY4.0 SHA46264e83… vérifié, six phrases178tokens, graine42/LSD3/temp0,3, un thread ONNX et ouverture/fermeture par job. Deux chemins complets par phrase, ordreAB/BA alterné, comparaison au QualityEngine de référence via ExpressionRenderer. **Six PCM bit-identiques**, pause/reprise explicite après le deuxième job ; six WAV locaux sous work/voice05/public-demo, jamais B. Le pool crée1gros tableau pour6emprunts. Aucun modèle reconstruit.
 
@@ -47,4 +47,6 @@ La démo utilise une identité temporaire Alba et efface ses fichiers de profil 
 
 Gardes historiques + garde dédiée réussies localement : tous anciens moteurs/vault/SDK/005J/archives/livraisons/Binder inchangés ; JNI et lockFP32 inchangés dans l'audit APK. Seuls les modules expérimentaux VOICE04 sont étendus sur la branche05. L'échec005D historique et les anciennes gardes de portée restent documentés dans VOICE04 ; rien n'est masqué.
 
-Statut PARTIEL : logiciel exécutable et démo native acquis, accélération Xiaomi/non-coupure perceptive non qualifiées. Prochaine action : qualification14tests AudioTrack/API puis publication du commit testé, avant VOICE06. Essai personnel ultérieur volontaire seulement, profilB/005J conservés ; ne pas désinstaller ni changer leurs clés.
+Statut PARTIEL : logiciel exécutable et démo native acquis, accélération Xiaomi/non-coupure perceptive non qualifiées. [APK indépendanteVOICE05](https://github.com/bubth720/JARVIS-VOICE/actions/runs/40085735780/artifacts/12557136574), fichiervoice04Studio-debug.apk dans leZIP ; IDcom.jarvis.voice.studio.voice05, signaturelaboratoire distincte,34 238 485octets, SHA2569c221fa9802a49f72a0bbd675778d8b0e615c13570182f4ac667adaa68dd1839. Aucun poids/enregistrement inclus. Ne pas remplacer005J/VOICE04.
+
+Prochaine action : VOICE06 peut partir de ce commit publié réellement testé ; essais physiques de vitesse toujours absents. Essai personnel ultérieur volontaire seulement, profilB/005J conservés ; ne pas désinstaller ni changer leurs clés.
