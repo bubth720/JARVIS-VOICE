@@ -277,6 +277,64 @@ class StudioController(private val context: Context,private val backend: StudioB
         try { audio.write(pcm,count);audio.drain();check(audio.completed && audio.submitted==count.toLong()) }
         finally { try { audio.close() } catch(t: Throwable) { speedQuarantined=true;narrativePool.close();throw t } finally { player.compareAndSet(audio,null) } }
     }
+    val emotionPhrases=listOf("Bonjour à vous.","Demain, je prendrai le train pour Paris.","Le train arrive dans quelques instants.","Nous sommes prêts pour cette nouvelle journée.","Le voyage se termine près du grand jardin.")
+    private var emotionTrial: AudibleComparisonSession?=null
+    private var emotionProfile: VoiceProfile?=null
+    @Volatile var emotionDiagnostic="Aucune émotion audible qualifiée. Effets logiciels d’essai uniquement.";private set
+    private fun clearEmotionTrial() { emotionTrial?.close();emotionTrial=null;emotionProfile=null }
+    fun emotionBaseline(phraseIndex: Int) {
+        require(phraseIndex in emotionPhrases.indices);require(hasModel()) { "Importer le pack FP32 existant avant cet essai." };val p=library.activeConfirmed();val settings=state.settings;val text=emotionPhrases[phraseIndex]
+        run("VOICE-06 : génération A neutre, même voix…",true) { c ->
+            clearEmotionTrial();require(library.activeConfirmed()==p)
+            val plan=ExpressionPolicy.plan(CoreVoiceRequestV1(text,p.identityId),ExpressionVoiceBinding.from(p),settings.sampling(),settings.seed)
+            var nativeAttempted=false;var nativeReturned=false
+            val adapter=ExpressionSpeechAdapter(ExpressionRenderPort { request,token ->
+                LocalProsodyPlanner.requireExactText(text,request.plan.request.utteranceText)
+                val voice=VoicePackResolver(vault,pack).resolve(request,token)
+                val prosody=backend.prepare(pack,request.plan)
+                nativeAttempted=true
+                val result=backend.render(pack,voice,prosody,token);nativeReturned=true
+                PlannedExpressionRender(prosody,result)
+            })
+            val rendered=try { adapter.render(SpeechRequest(java.util.UUID.randomUUID().toString(),plan),c) }
+                catch(t: Throwable) { if(nativeAttempted && !nativeReturned) speedQuarantined=true;throw t }
+            try {
+                require(rendered.eosReached)
+                emotionTrial=AudibleComparisonSession(ExpressionVoiceBinding.from(p),rendered.pcm);emotionProfile=p
+                play(rendered.pcm,c);emotionTrial!!.markPresented("A",ExpressionVoiceBinding.from(p))
+                emotionDiagnostic="A neutre présenté ; phrase publique ${phraseIndex+1}, profil/graine/sampler figés. B réutilisera exactement ce PCM, sans nouveau modèle."
+                emotionDiagnostic
+            } finally { rendered.pcm.fill(0f) }
+        }
+    }
+    fun emotionEffect(style: VoiceEmotionIntent,intensity: Int,consent: Boolean) {
+        val p=requireNotNull(emotionProfile);require(library.activeConfirmed()==p);val trial=requireNotNull(emotionTrial)
+        val planned=VoiceEmotionController().plan(style,intensity,consent)
+        val plan=(planned as? EmotionPlanning.Ready)?.plan ?: throw IllegalArgumentException("STYLE_UNSUPPORTED")
+        run("VOICE-06 : enveloppe d’énergie logicielle…") { c ->
+            require(library.activeConfirmed()==p)
+            val started=System.nanoTime();val result=trial.apply(plan,c)
+            val legacy=runCatching { com.jarvis.voice.speed.EmotionalIntentV1.valueOf(style.name) }.getOrNull()
+            val native=legacy?.let { com.jarvis.voice.speed.Pocket6LEmotionCapabilities.availability(it).selectable } ?: false
+            emotionDiagnostic="Effet logiciel ${plan.effective} (demandé $style) ; ${result.changedSamples} samples modifiés, RMS ${result.inputRms}/${result.outputRms}, coût ${(System.nanoTime()-started)/1e6} ms. Hauteur/débit non modifiés ; émotion native ${native && style==VoiceEmotionIntent.NEUTRAL}. Aucun sourire/rire détecté."
+            speedReport=JSONObject().put("schema","voice06.software-trial/1").put("intent",style.name).put("effectiveIntent",plan.effective.name).put("intensity",intensity).put("changedSamples",result.changedSamples)
+                .put("maxAbsDifference",result.maxAbsDifference).put("inputRms",result.inputRms).put("outputRms",result.outputRms).put("humanValidated",false).put("nativeEmotion",false)
+            diagnostics=emotionDiagnostic;emit()
+            trial.withPcm("B",ExpressionVoiceBinding.from(p)) { play(it,c) };trial.markPresented("B",ExpressionVoiceBinding.from(p))
+            emotionDiagnostic+"\nB présenté ; comparer à A à l’oreille, aucune qualité ou émotion validée automatiquement."
+        }
+    }
+    fun replayEmotion(side: String) {
+        val p=requireNotNull(emotionProfile);require(library.activeConfirmed()==p)
+        run("Réécoute $side du même PCM privé…") { c ->
+            emotionTrial!!.withPcm(side,ExpressionVoiceBinding.from(p)) { play(it,c) };emotionTrial!!.markPresented(side,ExpressionVoiceBinding.from(p))
+            "$side présenté sans recalcul ; jugement humain requis."
+        }
+    }
+    fun emotionReview(heard: Boolean) {
+        val p=requireNotNull(emotionProfile);require(library.activeConfirmed()==p)
+        emotionTrial!!.review(heard,ExpressionVoiceBinding.from(p));notice("Observation d’écoute conservée dans cette session privée ; aucune capacité émotionnelle globale activée.")
+    }
     val pack get()=File(root,"models/fp32")
     val source get()=File(root,"wizard-source.private")
     var pendingExport: VoiceIdentityId?=null
@@ -428,6 +486,7 @@ class StudioController(private val context: Context,private val backend: StudioB
         }
     }
     fun activate(id: VoiceIdentityId,pid: String,neutral: Boolean=false) {
+        if(!busy) clearEmotionTrial()
         run("Confirmation du profil choisi…") { c -> library.activate(id,pid,c,neutral);audition=null;"Voix activée explicitement. Elle reste identique pour tous les essais d’intention." }
     }
     fun restore(uri: Uri,password: CharArray,legal: Boolean) {
@@ -562,7 +621,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             "Notes d’écoute conservées localement ; aucune qualité inventée."
         }
     }
-    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans VOICE-04 seulement." } }
-    fun clearAudio(id: VoiceIdentityId) { run("Effacement des seules réécoutes de cette voix…") { expressions(id).delete();single(id).delete();profiles(id).delete();styleComparisons(id).delete();audition=null;"Audios effacés ; profils et références conservés." } }
-    fun removeIdentity(id: VoiceIdentityId) { run("Suppression de cette voix VOICE-04…") { c -> check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Voix supprimée de VOICE-04 seulement. Les anciennes applications restent intactes." } }
+    fun removeProfile(id: VoiceIdentityId,pid: String) { if(!busy) clearEmotionTrial();run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans VOICE-04 seulement." } }
+    fun clearAudio(id: VoiceIdentityId) { if(!busy) clearEmotionTrial();run("Effacement des seules réécoutes de cette voix…") { expressions(id).delete();single(id).delete();profiles(id).delete();styleComparisons(id).delete();audition=null;"Audios effacés ; profils et références conservés." } }
+    fun removeIdentity(id: VoiceIdentityId) { if(!busy) clearEmotionTrial();run("Suppression de cette voix VOICE-04…") { c -> check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Voix supprimée de VOICE-04 seulement. Les anciennes applications restent intactes." } }
 }

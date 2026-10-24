@@ -1,0 +1,167 @@
+{
+  "suites": [
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.ExpressionStoreTests",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:43.484Z"
+    },
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.EmotionPublicDemoTests",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:43.283Z"
+    },
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.ExpressionContractTests",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:43.455Z"
+    },
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.EmotionPcmTests",
+      "tests": "6",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:43.215Z"
+    },
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.PublicNeutralParityTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:45.150Z"
+    },
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.ProsodyTests",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:45.134Z"
+    },
+    {
+      "module": "expressionRuntime",
+      "name": "com.jarvis.voice.expression.ExpressionStyleTests",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:52:45.048Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.ProgressiveTests",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:31.984Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.NarrativePublicDemoTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:31.980Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.PublicTokenizationTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:32.430Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.SpeedTraceTests",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:32.431Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.PublicObservationParityTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:32.428Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.EmotionTests",
+      "tests": "5",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:31.693Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.NarrativeDeliveryTests",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:31.768Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.PublicLongFormPerformanceTests",
+      "tests": "1",
+      "skipped": "1",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:32.426Z"
+    },
+    {
+      "module": "voice04Runtime",
+      "name": "com.jarvis.voice.speed.LongFormTests",
+      "tests": "8",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:31.717Z"
+    },
+    {
+      "module": "voiceSdk",
+      "name": "com.jarvis.voice.sdk.SpeechSessionTest",
+      "tests": "25",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:30.280Z"
+    },
+    {
+      "module": "voiceSdk",
+      "name": "com.jarvis.voice.sdk.ExpressionSpeechAdapterTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T10:49:30.149Z"
+    }
+  ],
+  "note": "Some unchanged suites may be Gradle UP-TO-DATE; optional native tests skipped, public DSP test executed on pinned public WAVs."
+}
