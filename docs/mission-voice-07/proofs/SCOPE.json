@@ -1,0 +1,8 @@
+{
+  "base": "0e9e31553e15cc24b64f9edc8196344cf2b2d5f6",
+  "critical_files_unchanged": true,
+  "frozen_v1_sha256": "cfbdff471ed0403113803a0f4c86ec75c57f723cc828f5af3c13fb3ef8042cf2",
+  "native_generation": "DISABLED",
+  "core_connection_activated": false,
+  "signatures_permissions_jni_changed": false
+}
