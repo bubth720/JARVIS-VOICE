@@ -75,10 +75,12 @@ class Voice04StreamOutput(context: Context,private val cancel: CancellationToken
         val monitor=PlaybackEvidence(submitted,SystemClock.elapsedRealtime())
         val t=requireNotNull(active.get())
         while(true) {
-            checkLive();head=Integer.toUnsignedLong(t.playbackHeadPosition)
-            val phase=monitor.observe(SystemClock.elapsedRealtime(),t.state==AudioTrack.STATE_INITIALIZED,t.playState==AudioTrack.PLAYSTATE_PLAYING,head)
+            checkLive()
+            // health() owns the previous head and lastProgress. Do not overwrite them before comparison.
+            val observedHead=Integer.toUnsignedLong(t.playbackHeadPosition)
+            val phase=monitor.observe(SystemClock.elapsedRealtime(),t.state==AudioTrack.STATE_INITIALIZED,t.playState==AudioTrack.PLAYSTATE_PLAYING,observedHead)
             if(phase!=PlaybackStage.WAITING) trace.first(SpeedPoint.PRESENTATION_ESTIMATED)
-            if(phase==PlaybackStage.COMPLETED) { trace.first(SpeedPoint.PLAYBACK_COMPLETED);snapshot("terminé");return }
+            if(phase==PlaybackStage.COMPLETED) { head=observedHead;trace.first(SpeedPoint.PLAYBACK_COMPLETED);snapshot("terminé");return }
             health();Thread.sleep(5)
         }
     }
