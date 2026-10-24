@@ -30,3 +30,17 @@ object ResourcePolicy {
         return if(mode==ResourceMode.ECO || mode==ResourceMode.AUTO && (thermal>=1 || batteryPercent!=null && batteryPercent<25)) 1000 else 0
     }
 }
+
+/** Exactly the qualified official sampler's choices; UI and runtime share one source. */
+object PocketControls {
+    val steps=listOf(1,2,3,5)
+    val temperatures=listOf(.1,.2,.3,.4,.5,.6)
+    init { steps.forEach { s->temperatures.forEach { t->com.jarvis.voice.pocket.QualitySampling(s,t) } } }
+}
+data class PreparedRenderOptions(val mode: ResourceMode,val steps: Int,val temperature: Double) {
+    init { com.jarvis.voice.pocket.QualitySampling(steps,temperature) }
+    fun requireUi(currentMode: ResourceMode,emotion: Emotion,currentSteps: Int,currentTemperature: Double) {
+        PocketEmotionCapabilities.requireSupported(emotion)
+        require(mode==currentMode && steps==currentSteps && temperature==currentTemperature) { "PREPARE_CHANGED_PARAMETERS" }
+    }
+}

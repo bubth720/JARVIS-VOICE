@@ -1,0 +1,17 @@
+{
+  "sourceCommit": "78c674b38d898e9ac2438bdf5e8cff53ebaf1a52",
+  "run": 40141379610,
+  "unit": "success",
+  "api26": {
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api35": {
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0
+  },
+  "apk": "success",
+  "scope": "Initial implementation; UI correction requires separate qualification and delivery, not a substitute for that correction"
+}

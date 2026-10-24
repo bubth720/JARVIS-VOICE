@@ -30,6 +30,7 @@ class FinalCoordinator(private val context: Context,val controller: StudioContro
     private var profile: VoiceProfile?=null
     private var settings: com.jarvis.voice.studio.StudioSettings?=null
     private var mode=ResourceMode.AUTO
+    @Volatile private var renderOptions: PreparedRenderOptions?=null
     private var frontend: FrenchFrontend?=null
     private var frontendSha: String?=null
     private var lastBinding: String?=null
@@ -60,12 +61,16 @@ class FinalCoordinator(private val context: Context,val controller: StudioContro
             val plan=DocumentPlanner.prepare(text,frontend,c)
             this.frontend=frontend;frontendSha=VoiceIdentityVault.sha(File(controller.pack,"tokenizer.json"),c)
             profile=controller.library.activeConfirmed();settings=controller.state.settings;mode=resource
+            renderOptions=PreparedRenderOptions(resource,controller.state.settings.steps,controller.state.settings.temperature)
             session=DocumentSession(plan,::event)
             report=JSONObject().put("schema","voice-final01/1").put("preflightMs",(System.nanoTime()-begin)/1e6).put("segments",plan.segments.size).put("prepareTotalMs",(System.nanoTime()-preparePressed)/1e6)
                 .put("wordBoundaryCuts",plan.segments.count { it.boundary==Boundary.WORD_LIMIT }).put("humanAudibilityMs",JSONObject.NULL)
             status="${plan.segments.size} segments prévus, chacun ≤50 tokens. ${plan.segments.count { it.boundary==Boundary.WORD_LIMIT }} coupures de limite ; ponctuation normalisée par le frontend officiel. Profil figé jusqu’à nouvelle préparation."
             notifyUi();status
         }
+    }
+    fun requireUiOptions(resource: ResourceMode,emotion: Emotion,steps: Int,temperature: Double) {
+        requireNotNull(renderOptions) { "PREPARE_FIRST" }.requireUi(resource,emotion,steps,temperature)
     }
     fun speak(resume: Boolean=false,recovery: Recovery?=null,comparison: String?=null) {
         val q=requireNotNull(session) { "PREPARE_FIRST" };val p=requireNotNull(profile);val s=requireNotNull(settings)

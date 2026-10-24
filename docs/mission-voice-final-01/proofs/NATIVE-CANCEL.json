@@ -1,0 +1,63 @@
+{
+  "trace": {
+    "schema": "voice04.speed/1",
+    "nativeMemoryReleaseVerified": false,
+    "durationsMs": {
+      "CLOSE_RETURNED": null,
+      "FLOW_SESSION_READY": 31.804963,
+      "DECODER_SESSION_READY": 155.283269,
+      "PLAYBACK_COMPLETED": null,
+      "TOKENIZER_READY": 49.856459,
+      "EOS": null,
+      "PRESENTATION_ESTIMATED": null,
+      "FINISHED": null,
+      "NATIVE_OPEN_STARTED": null,
+      "MAIN_SESSION_READY": 346.72272,
+      "FIRST_WRITE": null,
+      "PRESSED": null,
+      "FIRST_PCM": null,
+      "PACK_VERIFIED": 395.40251,
+      "TEXT_SESSION_READY": 4.276387,
+      "ADMITTED": null
+    },
+    "chunks": 1,
+    "audioCounters": null,
+    "threads": 1,
+    "clock": "monotonic-relative-ms",
+    "audibilityHumanVerified": false,
+    "eventsMs": {
+      "CLOSE_RETURNED": 1707.101858,
+      "FLOW_SESSION_READY": 859.983755,
+      "DECODER_SESSION_READY": 1015.778479,
+      "PLAYBACK_COMPLETED": null,
+      "TOKENIZER_READY": 461.493563,
+      "EOS": null,
+      "PRESENTATION_ESTIMATED": null,
+      "FINISHED": 1707.207134,
+      "NATIVE_OPEN_STARTED": 476.254989,
+      "MAIN_SESSION_READY": 827.662288,
+      "FIRST_WRITE": null,
+      "PRESSED": 0,
+      "FIRST_PCM": 1691.271022,
+      "PACK_VERIFIED": 398.107607,
+      "TEXT_SESSION_READY": 480.487401,
+      "ADMITTED": null
+    },
+    "samples": 7680,
+    "pcmStats": {
+      "clippedPercent": 0,
+      "rms": 0.14968978356716836,
+      "nonFinite": 0,
+      "peak": 0.7310851812362671,
+      "silencePercent": 2.265625,
+      "samples": 7680
+    },
+    "engine": "pocket-french-6l-fp32-observed",
+    "tokens": 0,
+    "pcmSeconds": 0.32,
+    "outcome": "CANCELLED"
+  },
+  "scope": "Linux ONNX cancellation at first PCM; not mid-stall or Xiaomi",
+  "nativeUnloadVerified": false,
+  "audioPlayed": false
+}

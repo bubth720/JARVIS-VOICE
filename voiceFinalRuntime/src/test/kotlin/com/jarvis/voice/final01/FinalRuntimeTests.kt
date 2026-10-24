@@ -62,6 +62,15 @@ class FinalRuntimeTests {
         assertEquals(0,Quantiles.summarize(emptyList()).getInt("n"));assertTrue(Quantiles.summarize(emptyList()).isNull("p95"))
         assertEquals(19.0,Quantiles.summarize((1..20).map(Int::toDouble)).getDouble("p95"),0.0)
     }
+    @Test fun changedUiOptionsNeverSilentlyReuseAnOldSamplerOrUnsupportedEmotion() {
+        PocketControls.steps.forEach { s->PocketControls.temperatures.forEach { t->QualitySampling(s,t) } }
+        val prepared=PreparedRenderOptions(ResourceMode.AUTO,3,.3)
+        prepared.requireUi(ResourceMode.AUTO,Emotion.NEUTRAL,3,.3)
+        assertThrows(IllegalArgumentException::class.java) { prepared.requireUi(ResourceMode.AUTO,Emotion.JOY,3,.3) }
+        assertThrows(IllegalArgumentException::class.java) { prepared.requireUi(ResourceMode.AUTO,Emotion.NEUTRAL,5,.3) }
+        assertThrows(IllegalArgumentException::class.java) { prepared.requireUi(ResourceMode.ECO,Emotion.NEUTRAL,3,.3) }
+        assertThrows(IllegalArgumentException::class.java) { PreparedRenderOptions(ResourceMode.AUTO,3,.7) }
+    }
     @Test fun unsupportedEmotionAndResourceGuardsAreExplicit() {
         assertEquals(EmotionSupport.NATIVE_NEUTRAL,PocketEmotionCapabilities.support(Emotion.NEUTRAL))
         Emotion.entries.filter { it!=Emotion.NEUTRAL }.forEach { assertThrows(IllegalArgumentException::class.java) { PocketEmotionCapabilities.requireSupported(it) } }

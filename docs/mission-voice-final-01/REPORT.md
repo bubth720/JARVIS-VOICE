@@ -10,7 +10,7 @@ Branche `feat/voice-final-01`, base auditée **1a9f713dff28f6e4fb145728815e9ed11
 | B | Jusqu'à 200000 unités UTF16 /4000 segments, <=300 caractères et <=50 tokens par segment ; texte source conservé sans perte, aperçu des coupures ; lecture, pause de frontière, reprise et Arrêt ; interruption ambiguë exige décision explicite | Les plusieurs minutes réelles de parole ne sont pas qualifiées. Aucune continuité annoncée si le producteur est trop lent ; coupure au mot parfois nécessaire et signalée |
 | C | Matrice de toutes les intentions demandées ; seul NEUTRAL accepté ; autres réponses UNSUPPORTED ; alternatives étudiées dans les preuves antérieures | **BLOQUÉ pour émotions acoustiques validées**. Aucune émotion obtenue/écoutée, pas d'effet d'énergie présenté comme émotion |
 | D | Coffre 005H/I/J réutilisé : plusieurs imports MP3 d'une même identité, un par un avec revue/consentement ; profils individuels versionnés, sélection/suppression et archives chiffrées ; nouvelle analyse comparative des références conservées (RMS, silence, clipping, F0 estimée) | Mesures descriptives, pas de preuve biométrique ou de reconnaissance du locuteur. Aucun profil multiréférence fusionné : les 18 caches ne sont pas moyennés. B préservé sans réencodage destructeur |
-| E | Lanceur indépendant : texte saisi/import UTF8 local strict, identité via coffre, sampler1/3/5, température, ÉCO/ÉQUILIBRÉ/AUTO, lecture/réécoute A/B, WAV volontaire, effacement dérivés et compteurs ; restauration paramètres précédents | UI de laboratoire, pas une certification finale de naturel. A/B exige un seul segment et le même contexte ; WAV exporté IEEE float32, cache privé borné |
+| E | Lanceur indépendant : texte saisi/import UTF8 local strict, identité via coffre, sampler1/2/3/5, températures officielles0,1–0,6, ÉCO/ÉQUILIBRÉ/AUTO, lecture/réécoute A/B, WAV volontaire, effacement dérivés et compteurs ; restauration des paramètres précédents (graine, sampler, température, intentions/pauses héritées et mode ressources) | UI de laboratoire, pas une certification finale de naturel. A/B exige un seul segment et le même contexte ; WAV exporté IEEE float32, cache privé borné |
 | F | SDK JVM séparé sans Android/ONNX, événements typés et contrôle local pause/stop ; schéma versionné ; aucun texte/voix/PCM/UUID dans les événements | FIRST_AUDIO = preuve de présentation estimée par AudioTrack, **pas son humain entendu**. Pas d'alignement phonétique, d'ancre avatar inter-apps ou de connexion CORE |
 
 ## Code et préservation
@@ -26,22 +26,22 @@ Les trois profils de ressources conservent un thread ONNX : ÉCO ajoute1000ms en
 
 ## Benchmark réel, pas une mesure Xiaomi
 
-[Résultats bruts publics](proofs/PUBLIC-BENCHMARK.json) : pack officiel FP32 **déjà présent**, Alba publique CC BY4.0 SHA46264e83cb99115c3d210260e029117566d9c64f20266d10daa78107759ede3e. Encodeur officiel exécuté une fois, 2541ms. Deux phrases françaises (train et nombres), cinq répétitions chacune, deux chemins complets alternés AB/BA, graine42/LSD3/temp0,3/CPU1 : **20 générations réellement exécutées**, 10 par chemin. Pas de téléchargement/reconstruction de poids ni d'enregistrement personnel.
+[Résultats bruts publics](proofs/PUBLIC-BENCHMARK.json) : pack officiel FP32 **déjà présent**, Alba publique CC BY4.0 SHA46264e83cb99115c3d210260e029117566d9c64f20266d10daa78107759ede3e. Encodeur officiel de référence exécuté en1875,87ms (une autre création publique pour le test d’annulation est séparée). Deux phrases françaises (train et nombres), cinq répétitions chacune, deux chemins complets alternés AB/BA, graine42/LSD3/temp0,3/CPU1 : **20 générations réellement exécutées**, 10 par chemin. Pas de téléchargement/reconstruction de poids ni d'enregistrement personnel.
 
 | Mesure Linux | VOICE-05 p50 /p95 | FINAL-01 p50 /p95 |
 |---|---:|---:|
-| Ouverture/vérification modèle, ms |943,90 /996,31|942,42 /1122,52|
-| Premier PCM, chargement compris, ms |1574,14 /1654,87|1584,21 /1777,14|
-| Total chargement+génération, ms |3696,02 /8637,01|3838,31 /8494,93|
-| CPU processus, ms |4640 /8640|4150 /8510|
-| RTF (plus petit = plus rapide) |1,349 /1,405|1,316 /1,497|
-| PSS **après** job, Kio |1334345 /1767597|1264413 /1817841|
+|Ouverture/vérification modèle, ms|935.45 /953.79|930.24 /969.27|
+|Premier PCM, chargement compris, ms|1533.89 /1649.41|1529.57 /1625.44|
+|Total chargement+génération/mesures, ms|4008.13 /8311.30|3653.26 /8244.35|
+|CPU processus, ms|4380.00 /8380.00|3980.00 /8260.00|
+|RTF (plus petit = plus rapide)|1.298 /1.583|1.294 /1.386|
+|PSS **après** job, Kio|1482136.00 /2328667.00|1539495.00 /2410783.00|
 
 Quantiles nearest-rank, n=10 par chemin, corpus étroit de deux phrases, JIT/GC/cache OS non neutralisés. P95 exploratoire, pas une garantie statistique. PSS après job n'est pas un pic ; aucune baisse mémoire ou consommation démontrée. Aucun chiffre d'énergie ou thermique Linux inventé. Les 10 paires de PCM sont identiques **bit à bit** ; cela prouve l'absence de changement pour ces fixtures, pas une qualité humaine validée. Aucun audio publié.
 
 **Pas d'accélération nette.** FlowLM et le décodeur PCM dominent le calcul ; l'encodeur texte et la tokenisation sont très courts sur ce corpus. Le tokenizer réutilisé évite une reconstruction légère ; il ne résout pas la production autoregressive. RTF>1 explique l'impossibilité de promettre un flux continu ici. Le différé attend la totalité d'un segment, puis les ouvertures/calculs se répètent : ce sont des sources de délai mesurées sur Linux. La cause précise des >30s sur POCO demeure à profiler sur l'appareil : elle n'est pas déduite d'une extrapolation Cloud.
 
-Planification officielle supplémentaire : **4600 mots,18600 unités,400 segments**, texte brut reconstruit exactement, chacun<=50tokens ;566,74ms Linux. Ce document n'a pas été synthétisé en entier. Les tests logiques sur milliers de mots ne valent pas plusieurs minutes d'écoute.
+Planification officielle supplémentaire : **4600 mots,18600 unités,400 segments**, texte brut reconstruit exactement, chacun<=50tokens ;620.57ms Linux. Ce document n'a pas été synthétisé en entier. Les tests logiques sur milliers de mots ne valent pas plusieurs minutes d'écoute.
 
 Sur Android, les compteurs enregistrent pression→premier PCM et pression→présentation estimée (incluant admission/ouverture), les durées par étape et par segment, PSS échantillonné250ms, CPU processus, batterie/thermique disponibles et p50/p95. Les nombres de valeurs disponibles sont fournis ; absence reste null, pas zéro. L'énergie Android est un compteur grossier, non certifié. Le protocole POCO reste à exécuter après autorisation distincte d'installation.
 
@@ -66,3 +66,13 @@ Tests JVM, builds et lint locaux exécutés ; les comptes finaux et essais API26
 **Mission non terminée.** Lots A/B/D/E/F livrés à des degrés expérimentaux vérifiables ; C bloqué. Cible première parole perceptible<5s sur POCO, plusieurs minutes sans coupures anormales, émotion audible et identité perceptive stable **non atteintes ou non vérifiées**. Aucune installation personnelle ou connexion intermodule effectuée. Prochaine action : revue de cette APK, puis autorisation distincte des essais physiques, relevé des compteurs sur POCO et écoute aveugle. Une étude d'un moteur plus expressif exige aussi accord de téléchargement/qualification séparé et maintien de B intact.
 
 Portée temporelle : les mesures pression→audio partent du bouton Lire, pas du bouton Préparer séparé. `prepareTotalMs` mesure séparément cette préparation. Les quantiles Android et jobs concernent la tentative courante (`metricsCoverThisRunOnly`), pas les tentatives précédentes ou une étude contrôlée répétée. La progression de session reste conservée en RAM lors d’une pause/reprise.
+
+## Limite mémoire relevée dans la qualification native
+
+Le dernier benchmark, au code78c674b, comporte20 générations complètes et une annulation native supplémentaire à la première sortiePCM. Les traces du benchmark sont finalisées COMPLETED ; l’annulation est CANCELLED avec CLOSE_RETURNED observé et sans EOS/lecture ([preuve](proofs/NATIVE-CANCEL.json)). Les deux tests natifs sont réellement exécutés séparément, pas déduits des sauts CI.
+
+La valeur PSS après job de FINAL01 atteint un p95 d’environ2,30Gio dans cette passe Linux ; VOICE05 dépasse aussi2Gio. Ce n’est pas un pic Android et cela varie avec le processus, le GC et les allocateurs. Aucun gain mémoire démontré : risque de refus d’admission, échauffement ou arrêt par manque de mémoire sur longues narrations. Les gardes2Gio disponibles au départ de chaque segment et256Mio en cours ne sont pas diminuées ; elles ne constituent pas une preuve d’absence d’OOM. Pas de reset, GC forcé ou mémoire déclarée libérée pour contourner le problème. Ce risque maintient A et la qualification physique longue de B PARTIAL.
+
+Revue UI avant livraison : les sélecteurs utilisent les plages officielles communes au runtime. Tout changement de mode, émotion ou sampler après préparation exige une nouvelle préparation ; sélectionner une émotion non neutre ne peut pas réutiliser silencieusement un ancien plan neutre. La restauration échange le snapshot complet des réglages sans toucher à l’identité. Une ancienne passe CI au78c674b avait déjà validé7/7 parAPI ; la correction UI exige sa propre qualification avant livraison. Le moteur neuronal et son instrumentation sont inchangés par ce correctif.
+
+Affichage borné : le lanceur affiche une synthèse des compteurs et les dernières étapes, pas le JSON intégral de4000jobs dans un TextView. Le détail reste exportable volontairement, sans texte, voix ou identité. Cela évite une croissance de mise en page proportionnelle à la narration sur le thread UI.

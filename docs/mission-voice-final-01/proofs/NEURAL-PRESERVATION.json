@@ -1,0 +1,10 @@
+{
+  "benchmarkSource": "78c674b38d898e9ac2438bdf5e8cff53ebaf1a52",
+  "unchangedPaths": [
+    "voiceFinalRuntime/build.gradle.kts",
+    "voice04Runtime",
+    "pocketRuntime"
+  ],
+  "stageProfilerAndResourcePolicyPrefixUnchanged": true,
+  "changeScope": "UI controls, complete parameter snapshot restore, frozen prepared-options checks, bounded UI report; no neural or model changes"
+}

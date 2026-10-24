@@ -44,12 +44,12 @@ class FinalActivity: AppCompatActivity() {
         label("Émotion : seul NEUTRAL est réalisable. Les autres choix renvoient UNSUPPORTED.")
         emotion=spinner(Emotion.entries.map { if(it==Emotion.NEUTRAL) "NEUTRAL" else "${it.name} · UNSUPPORTED" })
         label("Sampler officiel : paramètres d’essai, aucun réglage déclaré supérieur.")
-        steps=spinner(listOf("1 étape","3 étapes","5 étapes"));steps.setSelection(listOf(1,3,5).indexOf(c.state.settings.steps).coerceAtLeast(0))
-        temperature=spinner(listOf("0.3","0.5","0.7"));temperature.setSelection(listOf(.3,.5,.7).indexOf(c.state.settings.temperature).coerceAtLeast(0))
+        steps=spinner(PocketControls.steps.map { "$it étapes" });steps.setSelection(PocketControls.steps.indexOf(c.state.settings.steps).coerceAtLeast(0))
+        temperature=spinner(PocketControls.temperatures.map { it.toString() });temperature.setSelection(PocketControls.temperatures.indexOf(c.state.settings.temperature).coerceAtLeast(0))
         button("Préparer le document") {
             val previous=c.state.settings
-            preferences.edit().putInt("previousSteps",previous.steps).putFloat("previousTemperature",previous.temperature.toFloat()).putInt("mode",mode.selectedItemPosition).apply()
-            c.update { it.copy(settings=it.settings.copy(steps=listOf(1,3,5)[steps.selectedItemPosition],temperature=listOf(.3,.5,.7)[temperature.selectedItemPosition])) }
+            preferences.edit().putString("previousSettings",snapshot(previous,preferences.getInt("mode",2)).toString()).putInt("mode",mode.selectedItemPosition).apply()
+            c.update { it.copy(settings=it.settings.copy(steps=PocketControls.steps[steps.selectedItemPosition],temperature=PocketControls.temperatures[temperature.selectedItemPosition])) }
             voice.prepare(text.text.toString(),ResourceMode.entries[mode.selectedItemPosition],Emotion.entries[emotion.selectedItemPosition])
         }
         button("Lire depuis le début préparé") { require(voice.session?.plan?.text==text.text.toString()) { "PREPARE_CHANGED_TEXT" };requirePlanText();voice.speak() }
@@ -70,14 +70,23 @@ class FinalActivity: AppCompatActivity() {
         button("Analyser les références de la voix sélectionnée") { voice.analyzeReferences() }
         button("Exporter les compteurs sans texte, voix ou identifiant") { choose(702,"application/json",true) }
         button("Restaurer les paramètres précédents") {
-            val old=c.state.settings
-            c.update { it.copy(settings=it.settings.copy(steps=preferences.getInt("previousSteps",1),temperature=preferences.getFloat("previousTemperature",.3f).toDouble().let { t->listOf(.3,.5,.7).minBy { kotlin.math.abs(it-t) } })) }
-            preferences.edit().putInt("previousSteps",old.steps).putFloat("previousTemperature",old.temperature.toFloat()).apply()
-            steps.setSelection(listOf(1,3,5).indexOf(c.state.settings.steps));temperature.setSelection(listOf(.3,.5,.7).indexOf(c.state.settings.temperature));refresh()
+            val old=c.state.settings;val oldMode=mode.selectedItemPosition
+            val saved=org.json.JSONObject(preferences.getString("previousSettings",null) ?: snapshot(old,oldMode).toString())
+            val restored=com.jarvis.voice.studio.StudioSettings(seed=saved.getLong("seed"),steps=saved.getInt("steps"),temperature=saved.getDouble("temperature"),
+                intent=com.jarvis.voice.expression.VoiceExpressionIntent.valueOf(saved.getString("intent")),pauses=saved.getBoolean("pauses"),pauseMs=saved.getInt("pauseMs"))
+            val restoredMode=saved.getInt("mode");require(restoredMode in ResourceMode.entries.indices)
+            c.update { it.copy(settings=restored) }
+            preferences.edit().putString("previousSettings",snapshot(old,oldMode).toString()).putInt("mode",restoredMode).apply()
+            steps.setSelection(PocketControls.steps.indexOf(restored.steps));temperature.setSelection(PocketControls.temperatures.indexOf(restored.temperature));mode.setSelection(restoredMode);refresh()
         }
         status=TextView(this).apply { setPadding(0,24,0,24);col.addView(this) };refresh()
     }
-    private fun requirePlanText() { require(voice.session?.plan?.text==text.text.toString()) { "PREPARE_CHANGED_TEXT" } }
+    private fun snapshot(s: com.jarvis.voice.studio.StudioSettings,resource: Int)=org.json.JSONObject().put("seed",s.seed).put("steps",s.steps).put("temperature",s.temperature)
+        .put("intent",s.intent.name).put("pauses",s.pauses).put("pauseMs",s.pauseMs).put("mode",resource)
+    private fun requirePlanText() {
+        require(voice.session?.plan?.text==text.text.toString()) { "PREPARE_CHANGED_TEXT" }
+        voice.requireUiOptions(ResourceMode.entries[mode.selectedItemPosition],Emotion.entries[emotion.selectedItemPosition],PocketControls.steps[steps.selectedItemPosition],PocketControls.temperatures[temperature.selectedItemPosition])
+    }
     private fun confirm(message: String,action: ()->Unit) { androidx.appcompat.app.AlertDialog.Builder(this).setMessage(message).setNegativeButton("Annuler",null).setPositiveButton("Confirmer") { _,_->guard(action) }.show() }
     private fun choose(code: Int,mime: String,create: Boolean) {
         check(!c.busy);startActivityForResult(Intent(if(create) Intent.ACTION_CREATE_DOCUMENT else Intent.ACTION_OPEN_DOCUMENT).apply { type=mime;addCategory(Intent.CATEGORY_OPENABLE);if(create) putExtra(Intent.EXTRA_TITLE,if(code==701) "ATHENA-rendu-$side.wav" else "ATHENA-compteurs.json") },code)
@@ -101,7 +110,11 @@ class FinalActivity: AppCompatActivity() {
             }
         }
     }
-    private fun refresh() { if(!::status.isInitialized) return;status.text=voice.status+"\n"+c.message+"\n"+c.metrics+"\n"+voice.report.toString(2);idleButtons.forEach { it.isEnabled=!c.busy };text.isEnabled=!c.busy;steps.isEnabled=!c.busy;temperature.isEnabled=!c.busy;mode.isEnabled=!c.busy;emotion.isEnabled=!c.busy }
+    private fun refresh() { if(!::status.isInitialized) return;val report=voice.report;val summary=org.json.JSONObject()
+        listOf("schema","segments","wordBoundaryCuts","prepareTotalMs","completed","skipped","state","runElapsedFromPressMs","pressedToFirstPcmMs","pressedToPresentationEstimatedMs","quantiles").forEach { key->if(report.has(key)) summary.put(key,report.opt(key)) }
+        val jobs=report.optJSONArray("jobs");summary.put("recordedJobsThisRun",jobs?.length() ?: 0)
+        if(jobs!=null && jobs.length()>0) summary.put("lastStagesMs",jobs.optJSONObject(jobs.length()-1)?.optJSONObject("stagesMs"))
+        status.text=voice.status+"\n"+c.message+"\n"+c.metrics+"\n"+summary.toString(2)+"\nDétail complet disponible par export volontaire des compteurs.";idleButtons.forEach { it.isEnabled=!c.busy };text.isEnabled=!c.busy;steps.isEnabled=!c.busy;temperature.isEnabled=!c.busy;mode.isEnabled=!c.busy;emotion.isEnabled=!c.busy }
     override fun onStart() { super.onStart();voice.listener={refresh()};c.observe(this) { refresh() };refresh() }
     override fun onStop() { if(!isChangingConfigurations) voice.stop();voice.listener=null;c.unobserve(this);super.onStop() }
 }
