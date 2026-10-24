@@ -15,10 +15,12 @@ class ProgressiveFailure(val afterStart: Boolean,cause: Throwable): IllegalState
 
 /** Experimental job <=20s. Gate measures producer throughput before the first sound, not a Xiaomi promise. */
 class ProgressiveJob(private val cancel: CancellationToken,private val output: ()->ProgressiveOutput,
-    val preload: Int=48000,private val devicePermitted: Boolean=true,private val clock: ()->Long=System::nanoTime) : AutoCloseable {
-    private val ring=BoundedPcmPipe()
-    private val pcm=FloatArray(480000)
+    val preload: Int=48000,private val devicePermitted: Boolean=true,private val pool: PcmBufferPool?=null,private val clock: ()->Long=System::nanoTime) : AutoCloseable {
+    private val captureLease=pool?.borrow(480000)
+    private val pcm=captureLease?.buffer ?: FloatArray(480000)
+    private val ring=try { BoundedPcmPipe(pool=pool) } catch(t: Throwable) { captureLease?.close();throw t }
     private var count=0
+    @Volatile private var finalized=false
     private val began=clock();private var previous=began;private var maxGapNs=0L
     private val failure=AtomicReference<Throwable?>()
     private val active=AtomicReference<ProgressiveOutput?>()
@@ -30,7 +32,7 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
     val peakQueuedSamples get()=ring.peak
     init { require(preload in setOf(24000,48000)) }
     fun offer(block: FloatArray) {
-        throwIfFailed();cancel.check()
+        check(!finalized) { "JOB_ALREADY_FINISHED" };throwIfFailed();cancel.check()
         require(block.isNotEmpty() && block.all { it.isFinite() }) { "INVALID_PCM" }
         require(block.size<=480000-count) { "JOB_PCM_LIMIT" }
         block.copyInto(pcm,count);count+=block.size
@@ -41,7 +43,7 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
             if(!canStream) mode=ProgressiveMode.DEFERRED
             else {
                 mode=ProgressiveMode.STREAM
-                ring.offer(pcm.copyOf(count),cancel)
+                ring.offer(pcm,count,cancel)
                 consumer=Thread({ consume() },"voice04-audio").apply { start() }
             }
         } else if(mode==ProgressiveMode.STREAM) ring.offer(block,cancel)
@@ -64,7 +66,9 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
     }
     /** Call only after reliable EOS and native engine closure. Never falls back after stream selection. */
     fun throwIfFailed() { failure.get()?.let { if(it !is java.util.concurrent.CancellationException) throw ProgressiveFailure(started,it) } }
-    fun finish(eos: Boolean): FloatArray {
+    fun finish(eos: Boolean): FloatArray = finishInto(eos) { data,size,_ -> data.copyOf(size) }
+    @Synchronized fun <T> finishInto(eos: Boolean,consume: (FloatArray,Int,ProgressiveMode)->T): T {
+        check(!finalized) { "JOB_ALREADY_FINISHED" };finalized=true
         throwIfFailed()
         require(eos && count>0) { "UNRELIABLE_EOS" }
         if(mode==ProgressiveMode.UNDECIDED) mode=ProgressiveMode.DEFERRED
@@ -73,7 +77,7 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
             failure.get()?.let { throw ProgressiveFailure(started,it) }
             cancel.check();check(completed) { "STREAM_NOT_COMPLETED" }
         }
-        cancel.check();return pcm.copyOf(count)
+        cancel.check();return consume(pcm,count,mode)
     }
     private fun awaitConsumer() {
         val thread=consumer ?: return
@@ -87,6 +91,6 @@ class ProgressiveJob(private val cancel: CancellationToken,private val output: (
     fun stop() { cancel.cancel();ring.close();active.get()?.stop() }
     override fun close() {
         ring.close()
-        try { if(consumer?.isAlive==true) { stop();awaitConsumer() } } finally { pcm.fill(0f) }
+        try { if(consumer?.isAlive==true) { stop();awaitConsumer() } } finally { if(closeUnknown) pool?.close();pcm.fill(0f);captureLease?.close() }
     }
 }

@@ -136,7 +136,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun editLong(text: String,manual: Boolean=longManual) {
         require(!busy)
         if(text!=longDraft || manual!=longManual) {
-            longCursor=null;longProfile=null;longSettings=null;longPreview="Texte modifié : prévisualiser tous les segments avant lecture."
+            narrativeQueue=null;comparisonPlan=null;comparisonA=null;longCursor=null;longProfile=null;longSettings=null;longPreview="Texte modifié : prévisualiser tous les segments avant lecture."
             require(text.length<=1800) { "LONGFORM_INPUT_LIMIT" };longDraft=text;longManual=manual
         }
     }
@@ -181,6 +181,101 @@ class StudioController(private val context: Context,private val backend: StudioB
                 diagnostics=longPreview+"\nJobs terminés : ${cursor.completedJobs}. Reprise uniquement explicite ; le job interrompu sera repris depuis son début."
             }
         }
+    }
+    private val narrativePool=PcmBufferPool()
+    private var narrativeScheduler=FirstAudioScheduler()
+    @Volatile var narrativeQueue: NarrativeQueue?=null;private set
+    private var narrativeProfile: VoiceProfile?=null
+    private var narrativeSettings: StudioSettings?=null
+    private var comparisonPlan: LongFormPlan?=null
+    private var comparisonA: JSONObject?=null
+    @Volatile var narrativeMode=SafePlaybackMode.DEFERRED;private set
+    @Volatile var narrativeStatus="VOICE-05 : préparer un plan avant lecture.";private set
+    fun narrativePolicy(mode: SafePlaybackMode) { check(!busy);narrativeMode=mode;notice("VOICE-05 : $mode. API26–30 reste différé ; aucune qualité réduite.") }
+    fun pauseNarrative() { notice(if(narrativeQueue?.requestPause()==true) "Pause demandée après la phrase en cours ; Arrêt reste immédiat." else "Aucune narration en cours.") }
+    fun prepareNarrative(text: String,manual: Boolean) {
+        editLong(text,manual);narrativeQueue=null;comparisonPlan=null;comparisonA=null
+        run("VOICE-05 : préflight de toutes les phrases…") { c ->
+            ExperimentalModelPack.verify(pack,c::isCancelled)
+            narrativeScheduler.beginSession()
+            val started=System.nanoTime()
+            val f=narrativeScheduler.frontend(VoiceIdentityVault.sha(File(pack,"tokenizer.json"),c)) { FrenchFrontend(JSONObject(File(pack,"tokenizer.json").readText())) }
+            val plan=SentencePreflight.prepare(LongFormSpeechRequestV1(text,manual),f)
+            narrativeProfile=library.activeConfirmed();narrativeSettings=state.settings;narrativeQueue=NarrativeQueue(plan)
+            narrativeStatus="${plan.segments.size} phrases / ${plan.tokens} tokens ; préflight ${(System.nanoTime()-started)/1000000} ms après vérification pack.\n"+
+                plan.segments.mapIndexed { n,seg -> "${n+1}: ${seg.tokens} tokens" }.joinToString(" ; ")+"\n${state.settings.sampling().label()} ; graine ${state.settings.seed}. Pas de modèle préchargé."
+            narrativeStatus
+        }
+    }
+    fun compareNarrative(side: String) {
+        require(side in setOf("A","B"));check(!busy)
+        val q=requireNotNull(narrativeQueue);val p=requireNotNull(narrativeProfile)
+        require(library.activeConfirmed()==p)
+        if(side=="A") { comparisonPlan=q.plan;comparisonA=null }
+        else require(comparisonPlan===q.plan && comparisonA!=null) { "Terminer A avec ce même plan et profil avant B." }
+        narrativeQueue=NarrativeQueue(q.plan)
+        speakNarrative(false,if(side=="A") SafePlaybackMode.DEFERRED else narrativeMode,side)
+    }
+    fun speakNarrative(resume: Boolean=false,mode: SafePlaybackMode=narrativeMode,comparison: String?=null) {
+        val q=requireNotNull(narrativeQueue);val p=requireNotNull(narrativeProfile);val settings=requireNotNull(narrativeSettings)
+        val reports=org.json.JSONArray();val press=System.nanoTime()
+        run("VOICE-05 : narration $mode…",true) { c ->
+            try {
+                q.run(c,resume) { index,segment ->
+                    admission();require(library.activeConfirmed()==p)
+                    val decision=narrativeScheduler.decision(mode,android.os.Build.VERSION.SDK_INT)
+                    val trace=SpeedTrace();trace.first(SpeedPoint.ADMITTED);trace.tokens(segment.tokens);speedTrace=trace
+                    narrativeStatus="Phrase ${index+1}/${q.plan.segments.size} ; terminées ${q.completedJobs} ; ${decision.reason}. Premier son humain non observé.";diagnostics=narrativeStatus;message=narrativeStatus;emit()
+                    try {
+                        val voice=vault.binding().resolve(p.identityId,p.id,c)
+                        if(decision.mayProbeStream) {
+                            var job: ProgressiveJob?=null
+                            try {
+                                val m=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine ->
+                                    job=ProgressiveJob(c,{Voice04StreamOutput(context,c,trace) { detail->diagnostics=narrativeStatus+"\n"+detail;emit() }},pool=narrativePool)
+                                    progressiveJob.set(job);engine.generate(segment.text,c,settings.seed,true) { job!!.offer(it) }
+                                }
+                                narrativeScheduler.produced(m.computeMs,m.audioSeconds)
+                                job!!.finishInto(m.eosReached) { data,count,actual ->
+                                    if(actual==ProgressiveMode.DEFERRED) playPrefix(data,count,c,trace)
+                                    narrativeStatus+=" ; sortie $actual ; file ${job!!.peakQueuedSamples} samples"
+                                }
+                            } catch(t: Throwable) { job?.throwIfFailed();throw t }
+                            finally { try { job?.close() } finally { if(job?.closeUnknown==true) { narrativePool.close();speedQuarantined=true };progressiveJob.set(null) } }
+                        } else {
+                            PooledPcmCapture(narrativePool).use { capture ->
+                                val m=ObservedQualityEngine(pack,voice,loadCancel=c,sampling=settings.sampling(),trace=trace).use { engine -> engine.generate(segment.text,c,settings.seed,true,capture::append) }
+                                narrativeScheduler.produced(m.computeMs,m.audioSeconds)
+                                capture.present(m.eosReached) { data,count->playPrefix(data,count,c,trace) }
+                            }
+                        }
+                        c.check();check(trace.has(SpeedPoint.CLOSE_RETURNED) && trace.has(SpeedPoint.PLAYBACK_COMPLETED));trace.finish("COMPLETED")
+                    } catch(t: Throwable) {
+                        speedInterrupted=trace.has(SpeedPoint.PRESENTATION_ESTIMATED)
+                        trace.finish(if(speedInterrupted) "INCOMPLETE" else if(c.isCancelled()) "CANCELLED" else "FAILED")
+                        if(speedQuarantined || trace.has(SpeedPoint.NATIVE_OPEN_STARTED) && !trace.has(SpeedPoint.CLOSE_RETURNED)) {
+                            speedQuarantined=true;narrativePool.close();throw UnknownNarrativeNative()
+                        }
+                        throw t
+                    } finally { reports.put(narrativeScheduler.report(trace,decision));speedTrace=null }
+                }
+                narrativeStatus="${q.state} : ${q.completedJobs}/${q.plan.segments.size} phrases présentées ; écoute humaine à confirmer."
+                if(comparison=="A" && q.state==NarrativeState.COMPLETED) comparisonA=JSONObject().put("mode","DEFERRED").put("elapsedMs",(System.nanoTime()-press)/1e6)
+                narrativeStatus
+            } finally {
+                speedReport=JSONObject().put("schema","voice05.narrative/1").put("state",q.state.name).put("completedJobs",q.completedJobs).put("jobs",reports)
+                    .put("mode",mode.name).put("elapsedMs",(System.nanoTime()-press)/1e6).put("poolArrayCreations",narrativePool.arrayCreations).put("poolBorrows",narrativePool.borrows)
+                    .put("deviceCounters",measure?.json() ?: JSONObject.NULL).put("comparisonSide",comparison ?: JSONObject.NULL).put("comparisonA",comparisonA ?: JSONObject.NULL)
+                diagnostics=narrativeStatus+"\n"+q.state+" ; aucun temps audible humain inventé."
+            }
+        }
+    }
+    private fun playPrefix(pcm: FloatArray,count: Int,c: CancellationToken,trace: SpeedTrace) {
+        check(!speedQuarantined && !sdkSessions.isQuarantined)
+        val audio=PcmPlayer(context,c,{ detail->diagnostics=narrativeStatus+"\n"+detail;emit() },{message=narrativeStatus+" ; lecture commencée — présentation estimée.";emit()},speed=trace)
+        player.set(audio)
+        try { audio.write(pcm,count);audio.drain();check(audio.completed && audio.submitted==count.toLong()) }
+        finally { try { audio.close() } catch(t: Throwable) { speedQuarantined=true;narrativePool.close();throw t } finally { player.compareAndSet(audio,null) } }
     }
     val pack get()=File(root,"models/fp32")
     val source get()=File(root,"wizard-source.private")

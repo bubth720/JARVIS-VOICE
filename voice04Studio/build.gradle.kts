@@ -11,15 +11,17 @@ val sharedStudio by tasks.registering(Sync::class) {
     into(layout.buildDirectory.dir("generated/sharedStudio"))
 }
 tasks.matching { it.name == "preBuild" }.configureEach { dependsOn(sharedStudio) }
+val voiceLab=providers.gradleProperty("voiceLab").getOrElse("04").also { require(it in setOf("04","05","06","07")) }
 android {
     namespace = "com.jarvis.voice.voicestudio"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.jarvis.voice.studio.voice04"
+        applicationId = "com.jarvis.voice.studio.voice$voiceLab"
+        manifestPlaceholders["voiceLabLabel"]="JARVIS VOICE-$voiceLab · Laboratoire"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.1.0-voice04-laboratory"
+        versionName = "0.1.0-voice$voiceLab-laboratory"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk { abiFilters += providers.gradleProperty("prototypeTestAbi").getOrElse("arm64-v8a") }
     }

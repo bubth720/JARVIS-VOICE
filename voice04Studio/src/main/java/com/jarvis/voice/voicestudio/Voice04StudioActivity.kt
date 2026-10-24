@@ -57,7 +57,7 @@ class StudioActivity: AppCompatActivity() {
             StudioScreen.ADVANCED->AdvancedScreen(this).view()
         }
         val frame=findViewById<FrameLayout>(R.id.content);frame.removeAllViews();frame.addView(content,FrameLayout.LayoutParams(if(resources.configuration.screenWidthDp>=720) ui.dp(720) else -1,-1,Gravity.CENTER))
-        fun enabled(v: View) { v.isEnabled=!controller.busy;if(v is ViewGroup) for(i in 0 until v.childCount) enabled(v.getChildAt(i)) }
+        fun enabled(v: View) { v.isEnabled=if(v.tag=="voice05-pause") controller.busy else !controller.busy;if(v is ViewGroup) for(i in 0 until v.childCount) enabled(v.getChildAt(i)) }
         if(controller.busy) enabled(content)
         val nav=findViewById<BottomNavigationView>(R.id.navigation)
         val id=when(controller.state.screen) { StudioScreen.VOICES->R.id.voices;StudioScreen.CREATE->R.id.create;else->R.id.speak }
