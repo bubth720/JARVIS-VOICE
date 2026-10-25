@@ -1,0 +1,45 @@
+{
+  "schema": "voice-final01.private-component-quantization/1",
+  "sourceSha256": "5772f23044581fb635ad6ba484d39b6ee4d1e2452902fda58eaab8f49d9e7c7e",
+  "sourceBytes": 39091998,
+  "candidateBytes": 9953412,
+  "conversionMs": 225.9240380008123,
+  "ortVersion": "1.27.0",
+  "threads": 1,
+  "provider": "CPUExecutionProvider",
+  "syntheticCases": 44,
+  "warmupCases": 4,
+  "schedule": "LSD1/2/3/5 interval samples; synthetic Gaussian conditioning/noise, not a real voice",
+  "component": "flow_lm_flow_fp32 / flow_dir only",
+  "maxAbsError": 0.8677963018417358,
+  "relativeL2": {
+    "n": 44,
+    "p50": 0.07878246105138288,
+    "p95": 0.1524996297751147,
+    "method": "nearest-rank"
+  },
+  "bitExact": false,
+  "directionRunMs": {
+    "FP32": {
+      "n": 40,
+      "p50": 1.7646169944782741,
+      "p95": 2.0891569947707467,
+      "method": "nearest-rank"
+    },
+    "DYNAMIC_INT8_COMPONENT": {
+      "n": 40,
+      "p50": 0.7845990039641038,
+      "p95": 0.9566139997332357,
+      "method": "nearest-rank"
+    }
+  },
+  "quantizedMatmulNodes": 26,
+  "originalUnchanged": true,
+  "androidPackProduced": false,
+  "weightsPublished": false,
+  "humanListening": false,
+  "fullGenerationTested": false,
+  "phoneticOrIdentityQualityMeasured": false,
+  "decision": "NOT_QUALIFIED_FOR_INTEGRATION",
+  "acceptanceThreshold": "None introduced; component differences do not validate acoustic quality"
+}

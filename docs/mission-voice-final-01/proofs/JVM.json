@@ -1,0 +1,35 @@
+{
+  "scope": "Local UI correction qualification; public native tests executed separately, skipped here without explicit model environment",
+  "suites": [
+    {
+      "module": "voiceFinalSdk",
+      "name": "com.jarvis.voice.final01.VoiceEventTests",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T23:05:39.822Z",
+      "time": "0.053"
+    },
+    {
+      "module": "voiceFinalRuntime",
+      "name": "com.jarvis.voice.final01.FinalRuntimeTests",
+      "tests": "13",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T23:16:40.770Z",
+      "time": "1.544"
+    },
+    {
+      "module": "voiceFinalRuntime",
+      "name": "com.jarvis.voice.final01.FinalPublicBenchmarkTest",
+      "tests": "2",
+      "skipped": "2",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-24T23:16:40.750Z",
+      "time": "0.01"
+    }
+  ]
+}

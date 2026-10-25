@@ -1,0 +1,10 @@
+{
+  "sourceCommit": "78c674b38d898e9ac2438bdf5e8cff53ebaf1a52",
+  "scope": "Separate actual Linux ONNX test pass, existing official pack/public Alba; no Android/human claim",
+  "tests": "2",
+  "skipped": "0",
+  "failures": "0",
+  "errors": "0",
+  "timestamp": "2026-10-24T23:07:10.488Z",
+  "time": "122.848"
+}

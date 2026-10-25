@@ -1,0 +1,110 @@
+{
+  "sourceCommit": "a59a9c5a6e95cdd645ad09661b6172e98af5323c",
+  "run": 40143704689,
+  "jobs": [
+    {
+      "id": 121020543874,
+      "name": "unit",
+      "conclusion": "success"
+    },
+    {
+      "id": 121020917498,
+      "name": "audio (26)",
+      "conclusion": "success"
+    },
+    {
+      "id": 121020917521,
+      "name": "audio (35)",
+      "conclusion": "success"
+    },
+    {
+      "id": 121021606937,
+      "name": "apk",
+      "conclusion": "success"
+    }
+  ],
+  "newJvm": {
+    "passed": 16,
+    "skippedNativeInCi": 2,
+    "failures": 0
+  },
+  "audio": [
+    {
+      "api": 26,
+      "passed": 8,
+      "skipped": 0,
+      "marker": [
+        "2026-10-24T23:46:10.8729251Z FINAL01_ANDROID_8_TESTS_PASSED"
+      ]
+    },
+    {
+      "api": 35,
+      "passed": 8,
+      "skipped": 0,
+      "marker": [
+        "2026-10-24T23:45:49.3033819Z FINAL01_ANDROID_8_TESTS_PASSED"
+      ]
+    }
+  ],
+  "apkAudit": {
+    "apkSha256": "b5d0eeea02cc146b82324b9c23d0346d22b0af13618b991052f350fa7fb855db",
+    "apkBytes": 34320499,
+    "applicationId": "com.jarvis.voice.studio.final01",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "53fccc6c4a17f9af284b4e93b2ff17660610b8bc2a3ebb50a5c90c4938e4c52a",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "artifacts": [
+    {
+      "id": 12580125652,
+      "name": "voice-final01-jvm-reports",
+      "bytes": 159508,
+      "digest": "sha256:7886b042497c3325b5053f21898bd23c8736e33b670ccdaf09184312febd2efa",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40143704689/artifacts/12580125652"
+    },
+    {
+      "id": 12579668251,
+      "name": "jarvis-voice-final01-independent-laboratory-apk",
+      "bytes": 15996429,
+      "digest": "sha256:37494f40e21f3c2124eb22f09a14fc12bcd648d1ca6d8f69bdd704c3f6b08662",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40143704689/artifacts/12579668251"
+    },
+    {
+      "id": 12579603287,
+      "name": "voice-final01-audio-api26",
+      "bytes": 698,
+      "digest": "sha256:7580793ea1fd1fa380430a37f3cac417895ae4456518bded744a3ba2d6cd29e2",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40143704689/artifacts/12579603287"
+    },
+    {
+      "id": 12579364463,
+      "name": "voice-final01-audio-api35",
+      "bytes": 728,
+      "digest": "sha256:b99b96bb19b2ad42974a1ebc2965168c52985610902096054b1c2d0800900d1f",
+      "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40143704689/artifacts/12579364463"
+    }
+  ],
+  "scope": "Decoded logs and provider artifact metadata, not an independently parsed CI ZIP. Synthetic AudioTrack on emulators, no model in Android CI, no physical POCO/human audibility claims.",
+  "nativeTests": "Two actual Linux ONNX tests separately executed at unchanged neural source; see NATIVE-TESTS and NEURAL-PRESERVATION."
+}
