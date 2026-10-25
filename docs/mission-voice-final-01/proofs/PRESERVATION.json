@@ -1,6 +1,6 @@
 {
   "base": "1a9f713dff28f6e4fb145728815e9ed118f5a929",
-  "all_original_tracked_files_unchanged": true,
+  "all_original_files_except_settings_unchanged": true,
   "only_original_configuration_change": "append three independent modules",
   "jni_permissions_signatures_contracts_unchanged": true,
   "personal_audio_or_weights_added": false

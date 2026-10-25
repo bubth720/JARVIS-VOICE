@@ -1,0 +1,107 @@
+{
+  "sourceCommit": "a59a9c5a6e95cdd645ad09661b6172e98af5323c",
+  "workflows": [
+    {
+      "run": 40143704707,
+      "name": "VOICE SDK and expression styles",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537355,
+          "failedSteps": [
+            "Preserve engines, packs, identities, historical app and bridge"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40143704702,
+      "name": "VOICE Binder V1 — isolated public fixtures",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537467,
+          "failedSteps": [
+            "Run python scripts/bridge/verify_pilot_scope.py"
+          ]
+        },
+        {
+          "id": 121020537641,
+          "failedSteps": [
+            "Run python scripts/bridge/verify_pilot_scope.py"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40143704724,
+      "name": "Voice Bridge 005K contracts only",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537573,
+          "failedSteps": [
+            "Prove historical applications and inactive transport preserved"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40143704723,
+      "name": "Voice Expression 005I",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537493,
+          "failedSteps": [
+            "Verify preservation of functional applications and model bindings"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40143704648,
+      "name": "Pocket Probe",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537618,
+          "failedSteps": [
+            "Run reactivecircus/android-emulator-runner@v2"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40143704741,
+      "name": "Voice Identity 005H",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537891,
+          "failedSteps": [
+            "Verify preservation of functional applications and model bindings"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40143704762,
+      "name": "Voice Studio 005J",
+      "conclusion": "failure",
+      "failedJobs": [
+        {
+          "id": 121020537535,
+          "failedSteps": [
+            "Verify preservation of functional applications and model bindings"
+          ]
+        }
+      ]
+    }
+  ],
+  "probeFailure": [
+    "2026-10-24T23:43:29.7003337Z com.jarvis.voice.pocketprobe.DeviceAudioTests > testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns[emulator-5554 - 15] \u001b[31mFAILED \u001b[0m",
+    "2026-10-24T23:43:29.7006960Z \tjava.lang.AssertionError: AudioTrack [count=1 frames=72000 submitted=72000] expected:<0> but was:<1>"
+  ],
+  "interpretation": "Six historical scope/preservation gates failed; separate unchanged Pocket Probe audio test has one underrun where zero is asserted. These workflows are not declared green; no historical assertion changed."
+}

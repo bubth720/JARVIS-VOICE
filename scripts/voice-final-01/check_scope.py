@@ -9,4 +9,4 @@ added=subprocess.check_output(['git','diff','--name-only','--diff-filter=A',BASE
 allowed=('voiceFinalSdk/','voiceFinalRuntime/','voiceFinalStudio/','docs/mission-voice-final-01/','scripts/voice-final-01/','.github/workflows/voice-final-01.yml')
 assert all(p.startswith(allowed) for p in added)
 assert not any(p.lower().endswith(('.wav','.mp3','.onnx','.safetensors','.jks','.keystore')) for p in added)
-print(json.dumps({'base':BASE,'all_original_tracked_files_unchanged':True,'only_original_configuration_change':'append three independent modules','jni_permissions_signatures_contracts_unchanged':True,'personal_audio_or_weights_added':False},indent=2))
+print(json.dumps({'base':BASE,'all_original_files_except_settings_unchanged':True,'only_original_configuration_change':'append three independent modules','jni_permissions_signatures_contracts_unchanged':True,'personal_audio_or_weights_added':False},indent=2))

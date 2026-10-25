@@ -6,5 +6,5 @@
     "pocketRuntime"
   ],
   "stageProfilerAndResourcePolicyPrefixUnchanged": true,
-  "changeScope": "UI controls, complete parameter snapshot restore, frozen prepared-options checks, bounded UI report; no neural or model changes"
+  "changeScope": "UI controls, complete parameter snapshot restore, frozen prepared-options checks, bounded UI report and RAM-only Activity draft; no neural or model changes"
 }
