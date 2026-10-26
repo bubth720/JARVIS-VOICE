@@ -1,0 +1,99 @@
+{
+  "repository": "bubth720/JARVIS-SERVICES",
+  "sha": "51da6fa26ec64e873fa50c0c29407a5acba37f98",
+  "run": 40287588184,
+  "jobs": [
+    {
+      "id": 121454808081,
+      "name": "jvm",
+      "conclusion": "success",
+      "failedSteps": []
+    },
+    {
+      "id": 121454808210,
+      "name": "services-port-instrumented (24, x86)",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Real SDK ports and SAF laboratory (not production activation)"
+      ]
+    },
+    {
+      "id": 121454808257,
+      "name": "android-instrumented",
+      "conclusion": "success",
+      "failedSteps": []
+    },
+    {
+      "id": 121454808296,
+      "name": "services-port-instrumented (25, x86)",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Real SDK ports and SAF laboratory (not production activation)"
+      ]
+    },
+    {
+      "id": 121454808297,
+      "name": "services-port-instrumented (26, x86)",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Real SDK ports and SAF laboratory (not production activation)"
+      ]
+    },
+    {
+      "id": 121454808321,
+      "name": "android-build",
+      "conclusion": "success",
+      "failedSteps": []
+    },
+    {
+      "id": 121454808331,
+      "name": "services-port-instrumented (35, x86_64)",
+      "conclusion": "failure",
+      "failedSteps": [
+        "Real SDK ports and SAF laboratory (not production activation)"
+      ]
+    }
+  ],
+  "api24Excerpt": [
+    "2026-10-26T07:48:58.5302808Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > revokeAtBarrierBeforeCommitHasNoEffect[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:48:58.5304150Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:49:15.8297961Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > deceptiveAckUnknownAndNoRetryAfterReopen[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:49:15.8298682Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:49:33.0300933Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > maliciousUriAndProviderDenialHaveNoEffect[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:49:33.0302166Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:49:50.3298511Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > realTxtAndTwoPagePdfViaPort[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:49:50.3299218Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:50:07.7298481Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > revokeAfterCommitReportsCommittedRatherThanRollback[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:50:07.7299202Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:50:24.9298390Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > lostAuthorityAckIsUnknownEvenWhenBytesCommitted[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:50:24.9299628Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:50:42.2298542Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > csvRealSafExportExactSumAndOriginalIntact[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:50:42.2299252Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:50:59.7298224Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > docxNoConsentNoCreationThenConfirmedReadback[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:50:59.7298939Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:51:17.0298713Z fr.jarvis.services.android.adapter.FusionSafInstrumentedTest > cancellationAndSecondWorkerRefused[emulator-5554 - 7.0] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:51:17.0299907Z \tjava.lang.AssertionError: SAF selection; UI=Show roots;FUSION fixtures;Grid view;Sort by;More options;sample.pdf;7:48 AM;source.csv;7:48 AM;source.txt;7:48 AM;template.docx;7:48 AM;",
+    "2026-10-26T07:51:20.9321261Z > Task :services-android-adapter:connectedDebugAndroidTest FAILED",
+    "2026-10-26T07:51:21.0559829Z FAILURE: Build failed with an exception.",
+    "2026-10-26T07:51:21.0632258Z * What went wrong:",
+    "2026-10-26T07:51:21.0859911Z BUILD FAILED in 4m 59s"
+  ],
+  "api35Excerpt": [
+    "2026-10-26T07:46:03.3371232Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:05.3446312Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:07.3529025Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:09.3609842Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:11.3689215Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:13.3772236Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:15.3857667Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:17.3944930Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:19.4027899Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:46:21.4113545Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1",
+    "2026-10-26T07:52:29.2122439Z INFO         | Increasing screen off timeout, logcat buffer size to 2M.",
+    "2026-10-26T07:52:35.9070978Z WARNING      | adb command '/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'cmd: Failure calling service settings: Broken pipe (32)'",
+    "2026-10-26T07:52:36.6914224Z cmd: Failure calling service input: Broken pipe (32)",
+    "2026-10-26T07:52:36.7010057Z ##[error]The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 224",
+    "2026-10-26T07:52:37.4463300Z ERROR        | stop: Not implemented"
+  ],
+  "interpretation": "API24 SAF selection assertions; API35 adb broken pipe/exit224 during emulator preparation. No real SDK SAF/fence qualification inferred; no sibling edits."
+}

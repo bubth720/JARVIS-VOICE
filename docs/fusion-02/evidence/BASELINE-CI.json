@@ -1,0 +1,153 @@
+{
+  "observedUtc": "2026-10-26",
+  "scope": "Historical remote statuses read via GitHub; not freshly rerun in sibling repositories",
+  "runs": [
+    {
+      "module": "UNIFIED",
+      "run": 40214722427,
+      "sha": "3caa57d91ce0dba31043e7cb6373a5e2df8b9fa4",
+      "conclusion": "failure",
+      "diagnosis": "No jobs returned; exact cause UNKNOWN"
+    },
+    {
+      "module": "CORE initial",
+      "run": 40215415459,
+      "sha": "0d41e6f3f412386371a81fe0d1a862fc87ae22cf",
+      "conclusion": "failure",
+      "diagnosis": "setup-android requests obsolete tools package"
+    },
+    {
+      "module": "CORE rerun",
+      "run": 40215604539,
+      "sha": "36761cea101b5f88b87cd4136dc075d28a1adb96",
+      "conclusion": "success",
+      "diagnosis": "Observed success; not Android integration proof"
+    },
+    {
+      "module": "NEXUS",
+      "run": 40115049468,
+      "sha": "374ea2e2fd640e78f2f5e12e60e75b493420e504",
+      "conclusion": "failure",
+      "diagnosis": "setup-android tools/platform-tools fails before Android tests"
+    },
+    {
+      "module": "SERVICES",
+      "run": 40115305244,
+      "sha": "f00091a639612b91eca1a301580c8f531249f1e3",
+      "conclusion": "failure",
+      "diagnosis": "Dependency verification rejects guava-parent-33.3.1-jre.pom in checkDebugUnitTestAarMetadata"
+    },
+    {
+      "module": "LLM",
+      "run": 40214822563,
+      "sha": "378a1cf4c2ceaaf531ded60670dc9161dc269575",
+      "conclusion": "success",
+      "diagnosis": "Code parent, not final docs head; no native CORE proof"
+    },
+    {
+      "module": "INTERFACE",
+      "run": 40214158554,
+      "sha": "1d0a89f3d92cba64122db08cc7b326239f85c08d",
+      "conclusion": "success",
+      "diagnosis": "No device/CORE/rig proof"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045314,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "VOICE SDK and expression styles"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045330,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "Voice Bridge 005K contracts only"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045326,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "VOICE Binder V1 — isolated public fixtures"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045349,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "success",
+      "name": "Android"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045335,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "success",
+      "name": "Voice Prototype 005F"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045381,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "success",
+      "name": "Voice Quality 005G"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045318,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "Voice Identity 005H"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045352,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "Pocket Probe"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045311,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "Voice Expression 005I"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045315,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "failure",
+      "name": "Voice Studio 005J"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145045344,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "success",
+      "name": "VOICE FINAL-01 independent studio"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145041706,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "cancelled",
+      "name": "VOICE FINAL-01 independent studio"
+    },
+    {
+      "module": "JARVIS-VOICE",
+      "run": 40145041684,
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "conclusion": "success",
+      "name": "Android"
+    },
+    {
+      "module": "JARVIS-VOLUTION-",
+      "run": 39996031251,
+      "sha": "c0180181804338d21f3bf9d4b537b709595902f7",
+      "conclusion": "success",
+      "name": "Evolution local JVM"
+    }
+  ]
+}

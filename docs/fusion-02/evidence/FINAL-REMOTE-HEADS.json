@@ -1,0 +1,74 @@
+{
+  "observedUtc": "2026-10-26T13:48:10.637927+00:00",
+  "readOnly": true,
+  "modules": [
+    {
+      "module": "unified",
+      "primary": "feat/fusion-01-integration-lock",
+      "currentPrimarySha": "3caa57d91ce0dba31043e7cb6373a5e2df8b9fa4",
+      "primaryUnchanged": true,
+      "fusion02Heads": {
+        "feat/fusion-02-android-first-evidence": "6de738633586743b3cf3f54e41ab4180c2cf0fee"
+      }
+    },
+    {
+      "module": "core",
+      "primary": "feat/fusion-01-core-integration",
+      "currentPrimarySha": "36761cea101b5f88b87cd4136dc075d28a1adb96",
+      "primaryUnchanged": true,
+      "fusion02Heads": {
+        "feat/fusion-02-core-readiness": "f6a3b2d0c280c69ef1570544fdbf5bcf5818810c"
+      }
+    },
+    {
+      "module": "nexus",
+      "primary": "feat/nex-06a-android-api24",
+      "currentPrimarySha": "374ea2e2fd640e78f2f5e12e60e75b493420e504",
+      "primaryUnchanged": true,
+      "fusion02Heads": {}
+    },
+    {
+      "module": "services",
+      "primary": "feat/serv-04a-android-tool-port",
+      "currentPrimarySha": "f00091a639612b91eca1a301580c8f531249f1e3",
+      "primaryUnchanged": true,
+      "fusion02Heads": {
+        "feat/fusion-02-services": "51da6fa26ec64e873fa50c0c29407a5acba37f98"
+      }
+    },
+    {
+      "module": "llm",
+      "primary": "feat/fusion-01-llm-integration",
+      "currentPrimarySha": "e0b781442b21034a251f6af450396faabc5f667d",
+      "primaryUnchanged": true,
+      "fusion02Heads": {
+        "feat/fusion-02-llm-prequalification": "f147236820e0633b0c88f6f1725e828f71167b27"
+      }
+    },
+    {
+      "module": "interface",
+      "primary": "fix/athena-premium-default",
+      "currentPrimarySha": "1d0a89f3d92cba64122db08cc7b326239f85c08d",
+      "primaryUnchanged": true,
+      "fusion02Heads": {
+        "feat/fusion-02-interface": "3c6921e2e40dd8e7c0756e07e854ce0bc1d9c5ff"
+      }
+    },
+    {
+      "module": "evolution",
+      "primary": "feat/evol-03-atelier-de-correctifs-isoles-e",
+      "currentPrimarySha": "c0180181804338d21f3bf9d4b537b709595902f7",
+      "primaryUnchanged": true,
+      "fusion02Heads": {}
+    },
+    {
+      "module": "voice",
+      "primary": "feat/voice-final-01",
+      "currentPrimarySha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "primaryUnchanged": true,
+      "fusion02Heads": {
+        "feat/fusion-02-voice-timeline": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+      }
+    }
+  ]
+}

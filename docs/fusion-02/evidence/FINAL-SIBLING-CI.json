@@ -1,0 +1,62 @@
+{
+  "scope": "Read-only current FUSION-02 heads; no implicit inheritance from green parents",
+  "modules": [
+    {
+      "repo": "JARVIS-LLM",
+      "sha": "f147236820e0633b0c88f6f1725e828f71167b27",
+      "runs": []
+    },
+    {
+      "repo": "JARVIS-UNIFIED",
+      "sha": "6de738633586743b3cf3f54e41ab4180c2cf0fee",
+      "runs": [
+        {
+          "id": 40287691712,
+          "name": "FUSION-02 independent evidence",
+          "sha": "6de738633586743b3cf3f54e41ab4180c2cf0fee",
+          "conclusion": "success",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "repo": "JAVIS-Local-v2",
+      "sha": "f6a3b2d0c280c69ef1570544fdbf5bcf5818810c",
+      "runs": [
+        {
+          "id": 40287287330,
+          "name": "FUSION-02 CORE refused ports and regressions",
+          "sha": "f6a3b2d0c280c69ef1570544fdbf5bcf5818810c",
+          "conclusion": "success",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "repo": "JARVIS-INTERFACE",
+      "sha": "3c6921e2e40dd8e7c0756e07e854ce0bc1d9c5ff",
+      "runs": [
+        {
+          "id": 40288572227,
+          "name": "Android",
+          "sha": "3c6921e2e40dd8e7c0756e07e854ce0bc1d9c5ff",
+          "conclusion": "success",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "repo": "JARVIS-SERVICES",
+      "sha": "51da6fa26ec64e873fa50c0c29407a5acba37f98",
+      "runs": [
+        {
+          "id": 40287588184,
+          "name": "SERVICES foundation and Android qualification",
+          "sha": "51da6fa26ec64e873fa50c0c29407a5acba37f98",
+          "conclusion": "failure",
+          "status": "completed"
+        }
+      ]
+    }
+  ]
+}

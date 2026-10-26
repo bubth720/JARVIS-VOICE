@@ -1,0 +1,112 @@
+{
+  "id": 40288377740,
+  "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-10-26T07:51:34Z",
+  "updated_at": "2026-10-26T08:00:39Z",
+  "jobs": [
+    {
+      "id": 121457532711,
+      "name": "unit",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121458362736,
+      "name": "audio (26)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121458362780,
+      "name": "audio (35)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121459584883,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "jvm": {
+    "cases": 260,
+    "passed": 237,
+    "skipped": 23,
+    "failures": 0,
+    "errors": 0
+  },
+  "android": {
+    "api26": {
+      "passed": 11,
+      "failed": 0,
+      "scope": "Synthetic AudioTrack + unchanged FinalAndroidTests",
+      "proof": "Job log marker emitted only after script asserts OK (11 tests)"
+    },
+    "api35": {
+      "passed": 11,
+      "failed": 0,
+      "scope": "Synthetic AudioTrack + unchanged FinalAndroidTests",
+      "proof": "Job log marker emitted only after script asserts OK (11 tests)"
+    }
+  },
+  "apkAudit": {
+    "apkSha256": "16d2be0cba534032e69e74f035ee0b14aa11e773deb6bcb7e305af86bd40e703",
+    "apkBytes": 34320499,
+    "applicationId": "com.jarvis.voice.studio.final01",
+    "minSdk": 26,
+    "targetSdk": 35,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "signatureVerified": true,
+    "certificateSha256": "f61bc9f8e9969a0533aa18887a86a0894a124a278bd892c5ba1f49fd8a8ff73a",
+    "zipalign16K": true,
+    "libraries": {
+      "libonnxruntime.so": {
+        "sha256": "12c870ee77349d0e80e0d85eb293849ebe8f56717a81eec62b53ecb1446e7de8",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      },
+      "libonnxruntime4j_jni.so": {
+        "sha256": "8cd202ef5ad8fb13754abc8767b892a6ae8ded41ee0a30bd1917007720aa56bb",
+        "loadAlignment": "16384",
+        "zipCompression": "stored"
+      }
+    },
+    "internetPermission": false,
+    "physicalAndroidDeviceTest": false,
+    "experimental": true,
+    "modelWeightsIncluded": false
+  },
+  "artifacts": [
+    {
+      "id": 12635159471,
+      "name": "fusion02-voice-build-evidence",
+      "size": 36374,
+      "digest": "sha256:53ef75324f565d619a330b0566182eb8c99767ce8469c67eaee7593168af8150"
+    },
+    {
+      "id": 12635033523,
+      "name": "fusion02-voice-jvm-evidence",
+      "size": 36489,
+      "digest": "sha256:e44834d4b9e7d544eec016f760ef68466cd29c74f1517c52ced6e5cf9d32655a"
+    },
+    {
+      "id": 12634789784,
+      "name": "fusion02-voice-audio-api35",
+      "size": 1115,
+      "digest": "sha256:f47fe0d82feb51a6bdd3634e021657ab8593070db89b63f47d277eb2e4515220"
+    },
+    {
+      "id": 12634449460,
+      "name": "fusion02-voice-audio-api26",
+      "size": 1071,
+      "digest": "sha256:c2556bceddd12b45e56abbadcbd9400a83b31cbc53ca92cf3774be4e245e9d7a"
+    }
+  ],
+  "artifactZipBytesIndependentlyParsed": false,
+  "artifactReadLimitation": "Connector returned file-service references; direct workspace retrieval failed URLError. Decoded GitHub job logs and artifact metadata verified, no signature URL published."
+}

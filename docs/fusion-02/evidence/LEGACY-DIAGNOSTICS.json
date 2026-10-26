@@ -1,0 +1,97 @@
+{
+  "scope": "Old workflows preserved, inspected at1094c74; not all CI green",
+  "failures": [
+    {
+      "run": 40288377751
+    },
+    {
+      "run": 40288377745
+    },
+    {
+      "run": 40288377682
+    },
+    {
+      "run": 40288377720
+    },
+    {
+      "run": 40288377723,
+      "jobs": [
+        {
+          "id": 121457374509,
+          "name": "android-library-crypto-playback",
+          "conclusion": "success",
+          "failedSteps": []
+        },
+        {
+          "id": 121457374642,
+          "name": "build-and-audit",
+          "conclusion": "failure",
+          "failedSteps": [
+            "Verify preservation of functional applications and model bindings"
+          ]
+        }
+      ]
+    },
+    {
+      "run": 40288377700,
+      "jobs": [
+        {
+          "id": 121457376164,
+          "name": "build-and-audit",
+          "conclusion": "failure",
+          "failedSteps": [
+            "Verify preservation of functional applications and model bindings"
+          ]
+        },
+        {
+          "id": 121457376513,
+          "name": "android-library-crypto-playback",
+          "conclusion": "success",
+          "failedSteps": []
+        }
+      ]
+    },
+    {
+      "run": 40288377701,
+      "jobs": [
+        {
+          "id": 121457373989,
+          "name": "build-and-audit",
+          "conclusion": "failure",
+          "failedSteps": [
+            "Verify preservation of functional applications and model bindings"
+          ]
+        },
+        {
+          "id": 121457374135,
+          "name": "android-library-crypto-playback",
+          "conclusion": "success",
+          "failedSteps": []
+        }
+      ]
+    },
+    {
+      "run": 40288377628,
+      "jobs": [
+        {
+          "id": 121457373562,
+          "name": "synthetic-android-codec",
+          "conclusion": "failure",
+          "failedSteps": [
+            "Run reactivecircus/android-emulator-runner@v2"
+          ]
+        },
+        {
+          "id": 121457373928,
+          "name": "build-and-inference",
+          "conclusion": "success",
+          "failedSteps": []
+        }
+      ]
+    }
+  ],
+  "pocketFailureLogExcerpt": [
+    "2026-10-26T07:55:15.3807597Z com.jarvis.voice.pocketprobe.DeviceAudioTests > testThreeSecondsOfContinuousDeferredAudioHasNoUnderruns[emulator-5554 - 15] \u001b[31mFAILED \u001b[0m",
+    "2026-10-26T07:55:15.3811103Z \tjava.lang.AssertionError: AudioTrack [count=1 frames=72000 submitted=72000] expected:<0> but was:<1>"
+  ]
+}

@@ -28,3 +28,5 @@ if (providers.gradleProperty("includeVoicePilot").orNull == "true") {
 include(":voice04Runtime", ":voice04Studio")
 
 include(":voiceFinalSdk", ":voiceFinalRuntime", ":voiceFinalStudio")
+
+include(":voiceFusion02")
