@@ -1,0 +1,34 @@
+{
+  "base": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+  "protectedExistingFiles": 564,
+  "onlyExistingChanges": [
+    "settings.gradle.kts",
+    "voiceBridgePilot/build.gradle.kts",
+    "voiceFinalStudio/build.gradle.kts"
+  ],
+  "addedFiles": [
+    ".github/workflows/fusion-02-voice.yml",
+    "docs/fusion-02/CONTRACT.md",
+    "docs/fusion-02/PROVENANCE.json",
+    "docs/fusion-02/REPORT.md",
+    "docs/fusion-02/TESTS.md",
+    "docs/fusion-02/VALIDATION.json",
+    "docs/fusion-02/evidence/BASELINE-CI.json",
+    "docs/fusion-02/evidence/LOCAL-JVM.json",
+    "docs/fusion-02/evidence/PRIVATE-PACK.json",
+    "docs/fusion-02/evidence/PUBLIC-RENDER.json",
+    "docs/fusion-02/evidence/SCOPE.json",
+    "scripts/fusion-02/android_audio.sh",
+    "scripts/fusion-02/check_scope.py",
+    "scripts/fusion-02/collect_tests.py",
+    "voiceBridgePilot/src/test/java/com/jarvis/voice/bridgepilot/Fusion02ProposalTests.kt",
+    "voiceFinalStudio/src/androidTest/java/com/jarvis/voice/voicestudio/Fusion02AudioTests.kt",
+    "voiceFusion02/build.gradle.kts",
+    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/AudioTimeline.kt",
+    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/LocalProxy.kt",
+    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/ProxyDemo.kt",
+    "voiceFusion02/src/test/kotlin/com/jarvis/voice/fusion02/PublicRenderBenchmarkTest.kt",
+    "voiceFusion02/src/test/kotlin/com/jarvis/voice/fusion02/TimelineTests.kt"
+  ],
+  "runtimeManifestJniPermissionsSignaturesUnchanged": true
+}

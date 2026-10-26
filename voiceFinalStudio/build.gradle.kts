@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":voiceFinalRuntime"))
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.27.0")
+    androidTestImplementation(project(":voiceFusion02"))
     androidTestImplementation("androidx.test:runner:1.6.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
 }

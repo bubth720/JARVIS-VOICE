@@ -1,0 +1,510 @@
+{
+  "schema": "voice.fusion02.public-render/1",
+  "summary": [
+    {
+      "pssAfterKiB": {
+        "method": "nearest-rank",
+        "p50": 1015333,
+        "p95": 1198409,
+        "n": 3
+      },
+      "rtf": {
+        "method": "nearest-rank",
+        "p50": 1.8692015713541668,
+        "p95": 1.93960005625,
+        "n": 3
+      },
+      "audioSeconds": {
+        "method": "nearest-rank",
+        "p50": 1.92,
+        "p95": 1.92,
+        "n": 3
+      },
+      "corpus": 0,
+      "cpuProcessMs": {
+        "method": "nearest-rank",
+        "p50": 3670,
+        "p95": 4100,
+        "n": 3
+      },
+      "firstPcmMs": {
+        "method": "nearest-rank",
+        "p50": 1584.702068,
+        "p95": 1715.975663,
+        "n": 3
+      },
+      "elapsedMs": {
+        "method": "nearest-rank",
+        "p50": 3588.867017,
+        "p95": 3724.032108,
+        "n": 3
+      }
+    },
+    {
+      "pssAfterKiB": {
+        "method": "nearest-rank",
+        "p50": 1601037,
+        "p95": 1680029,
+        "n": 3
+      },
+      "rtf": {
+        "method": "nearest-rank",
+        "p50": 1.4216914491071428,
+        "p95": 1.4276255444642858,
+        "n": 3
+      },
+      "audioSeconds": {
+        "method": "nearest-rank",
+        "p50": 5.6,
+        "p95": 5.6,
+        "n": 3
+      },
+      "corpus": 1,
+      "cpuProcessMs": {
+        "method": "nearest-rank",
+        "p50": 8150,
+        "p95": 8170,
+        "n": 3
+      },
+      "firstPcmMs": {
+        "method": "nearest-rank",
+        "p50": 1507.358895,
+        "p95": 1651.450224,
+        "n": 3
+      },
+      "elapsedMs": {
+        "method": "nearest-rank",
+        "p50": 7961.472115,
+        "p95": 7994.703049,
+        "n": 3
+      }
+    },
+    {
+      "pssAfterKiB": {
+        "method": "nearest-rank",
+        "p50": 1952661,
+        "p95": 2765953,
+        "n": 3
+      },
+      "rtf": {
+        "method": "nearest-rank",
+        "p50": 1.5412895797207447,
+        "p95": 1.543861248670213,
+        "n": 3
+      },
+      "audioSeconds": {
+        "method": "nearest-rank",
+        "p50": 30.08,
+        "p95": 30.08,
+        "n": 3
+      },
+      "corpus": 2,
+      "cpuProcessMs": {
+        "method": "nearest-rank",
+        "p50": 46530,
+        "p95": 46660,
+        "n": 3
+      },
+      "firstPcmMs": {
+        "method": "nearest-rank",
+        "p50": 1440.973082,
+        "p95": 1575.32132,
+        "n": 3
+      },
+      "elapsedMs": {
+        "method": "nearest-rank",
+        "p50": 46361.990558,
+        "p95": 46439.34636,
+        "n": 3
+      }
+    }
+  ],
+  "seed": 42,
+  "noLatencyGainClaim": true,
+  "threads": 1,
+  "corpus": [
+    "Demain, je prendrai le train pour Paris.",
+    "Le 24 octobre, le billet coûte 32,50 euros.",
+    "Demain, je prendrai le train pour Paris.\nLe 24 octobre, le billet coûte 32,50 euros.\nDemain, je prendrai le train pour Paris.\nLe 24 octobre, le billet coûte 32,50 euros.\nDemain, je prendrai le train pour Paris.\nLe 24 octobre, le billet coûte 32,50 euros.\nDemain, je prendrai le train pour Paris.\nLe 24 octobre, le billet coûte 32,50 euros."
+  ],
+  "rows": [
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 144.06727500000005,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 1334.797534,
+        "TEXT_ENCODING": 0.167587,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 2.942306,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 1026.362433
+      },
+      "rtf": 1.93960005625,
+      "corpus": 0,
+      "peak": 0.7310851812362671,
+      "cpuProcessMs": 4100,
+      "segments": 1,
+      "pssAfterKiB": 938664,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 1.92,
+      "repeat": 0,
+      "thermal": null,
+      "rms": 0.13191383628839176,
+      "firstPcmMs": 1715.975663,
+      "elapsedMs": 3724.032108,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 136.49649000000002,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 1245.9118070000002,
+        "TEXT_ENCODING": 0.268597,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 2.620871,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 957.580835
+      },
+      "rtf": 1.7704817135416666,
+      "corpus": 0,
+      "peak": 0.7310851812362671,
+      "cpuProcessMs": 3560,
+      "segments": 1,
+      "pssAfterKiB": 1015333,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 1.92,
+      "repeat": 1,
+      "thermal": null,
+      "rms": 0.13191383628839176,
+      "firstPcmMs": 1551.137155,
+      "elapsedMs": 3399.32489,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 144.46605,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 1371.6832460000003,
+        "TEXT_ENCODING": 0.219755,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 2.799175,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 1024.590027
+      },
+      "rtf": 1.8692015713541668,
+      "corpus": 0,
+      "peak": 0.7310851812362671,
+      "cpuProcessMs": 3670,
+      "segments": 1,
+      "pssAfterKiB": 1198409,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 1.92,
+      "repeat": 2,
+      "thermal": null,
+      "rms": 0.13191383628839176,
+      "firstPcmMs": 1584.702068,
+      "elapsedMs": 3588.867017,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 424.0771109999999,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 3655.2833189999988,
+        "TEXT_ENCODING": 0.142711,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 1.233552,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 2885.9772749999997
+      },
+      "rtf": 1.4216914491071428,
+      "corpus": 1,
+      "peak": 0.6978143453598022,
+      "cpuProcessMs": 8030,
+      "segments": 1,
+      "pssAfterKiB": 1424349,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 5.6,
+      "repeat": 0,
+      "thermal": null,
+      "rms": 0.10619554917047996,
+      "firstPcmMs": 1507.358895,
+      "elapsedMs": 7961.472115,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 425.1483570000001,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 3619.957629999999,
+        "TEXT_ENCODING": 0.160136,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 1.479716,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 2894.64838
+      },
+      "rtf": 1.4276255444642858,
+      "corpus": 1,
+      "peak": 0.6978143453598022,
+      "cpuProcessMs": 8170,
+      "segments": 1,
+      "pssAfterKiB": 1601037,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 5.6,
+      "repeat": 1,
+      "thermal": null,
+      "rms": 0.10619554917047996,
+      "firstPcmMs": 1651.450224,
+      "elapsedMs": 7994.703049,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 425.89467499999984,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 3628.757627000001,
+        "TEXT_ENCODING": 0.174148,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 1.844885,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 2845.1221539999997
+      },
+      "rtf": 1.401166615892857,
+      "corpus": 1,
+      "peak": 0.6978143453598022,
+      "cpuProcessMs": 8150,
+      "segments": 1,
+      "pssAfterKiB": 1680029,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 5.6,
+      "repeat": 2,
+      "thermal": null,
+      "rms": 0.10619554917047996,
+      "firstPcmMs": 1469.367473,
+      "elapsedMs": 7846.533049,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 2246.0540369999994,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 19688.874735999994,
+        "TEXT_ENCODING": 1.118111,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 5.58542,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 15634.816952000003
+      },
+      "rtf": 1.5142528407579787,
+      "corpus": 2,
+      "peak": 0.7310851812362671,
+      "cpuProcessMs": 45810,
+      "segments": 8,
+      "pssAfterKiB": 2765953,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 30.08,
+      "repeat": 0,
+      "thermal": null,
+      "rms": 0.11331817713746442,
+      "firstPcmMs": 1575.32132,
+      "elapsedMs": 45548.72545,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 2337.4215379999964,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 20630.149434000006,
+        "TEXT_ENCODING": 1.382261,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 4.430021999999999,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 15732.720151000003
+      },
+      "rtf": 1.5412895797207447,
+      "corpus": 2,
+      "peak": 0.7310851812362671,
+      "cpuProcessMs": 46660,
+      "segments": 8,
+      "pssAfterKiB": 1878649,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 30.08,
+      "repeat": 1,
+      "thermal": null,
+      "rms": 0.11331817713746442,
+      "firstPcmMs": 1440.973082,
+      "elapsedMs": 46361.990558,
+      "energy": null
+    },
+    {
+      "firstAudibleMs": null,
+      "firstWriteMs": null,
+      "stageMs": {
+        "FLOW_SAMPLER": 2379.663695000001,
+        "AUDIO_TRANSFER": null,
+        "FLOW_LM": 20641.910798999983,
+        "TEXT_ENCODING": 1.302393,
+        "AUDIO_DRAIN": null,
+        "TOKENIZATION": 2.878163,
+        "PROFILE_RESOLVE": null,
+        "PCM_DECODER": 16062.411743999995
+      },
+      "rtf": 1.543861248670213,
+      "corpus": 2,
+      "peak": 0.7310851812362671,
+      "cpuProcessMs": 46530,
+      "segments": 8,
+      "pssAfterKiB": 1952661,
+      "eventStages": [
+        "SpeechQueued",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "Generating",
+        "FirstPCM",
+        "SegmentGeneratedOnly",
+        "RenderedOnly"
+      ],
+      "audioSeconds": 30.08,
+      "repeat": 2,
+      "thermal": null,
+      "rms": 0.11331817713746442,
+      "firstPcmMs": 1401.957843,
+      "elapsedMs": 46439.34636,
+      "energy": null
+    }
+  ],
+  "steps": 3,
+  "humanListening": false,
+  "platform": "Linux Cloud x86_64 CPU; no Android audio",
+  "sourceSha256": "46264e83cb99115c3d210260e029117566d9c64f20266d10daa78107759ede3e",
+  "profileResolvedBeforeRuns": true,
+  "temperature": 0.3,
+  "voiceEncodingMs": 2430.903787,
+  "modelsRebuilt": false,
+  "nativeUnloadVerified": false
+}

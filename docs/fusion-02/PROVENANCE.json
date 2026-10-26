@@ -1,0 +1,131 @@
+{
+  "observedUtc": "2026-10-26T07:38:47.755723+00:00",
+  "heads": [
+    {
+      "module": "unified",
+      "repository": "bubth720/JARVIS-UNIFIED",
+      "branch": "feat/fusion-01-integration-lock",
+      "sha": "3caa57d91ce0dba31043e7cb6373a5e2df8b9fa4",
+      "consumed": false
+    },
+    {
+      "module": "core",
+      "repository": "bubth720/JAVIS-Local-v2",
+      "branch": "feat/fusion-01-core-integration",
+      "sha": "36761cea101b5f88b87cd4136dc075d28a1adb96",
+      "consumed": false
+    },
+    {
+      "module": "nexus",
+      "repository": "bubth720/JARVIS-NEXUS",
+      "branch": "feat/nex-06a-android-api24",
+      "sha": "374ea2e2fd640e78f2f5e12e60e75b493420e504",
+      "consumed": false
+    },
+    {
+      "module": "services",
+      "repository": "bubth720/JARVIS-SERVICES",
+      "branch": "feat/serv-04a-android-tool-port",
+      "sha": "f00091a639612b91eca1a301580c8f531249f1e3",
+      "consumed": false
+    },
+    {
+      "module": "llm",
+      "repository": "bubth720/JARVIS-LLM",
+      "branch": "feat/fusion-01-llm-integration",
+      "sha": "e0b781442b21034a251f6af450396faabc5f667d",
+      "consumed": false
+    },
+    {
+      "module": "interface",
+      "repository": "bubth720/JARVIS-INTERFACE",
+      "branch": "fix/athena-premium-default",
+      "sha": "1d0a89f3d92cba64122db08cc7b326239f85c08d",
+      "consumed": false
+    },
+    {
+      "module": "evolution",
+      "repository": "bubth720/JARVIS-VOLUTION-",
+      "branch": "feat/evol-03-atelier-de-correctifs-isoles-e",
+      "sha": "c0180181804338d21f3bf9d4b537b709595902f7",
+      "consumed": false
+    },
+    {
+      "module": "voice",
+      "repository": "bubth720/JARVIS-VOICE",
+      "branch": "feat/voice-final-01",
+      "sha": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+      "consumed": true
+    }
+  ],
+  "module": "VOICE",
+  "mission": "FUSION-02 / VOICE #22",
+  "master": "https://github.com/bubth720/JARVIS-UNIFIED/issues/5",
+  "branch": "feat/fusion-02-voice-timeline",
+  "base": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
+  "head": "RESOLVED_BY_GIT_COMMIT_CONTAINING_THIS_DOCUMENT",
+  "siblingSourceEdits": false,
+  "alternatives": [
+    {
+      "module": "voice",
+      "branch": "feat/voice-bridge-pilot",
+      "sha": "04c4ca1c050c16e097d27b08831544b66121128c",
+      "mergeBaseWithPrimary": "04c4ca1c050c16e097d27b08831544b66121128c",
+      "ancestorOfPrimary": true,
+      "consumed": true
+    },
+    {
+      "module": "voice",
+      "branch": "feat/voice-07-voice-delivery",
+      "sha": "40cb27b1e27567ae1841e4cfb3dd2c57a7b57820",
+      "mergeBaseWithPrimary": "1a9f713dff28f6e4fb145728815e9ed118f5a929",
+      "ancestorOfPrimary": false,
+      "consumed": false
+    },
+    {
+      "module": "core",
+      "branch": "feat/core-voice-pilot",
+      "sha": "7426665f2794cba83646008fa0f342d102141201",
+      "mergeBaseWithPrimary": "226e2e8cc3eebd479805b89d035eb5c1cbcad540",
+      "ancestorOfPrimary": false,
+      "consumed": false
+    },
+    {
+      "module": "nexus",
+      "branch": "feat/nexus-final-01",
+      "sha": "d903bf04f497ab0dc7f40e9708ed057e4f24c6ee",
+      "mergeBaseWithPrimary": "3acec55616ff8e3b1666091780fca59261377e18",
+      "ancestorOfPrimary": false,
+      "consumed": false
+    },
+    {
+      "module": "services",
+      "branch": "feat/services-final-01",
+      "sha": "d16dd84f27881460ec9f02d2a54d9ddff23187dc",
+      "mergeBaseWithPrimary": "3decdc47d82f9b43713c48cab244762941770a81",
+      "ancestorOfPrimary": false,
+      "consumed": false
+    },
+    {
+      "module": "interface",
+      "branch": "feat/interface-final-01",
+      "sha": "db459ba388a3fea992d80320c3989be0edda8500",
+      "mergeBaseWithPrimary": "db459ba388a3fea992d80320c3989be0edda8500",
+      "ancestorOfPrimary": true,
+      "consumed": false
+    }
+  ],
+  "preservedContracts": {
+    "voiceFinalSdk/src/main/kotlin/com/jarvis/voice/final01/VoiceEvents.kt": "b0541cf4969a180b3fc8f0a3a4b2aa89a498a712997f0c8e9273294323abd98c",
+    "voiceBridgePilot/contract/CONTRACT.md": "dee564d81218b1b7b17f8925503f97ff2e36df0ed29825abbbc8f419d2efefa9",
+    "voiceBridgePilot/src/main/aidl/com/jarvis/voice/bridgepilot/ipc/IVoicePilotFixture.aidl": "55e31e7fddc800f3c123c67218f277813eba257423b9aba67ca2ba60c84d3918"
+  },
+  "sharedBinderV1ContractSha256": "cfbdff471ed0403113803a0f4c86ec75c57f723cc828f5af3c13fb3ef8042cf2",
+  "licences": {
+    "newModelOrNativeDependency": false,
+    "existingOnnxRuntime": "MIT, unchanged 1.27.0",
+    "publicReference": "Alba MacKenna CC BY4.0; existing source hash pinned; no audio distributed",
+    "privateFp32": "Pack notice CC BY4.0 plus gated/use restrictions; original kept private, no weights distributed",
+    "globalDistributionClearance": "UNKNOWN; no APK/model distribution in this lane"
+  }
+}

@@ -1,0 +1,83 @@
+name: FUSION-02 VOICE isolated protocol
+on:
+  push:
+    branches: ['feat/fusion-02-voice-timeline']
+    paths-ignore: ['docs/fusion-02/**']
+  pull_request:
+    branches: ['feat/voice-final-01']
+    paths: ['voiceFusion02/**', 'voiceFinalStudio/**', 'voiceBridgePilot/**', 'scripts/fusion-02/**', '.github/workflows/fusion-02-voice.yml', 'settings.gradle.kts']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fusion02-voice-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: python3 scripts/fusion-02/check_scope.py
+      - run: ./gradlew :voiceFusion02:test :voiceFusion02:run :voiceFinalSdk:test :voiceFinalRuntime:test :voice04Runtime:test :voiceSdk:test :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test :voiceBridgeContract:test :voiceBridgeHarness:test :app:testDebugUnitTest :voiceBridgePilot:testDebugUnitTest -PincludeVoicePilot=true --no-daemon --max-workers=2
+      - run: python3 scripts/fusion-02/collect_tests.py --output docs/fusion-02/evidence/CI-JVM.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fusion02-voice-jvm-evidence
+          path: |
+            */build/test-results/**/*.xml
+            docs/fusion-02/evidence/CI-JVM.json
+  audio:
+    needs: unit
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [26, 35]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - name: KVM fixture only
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          ram-size: 4096M
+          disable-animations: true
+          script: ANDROID_SERIAL=emulator-5554 bash scripts/fusion-02/android_audio.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fusion02-voice-audio-api${{ matrix.api }}
+          path: voiceFinalStudio/build/fusion-02-proof/**
+  build:
+    needs: [unit, audio]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :voiceFinalStudio:assembleDebug :voiceFinalStudio:lintDebug --no-daemon --max-workers=2
+      - run: python3 scripts/voice-final-01/verify_apk.py voiceFinalStudio/build/outputs/apk/debug/voiceFinalStudio-debug.apk --application-id com.jarvis.voice.studio.final01 --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voiceFinalStudio/build/fusion-02-apk-audit.json
+      # Reports only: APK/model distribution requires a separate user decision (master §9.3).
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fusion02-voice-build-evidence
+          path: |
+            voiceFinalStudio/build/fusion-02-apk-audit.json
+            voiceFinalStudio/build/reports/lint-results-debug.*
