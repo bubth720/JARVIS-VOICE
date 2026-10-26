@@ -3,18 +3,18 @@
   "mission": "FUSION-02 / #22",
   "branch": "feat/fusion-02-voice-timeline",
   "base": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
-  "codeCommit": "PENDING_PUBLICATION",
+  "codeCommit": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47",
   "status": "PARTIAL",
   "local": {
     "jvmCases": 260,
-    "passed": 238,
-    "skipped": 22,
+    "passed": 237,
+    "skipped": 23,
     "failures": 0,
     "errors": 0,
     "nativePublicDocuments": 9,
     "nativePublicSegments": 30,
     "nativeBenchmark": "PASS",
-    "androidTestCompilation": "PASS_REBUILT_FINAL_SOURCE",
+    "androidTestCompilation": "PASS_FINAL_CODE",
     "androidInstrumentation": "NOT_RUN_NO_KVM",
     "device": "NOT_RUN",
     "humanListening": "NOT_RUN_N0",
@@ -23,9 +23,45 @@
       "fatal": 0,
       "errors": 0,
       "warnings": 28
+    },
+    "separateNativeCampaign": {
+      "cases": 260,
+      "passed": 238,
+      "skipped": 22,
+      "codeCommit": "a41d82a0b2c496db1b615757d802f05aff8ae096",
+      "nativeDocs": 9,
+      "nativeSegments": 30
     }
   },
-  "ci": "PENDING_PUBLICATION",
+  "ci": {
+    "run": 40288377740,
+    "url": "https://github.com/bubth720/JARVIS-VOICE/actions/runs/40288377740",
+    "codeCommit": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47",
+    "status": "SUCCESS",
+    "jobs": {
+      "unit": "SUCCESS",
+      "audio26": "SUCCESS",
+      "audio35": "SUCCESS",
+      "buildArm64LintAudit": "SUCCESS"
+    },
+    "jvm": {
+      "cases": 260,
+      "passed": 237,
+      "skipped": 23,
+      "failed": 0
+    },
+    "android": {
+      "api26": {
+        "passed": 11,
+        "failed": 0
+      },
+      "api35": {
+        "passed": 11,
+        "failed": 0
+      },
+      "scope": "Synthetic AudioTrack and preserved FinalAndroidTests; no personal voice/native TTS/device/human hearing"
+    }
+  },
   "coreConnected": false,
   "nativeUnloadVerified": false,
   "apkDistributed": false,
@@ -37,5 +73,18 @@
     "No real CORE generation Binder dispatch",
     "No physical audio/human perception campaign"
   ],
-  "nextAction": "Review standalone draft; qualify native authority separately before sensitive activation"
+  "nextAction": "Review standalone draft; qualify native authority separately before sensitive activation",
+  "nativeBenchmarkCodeCommit": "a41d82a0b2c496db1b615757d802f05aff8ae096",
+  "pr": {
+    "number": 23,
+    "draft": true,
+    "merged": false,
+    "base": "feat/voice-final-01"
+  },
+  "gates": {
+    "standaloneProtocol": "JVM_PASS_AND_ANDROID_EMULATOR_PASS",
+    "coreConnectedVoice": "BLOCKED",
+    "nonNeutralAcousticEmotions": "UNSUPPORTED",
+    "ANDROID_MULTI_MODULE_GO": false
+  }
 }

@@ -1,0 +1,117 @@
+{
+  "scope": "All remote runs at qualified code head; not all workflows green",
+  "runs": [
+    {
+      "id": 40288377627,
+      "name": "Android",
+      "status": "completed",
+      "conclusion": "success",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377750,
+      "name": "Voice Prototype 005F",
+      "status": "completed",
+      "conclusion": "success",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377723,
+      "name": "Voice Identity 005H",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377725,
+      "name": "Voice Quality 005G",
+      "status": "completed",
+      "conclusion": "success",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377700,
+      "name": "Voice Expression 005I",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377701,
+      "name": "Voice Studio 005J",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377628,
+      "name": "Pocket Probe",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377740,
+      "name": "FUSION-02 VOICE isolated protocol",
+      "status": "completed",
+      "conclusion": "success",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377751,
+      "name": "VOICE FINAL-01 independent studio",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377682,
+      "name": "Voice Bridge 005K contracts only",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377745,
+      "name": "VOICE Binder V1 — isolated public fixtures",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288377720,
+      "name": "VOICE SDK and expression styles",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "pull_request",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288322678,
+      "name": "FUSION-02 VOICE isolated protocol",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "event": "push",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    },
+    {
+      "id": 40288322716,
+      "name": "Android",
+      "status": "completed",
+      "conclusion": "success",
+      "event": "push",
+      "head_sha": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47"
+    }
+  ]
+}

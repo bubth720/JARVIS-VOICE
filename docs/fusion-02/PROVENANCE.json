@@ -63,7 +63,7 @@
   "master": "https://github.com/bubth720/JARVIS-UNIFIED/issues/5",
   "branch": "feat/fusion-02-voice-timeline",
   "base": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
-  "head": "RESOLVED_BY_GIT_COMMIT_CONTAINING_THIS_DOCUMENT",
+  "head": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47",
   "siblingSourceEdits": false,
   "alternatives": [
     {
@@ -127,5 +127,9 @@
     "publicReference": "Alba MacKenna CC BY4.0; existing source hash pinned; no audio distributed",
     "privateFp32": "Pack notice CC BY4.0 plus gated/use restrictions; original kept private, no weights distributed",
     "globalDistributionClearance": "UNKNOWN; no APK/model distribution in this lane"
-  }
+  },
+  "headMeaning": "Qualified code head; subsequent commits may contain evidence/report only. Delivery Git HEAD is commit containing this document.",
+  "finalRemoteCandidates": "evidence/FINAL-REMOTE-HEADS.json",
+  "finalSiblingCi": "evidence/FINAL-SIBLING-CI.json",
+  "newCandidatesConsumed": false
 }

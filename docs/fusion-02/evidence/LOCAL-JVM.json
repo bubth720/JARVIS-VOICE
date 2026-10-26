@@ -1,23 +1,23 @@
 {
   "platform": "Linux JVM/Robolectric; not Android instrumentation",
-  "gitHeadAtRun": "fe57452fcb33f5b6870070f30ba6c5f1d349c4ba",
-  "dirtyWorktree": true,
+  "gitHeadAtRun": "1094c740a6961c59e5e9fdb52e5e4a6ee3c56b47",
+  "dirtyWorktree": false,
   "modules": [
     {
       "module": "voiceFusion02",
       "tests": 17,
       "failures": 0,
       "errors": 0,
-      "skipped": 0,
+      "skipped": 1,
       "suites": [
         {
           "file": "voiceFusion02/build/test-results/test/TEST-com.jarvis.voice.fusion02.PublicRenderBenchmarkTest.xml",
-          "sha256": "748cb3ad259368091829669fcda23b589958d1be875bae69ddaec58bc2cac48a",
+          "sha256": "759d1d3f2857757eea4f10495330e578f282f4d0339febbe8b946e701251628c",
           "tests": 1
         },
         {
           "file": "voiceFusion02/build/test-results/test/TEST-com.jarvis.voice.fusion02.TimelineTests.xml",
-          "sha256": "110df539ffd3b6262433ce093099f87407ddc731378c086946b85ebcae15d622",
+          "sha256": "bf293e04872c900c6a6dd21bdc6c58fd7de869a90b71c07103025f33c6acdd74",
           "tests": 16
         }
       ]
@@ -31,7 +31,7 @@
       "suites": [
         {
           "file": "voiceFinalSdk/build/test-results/test/TEST-com.jarvis.voice.final01.VoiceEventTests.xml",
-          "sha256": "b88c94fa031e370bccde9ed1211e0731fab3f7e5adcf39d831e1c0af0c1fd40f",
+          "sha256": "f468f9e9840792960a078332b0433294b718111fc2e6e2359b4eb81d7727105c",
           "tests": 3
         }
       ]
@@ -45,12 +45,12 @@
       "suites": [
         {
           "file": "voiceFinalRuntime/build/test-results/test/TEST-com.jarvis.voice.final01.FinalPublicBenchmarkTest.xml",
-          "sha256": "af9ad90816f8a690e4a8c7fc9051e040cba98dedd09dcd1cf4c8e8796ecbed5a",
+          "sha256": "e71ce225d57a13bd3b39ef57e82c585bb8135a7fc2b3a43184eb661c80527e37",
           "tests": 2
         },
         {
           "file": "voiceFinalRuntime/build/test-results/test/TEST-com.jarvis.voice.final01.FinalRuntimeTests.xml",
-          "sha256": "07348bc2f89afbe9414a696627af7dcdbd427bb348d3e4afa9333ef5e61eb1df",
+          "sha256": "f81e5fecbb7074303950ae0cd39e93fa1e6c0c70b9a8c875cabdfa96afed4ea6",
           "tests": 13
         }
       ]
@@ -64,47 +64,47 @@
       "suites": [
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.EmotionTests.xml",
-          "sha256": "bac1b2bee026e4ece8f9b2557b02f91fc7b6af03bc3bca9373aa30f473788956",
+          "sha256": "0d119c323456cf869f2e3461684838e7ca907360e36fc2e6f5b166cb1463d7e6",
           "tests": 5
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.LongFormTests.xml",
-          "sha256": "ba96dfad31ac31acab51ff90594246ea9574d8ade8a254342e49810ed72da1be",
+          "sha256": "dc9e921419521ce0d75c4c4f3ec97354448d8d59a9830dd5db7ed04433693e3d",
           "tests": 8
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.NarrativeDeliveryTests.xml",
-          "sha256": "caa738f825006b4a0ed2ee2ac7302d8b89d4303277031e477ad1d1a063fc6a4c",
+          "sha256": "80584115641a33fbb5d9d7f2dbddd4ffa713a28fef5e3461da053efabea7157d",
           "tests": 10
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.NarrativePublicDemoTests.xml",
-          "sha256": "e77db46c8041014cd7cb212974cbf49aac1dd968e57319cb604c30fb5b117f75",
+          "sha256": "9e354ee9a0a5f491c1070054b9ae7d2df2b549630cbff0b9cc1fe54c998591cb",
           "tests": 1
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.ProgressiveTests.xml",
-          "sha256": "697ab742e22242212f42213d14c26edbedb6a9d0040a2395b65c5c985bb5f20d",
+          "sha256": "f4aa128178a03b7644809ade5c9f92c62cea4915bae00e85587316aa3c882b3f",
           "tests": 10
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.PublicLongFormPerformanceTests.xml",
-          "sha256": "bbd913316ec764e35915b089e5d8800bd12ffec5df2504668bf67503fdf439c2",
+          "sha256": "207d8fdbb8c2233cd58007f062f96f6fdc74d3bf700c523e758011d328583ab1",
           "tests": 1
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.PublicObservationParityTests.xml",
-          "sha256": "8bb5ca86421e4c5b7bd9bb294082820b8ea1a46d69a2944a2b9a5aadba8e2eb0",
+          "sha256": "f2608d0683dabc22f5e7e4742f7a0cf7c50e8732ecfc66da73249f168a906806",
           "tests": 1
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.PublicTokenizationTests.xml",
-          "sha256": "0f65ff0173fe8d7a5ddcf94339dd622a42b1e4153f9829f81b33b6fa83b45c7f",
+          "sha256": "ed1c88d78e7c253235f7f2669d6bde854637d81b14b9bb29c9d368377f35d668",
           "tests": 1
         },
         {
           "file": "voice04Runtime/build/test-results/test/TEST-com.jarvis.voice.speed.SpeedTraceTests.xml",
-          "sha256": "2ce83c961b542200ac6de558561a7eecbb6c4eb63cb2484d940b69332f440f53",
+          "sha256": "ee59435a4d21b33f85659e45876650b1dcd9f09342def2aac4d2f29a985f31bf",
           "tests": 4
         }
       ]
@@ -118,12 +118,12 @@
       "suites": [
         {
           "file": "voiceSdk/build/test-results/test/TEST-com.jarvis.voice.sdk.ExpressionSpeechAdapterTest.xml",
-          "sha256": "84b59e389386a5c752a5a608c57c1f52c7a5ea1b10b81f29f1acda73978c5081",
+          "sha256": "cc1ad8dd60f11955b0ee1db608942a9cfca19140c4033fa50cda6d99f8f3fbc5",
           "tests": 4
         },
         {
           "file": "voiceSdk/build/test-results/test/TEST-com.jarvis.voice.sdk.SpeechSessionTest.xml",
-          "sha256": "9978f17eea584eb47c382fb088dc8309758964976dd8c0432112b0892b5b98e3",
+          "sha256": "dbc5bba56b6362051e1019508115b6828e6849e96b7d398fba473b10879e5692",
           "tests": 25
         }
       ]
@@ -137,22 +137,22 @@
       "suites": [
         {
           "file": "studioRuntime/build/test-results/test/TEST-com.jarvis.voice.studio.StudioLibraryTests.xml",
-          "sha256": "6923155af7eec559ca2d51051b47f673a28ba2b5c8ad115ca1051134de07fe6a",
+          "sha256": "4950fbaac78c7fef7d300214ad64b15898cb52bb299cc967b131c2d027a0b7d4",
           "tests": 3
         },
         {
           "file": "studioRuntime/build/test-results/test/TEST-com.jarvis.voice.studio.StudioParityTests.xml",
-          "sha256": "269b05fe861e665ac54ab59c1632f283769b8e3e030084cfd7080d2f6f90ebc6",
+          "sha256": "bafdffaa29a91891d2e84e4f5acde35119062aff8dfc9f11b00b9eb13305479f",
           "tests": 1
         },
         {
           "file": "studioRuntime/build/test-results/test/TEST-com.jarvis.voice.studio.StudioPcmWindowTests.xml",
-          "sha256": "e52f0a42129eed1d8c2fcdf2662418da5df6805c9a07b5faf65e8b1859a6b62d",
+          "sha256": "cb50a3c91face7c4e6d8ea442cbf451949508f9085e81f2c3a27f56cd652c709",
           "tests": 2
         },
         {
           "file": "studioRuntime/build/test-results/test/TEST-com.jarvis.voice.studio.StudioStateTests.xml",
-          "sha256": "a7f08d415f8cb616655e17f3eefc6df7462d77a7587fd09ec0a98dce66f2ab2f",
+          "sha256": "0ccd3efed26977b0077010258d8e035b2e414ee86a5fe575422f97bbd229d098",
           "tests": 4
         }
       ]
@@ -166,27 +166,27 @@
       "suites": [
         {
           "file": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ExpressionContractTests.xml",
-          "sha256": "a2cc28b712a41b9c8257464709f03c4233d87faac018a8cf05aebe8ce791c09e",
+          "sha256": "807c3b50c916ae955f5984e34785e8bf8261fc1a990ced370a6302c95bb57451",
           "tests": 4
         },
         {
           "file": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ExpressionStoreTests.xml",
-          "sha256": "34e1a500404824d3dceeb732e9e06679b090e7185263ee0c7ed14be926f7514b",
+          "sha256": "28661dad21d7b82c148db58b356e1e0cd0ae7d10d0762396037ee18cb3f14441",
           "tests": 3
         },
         {
           "file": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ExpressionStyleTests.xml",
-          "sha256": "3211a02b7faaab73c2fe15f90de1b2610727aa2a0a7a2c6325a3b9df4a103f12",
+          "sha256": "aaf2b7b90c5e42dcbe23b017cdd2059e476821594fdf5d3e2cd38212d0803b31",
           "tests": 8
         },
         {
           "file": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.ProsodyTests.xml",
-          "sha256": "8c442d607313636083a9691c16adbb387be5955b165603474ee36b6a0bb24584",
+          "sha256": "3f11fd7956a83f47edacb232ce1da65bed0afb3ece20bdfe4c2541068a04a1c9",
           "tests": 4
         },
         {
           "file": "expressionRuntime/build/test-results/test/TEST-com.jarvis.voice.expression.PublicNeutralParityTests.xml",
-          "sha256": "403c28ee8b8d376c390b6c3c3d2bed2e1b85b7178c60733e71cfa6cce2a2b391",
+          "sha256": "bceefcc7ff5854894a549a292b7b9349709810b913ebb32eeac8106d9ad98d54",
           "tests": 1
         }
       ]
@@ -200,22 +200,22 @@
       "suites": [
         {
           "file": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.IdentityWavTests.xml",
-          "sha256": "60d14464f202cdd17b012619f3ea45a44caddf5f2dcc6ab4669b88ae722229bf",
+          "sha256": "c833b8b3147269daa0ed6e99941ba56c6cedd088dae518d40b5ec015845a7c68",
           "tests": 1
         },
         {
           "file": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.RealPublicIdentityTests.xml",
-          "sha256": "43bcab9f4a51f31dd6df0cdd0e96a21ad7b9b66ba4d617f15eb0ed563cfc77c4",
+          "sha256": "60f7d5738c3d298f003c4b2109d5dbc969613e5d1eafa3a97b661f9986fd3a78",
           "tests": 1
         },
         {
           "file": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.VoiceIdentityArchiveTests.xml",
-          "sha256": "70dbd5d2ccbd7491d1a9b6909b405cf268fa69ef6bb1e760fdf686a93c42b1d1",
+          "sha256": "129c39beb15e7ea33bf969d9a125d17f0992ce258af727aa75c0b7eb0913e0cd",
           "tests": 5
         },
         {
           "file": "identityRuntime/build/test-results/test/TEST-com.jarvis.voice.identity.VoiceIdentityVaultTests.xml",
-          "sha256": "3c64a146f6c8b390c735a9df5fffddcbfa996f80eb732b89e09a83c8efdda8fc",
+          "sha256": "733eea1467288a266d0e777cca99cb54ea631a59c6c673cc26a91d5ea8f297ac",
           "tests": 12
         }
       ]
@@ -229,47 +229,47 @@
       "suites": [
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.CandidateVoiceEncoderTests.xml",
-          "sha256": "da8129b22ad5e9c04fc8765f375e7dbadc64d42cbd2d3af724b6da0afb0c4d44",
+          "sha256": "b18b912a86e9e4bf3bad135bfbc440e0373e6454ba03bd41b46c3375c45e7039",
           "tests": 2
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.ExperimentalImportTests.xml",
-          "sha256": "3dad76c4a15af6421231d1879ef6d5c33a2af5311ba24783f37394b1f1245850",
+          "sha256": "9b66a3a2467f553e6e03d813b3739ef4b9df8ce789ae43e8d3d9bbd1c37304a8",
           "tests": 3
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.ExperimentalProfileTests.xml",
-          "sha256": "09848fe2b74187e6db250139ae37b691a0a99e9b65bdb3b7b9071ee2e18be76e",
+          "sha256": "f35fe1a8c3ed130f863106c5598a0803c2276078a36dc2489f91c6915d19a9cc",
           "tests": 6
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PcmDeliveryTests.xml",
-          "sha256": "9ccb199c5180d08ece15c3968ec9190509fcca41c1868f49346fd6838c79ddca",
+          "sha256": "2fa3fd962387a8245676e26a6fec5e44b801dc6805713d8e8d50f4f3e0f891df",
           "tests": 6
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PerformanceTests.xml",
-          "sha256": "a789ca7ef65e3b6d31fa19c9f1cf5a40e9c333caf2091248013d5fe4825f73e1",
+          "sha256": "350124e18165892259551710a208f0437342b756ce571da38f6daa135cc03393",
           "tests": 1
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PlaybackEvidenceTests.xml",
-          "sha256": "c9093963c63bcc2a0778baa48e8938a8f7285ff3f7bcef76884e5a5ae8af8ca7",
+          "sha256": "058e3c719b65d0e1ca3a38b64fcb75cca74c5d0fabc70d54592fdc4831457e95",
           "tests": 5
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.PocketTests.xml",
-          "sha256": "33331c47e05fb970f314c24255efe11d6ad2099c5e72e245606dd5623ffec5d4",
+          "sha256": "17fd184a9866cc37feb0a9e19f9f0f3766946fbb01f5762364d1b55505113984",
           "tests": 11
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.QualitySamplerTests.xml",
-          "sha256": "78d5261399bc29f032cc18bbf86aaa9115861c327ccc79a41f823965f9a1ab25",
+          "sha256": "00b4bb3c00f60b886d7dffa0efc35809b757312b084cc2597007e8a4c27260d6",
           "tests": 5
         },
         {
           "file": "pocketRuntime/build/test-results/test/TEST-com.jarvis.voice.pocket.ReferenceAudioTests.xml",
-          "sha256": "d8b4d72fa44dc23c7bb9d107656ed7ff3bdf8250607958e961b0f79b6f29e578",
+          "sha256": "d376dc210489cc0ef24ea10cc26aa03a9e4e94f377c50d2b3976c839ac549c22",
           "tests": 7
         }
       ]
@@ -283,17 +283,17 @@
       "suites": [
         {
           "file": "voiceBridgeContract/build/test-results/test/TEST-com.jarvis.voice.bridge.CoordinatorTests.xml",
-          "sha256": "0cd6889d25ddf21da0982c6560a1e790a5a05b50a1e5c5650d8664533ef3e7d6",
+          "sha256": "f3fd2ccf052efa3b77ad8901fb55be8b49bee5f96d433d33108ca914cd81f78b",
           "tests": 8
         },
         {
           "file": "voiceBridgeContract/build/test-results/test/TEST-com.jarvis.voice.bridge.MapperTests.xml",
-          "sha256": "d18b3091184e77ceba9aaa70bb9b55c01e6aee4cdb9ece9cd85bb3004e522f24",
+          "sha256": "0accf3aec869a7863513e64e1c0f1264a844c71b85ca8875b8771320c4aad7d7",
           "tests": 12
         },
         {
           "file": "voiceBridgeContract/build/test-results/test/TEST-com.jarvis.voice.bridge.SchemaTests.xml",
-          "sha256": "d5389af3cb154fdef49e532bd43dce31d12245af6997529b622277feb9e8426a",
+          "sha256": "c8fe9e126f4f0466bf83aaf0053895ad6dc73d120d79bd5b0655005d42d33a89",
           "tests": 9
         }
       ]
@@ -307,7 +307,7 @@
       "suites": [
         {
           "file": "voiceBridgeHarness/build/test-results/test/TEST-com.jarvis.voice.bridge.harness.AdapterTests.xml",
-          "sha256": "4d9a8485f876681463644fb7e1e1c67171fd88ae6db80f1c84e360cfecb74397",
+          "sha256": "92665197f1042d628f64836491cd3440ca11c380739b1e3818577daf12c154fc",
           "tests": 3
         }
       ]
@@ -321,7 +321,7 @@
       "suites": [
         {
           "file": "app/build/test-results/testDebugUnitTest/TEST-com.jarvis.voice.speech.SpeechRouterTest.xml",
-          "sha256": "f116303a12fd2fa1d18687a50bb305d9d7869d330245289ff0e80c22427920dd",
+          "sha256": "f8be65cef8c665dc3490068487a6fd755ea5425ce44269c48e05e534c01d57d5",
           "tests": 8
         }
       ]
@@ -335,12 +335,12 @@
       "suites": [
         {
           "file": "voiceBridgePilot/build/test-results/testDebugUnitTest/TEST-com.jarvis.voice.bridgepilot.Fusion02ProposalTests.xml",
-          "sha256": "37423a5bcc7f50648958145f44f88568a74d9acfeb4bffc070affb406c4157c2",
+          "sha256": "eb7b4584082f7fd78e3ecacea47ba082bcf2eeeaedb24c8dbef98f57569a6376",
           "tests": 3
         },
         {
           "file": "voiceBridgePilot/build/test-results/testDebugUnitTest/TEST-com.jarvis.voice.bridgepilot.PilotTests.xml",
-          "sha256": "915e691548b133274cda80444d000b0e935800bc2846224a49e7ab190cfd5615",
+          "sha256": "d0bb9e5e70adfa4b0652bd01fed05612f528da7cae98c0890ae8898dde770e15",
           "tests": 17
         }
       ]
@@ -350,7 +350,7 @@
     "tests": 260,
     "failures": 0,
     "errors": 0,
-    "skipped": 22
+    "skipped": 23
   },
   "emulatorResult": "NOT_INFERRED",
   "deviceResult": "NOT_RUN"
