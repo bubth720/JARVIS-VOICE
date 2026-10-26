@@ -30,7 +30,7 @@ le SHA de code et la CI sont précisés dans VALIDATION.json après publication.
 Le code runtime des applications antérieures, JNI, poids, paramètres ONNX, gardes
 thermiques/batterie/mémoire, clés, profils et archives n'est pas modifié. Seulement
 settings ajoute le module ; deux builds ajoutent une dépendance **de test**. Aucun module
-frère modifié. La proposition est additif/inert : le Studio conserve sa chronologie v1
+frère modifié. La proposition reste additive et inerte : le Studio conserve sa chronologie v1
 jusqu'à une future revue d'intégration. Le profil B présent sur téléphone n'a pas été
 ouvert, copié ou réencodé. Les régressions utilisent des coffres synthétiques neufs.
 
@@ -107,7 +107,8 @@ non qualifiés, aucune optimisation numérique nouvelle activée.
 Passe locale forcée :260cas,238réussis,22sautés,0échec/erreur. Dont16nouveaux JVM,3nouveaux
 Robolectric et le benchmark natif réellement exécuté. Les22sauts historiques nécessitent
 leurs modèles/opt-in spécifiques ; ils ne deviennent pas des succès par le présent benchmark.
-Compilation Android de la fixture effectuée ; exécution émulateur/CI à vérifier séparément.
+Compilation finale app/test x86_64 et Lint réussis :0erreur/fatal,28avertissements
+conservés ; exécution émulateur/CI à vérifier séparément.
 Pas de /dev/kvm dans ce Cloud. Les8régressions Android et3nouveaux tests sont préparés pour
 API26/35 : signal synthétique avec le vrai lecteur, pas modèle personnel ni écoute humaine.
 

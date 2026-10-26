@@ -9,12 +9,13 @@
     "voiceBridgePilot/build.gradle.kts": "63d477939764157b0410b43a716f1a158416dad89e29763796a260c916d9d027",
     "voiceBridgePilot/src/test/java/com/jarvis/voice/bridgepilot/Fusion02ProposalTests.kt": "b282b32e34f5759a475ab4031244308266c51ad55a9112a0b43257e41b723064",
     "voiceFinalStudio/build.gradle.kts": "878fd97ced7bc62e3f5840b7da88ab0342ab39463b1b6c3212be344dfdf47df2",
-    "voiceFinalStudio/src/androidTest/java/com/jarvis/voice/voicestudio/Fusion02AudioTests.kt": "e4699086eb8fa9150eab6b89c510e5b39fcb8bffad4ff7be94c06d0c12d5a7ab",
+    "voiceFinalStudio/src/androidTest/java/com/jarvis/voice/voicestudio/Fusion02AudioTests.kt": "26e42558782c2ed6f3f7f30df7c9020758e795114d3f51adbef85e245ca644bb",
     "voiceFusion02/build.gradle.kts": "9151e133d482850a742d39e821f9427116b2a508e08d832ccab6cf5a24ec05be",
-    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/AudioTimeline.kt": "62bdada823f35b6821695f3f10d5e909ebbe833bede9ad8e570c5bf85f777ec5",
-    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/LocalProxy.kt": "6a30fa726eeced92592bd5eddb90c0d7ab0850d1c4b0e5c7fd3e5df510815912",
+    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/AudioTimeline.kt": "bc15c71b21f868c6627effccd631040b3bbd137265790b5f5669118b88348431",
+    "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/LocalProxy.kt": "56b69549c7b7c7b0ad21803f7f08c79b71ed7108741e9211560310001702c98f",
     "voiceFusion02/src/main/kotlin/com/jarvis/voice/fusion02/ProxyDemo.kt": "43600104da6dab40bbf1093efc3b18e2552cfd5001588127be6dfc8f940343c3",
     "voiceFusion02/src/test/kotlin/com/jarvis/voice/fusion02/PublicRenderBenchmarkTest.kt": "4e228716f365661083fee8b6c85adec9c551eb4d55fa7f17466082c22c82952c",
-    "voiceFusion02/src/test/kotlin/com/jarvis/voice/fusion02/TimelineTests.kt": "6315e093d6a0de8ef25295f61bab5e3b23db887d2cc0f01247b55758e05d1da8"
-  }
+    "voiceFusion02/src/test/kotlin/com/jarvis/voice/fusion02/TimelineTests.kt": "0f71ad2b18f95e361128fa3556c84a12d740f004a991e9e0c4323133b3de8af3"
+  },
+  "nativeBenchmarkCodeCommit": "a41d82a0b2c496db1b615757d802f05aff8ae096"
 }

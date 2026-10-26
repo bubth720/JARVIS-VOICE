@@ -82,9 +82,14 @@ data class SpeakProposal(val key: AudioKey,val utterance: PublicUtterance,val re
     override fun toString()="SpeakProposal(schema=$SPEAK_SCHEMA,generation=${key.generation})"
 }
 enum class IntegrationStatus { BLOCKED_NATIVE_AUTHORITY, UNSUPPORTED_CORE_WHISPER_NOT_CONNECTED }
+/** Capability port for the future CORE-owned Whisper; intentionally no recorder/audio payload API. */
+interface CoreWhisperCapability { fun status(): IntegrationStatus }
+object UnavailableCoreWhisper: CoreWhisperCapability {
+    override fun status()=IntegrationStatus.UNSUPPORTED_CORE_WHISPER_NOT_CONNECTED
+}
 object DisabledIntegration {
     fun speak(@Suppress("UNUSED_PARAMETER") proposal: SpeakProposal)=IntegrationStatus.BLOCKED_NATIVE_AUTHORITY
-    fun transcribe()=IntegrationStatus.UNSUPPORTED_CORE_WHISPER_NOT_CONNECTED
+    fun transcribe()=UnavailableCoreWhisper.status()
 }
 /** NEUTRAL means existing engine baseline, not a newly verified listening result. */
 object EmotionSupport {

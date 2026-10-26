@@ -37,7 +37,7 @@ class TimelineTests {
         t.nativeUnknown();assertEquals(AudioStage.NativeUnknown,t.stage)
     }
     @Test fun clocksAreMonotonicRelativeAndTestClockDeclared() {
-        var now=900L;val t=AudioTimeline(key(),1,ObservationOrigin.JVM_SIMULATION,{now},"INJECTED_TEST_CLOCK")
+        var now=900L;val t=AudioTimeline(key(),1,ObservationOrigin.JVM_SIMULATION,{now},ClockSource.INJECTED_TEST_CLOCK)
         t.queued();now+=10;pcm(t);assertEquals(10L,t.snapshot().last().elapsedNs)
         assertEquals("INJECTED_TEST_CLOCK",t.snapshot().last().metadata()["clock"])
         now=1;refuses(ProtocolError.CLOCK_REGRESSED){t.stop()}

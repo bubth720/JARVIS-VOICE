@@ -41,6 +41,14 @@ class Fusion02AudioTests {
         assertEquals(2,events.count { it.stage==AudioStage.PlayingEstimated })
         assertTrue(events.all { it.metadata()["humanAudibilityVerified"]==false })
         assertTrue(events.zipWithNext().all { (a,b) -> b.elapsedNs>=a.elapsedNs })
+        // Technical fixture timestamps only. No UUID, PCM, profile or human-audibility claim.
+        val timing=org.json.JSONArray()
+        events.filter { it.stage in setOf(AudioStage.FirstPCM,AudioStage.AudioTrackWrite,AudioStage.PlayingEstimated,AudioStage.Finished) }
+            .forEach { timing.put(org.json.JSONObject().put("stage",it.stage.name).put("segment",it.segment ?: org.json.JSONObject.NULL).put("elapsedNs",it.elapsedNs)) }
+        instrumentation.sendStatus(0,android.os.Bundle().apply {
+            putString("fusion02_synthetic_audio_timing",timing.toString())
+            putString("fusion02_origin","ANDROID_SYNTHETIC_AUDIO_TRACK_NOT_TTS_OR_HUMAN_LISTENING")
+        })
     }
     @Test fun actualAudioStopRejectsLateSuccessAndPreservesCorrelation() {
         val k=key();val t=AudioTimeline(k,1,ObservationOrigin.ANDROID_SYNTHETIC_AUDIO_TRACK)

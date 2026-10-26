@@ -9,22 +9,23 @@ data class AudioKey(val sessionId: String,val requestId: String,val generation: 
     override fun toString()="AudioKey(generation=$generation)"
 }
 enum class AudioStage { SpeechQueued, Generating, FirstPCM, AudioTrackWrite, PlayingEstimated, SegmentFinished, SegmentGeneratedOnly, Paused, Finished, RenderedOnly, Cancelled, Failed, NativeUnknown }
+enum class ClockSource { SYSTEM_NANO_TIME_PROCESS_RELATIVE, INJECTED_TEST_CLOCK }
 enum class ObservationOrigin { JVM_SIMULATION, LINUX_NATIVE_RENDER_ONLY, ANDROID_SYNTHETIC_AUDIO_TRACK }
 enum class ProtocolError { CORRELATION, TERMINAL, ORDER, FRAME_LIMIT, INCOMPLETE_AUDIO, CLOCK_REGRESSED, BUSY, REPLAY, CAPACITY, STALE_GENERATION }
 class AudioProtocolException(val code: ProtocolError): IllegalStateException(code.name)
 internal fun demand(ok: Boolean,code: ProtocolError) { if(!ok) throw AudioProtocolException(code) }
 /** IDs are operation correlation, never profile identifiers. No text/PCM/path in the event. */
 data class AudioEvent internal constructor(val key: AudioKey,val sequence: Long,val elapsedNs: Long,val stage: AudioStage,
-    val segment: Int?,val frames: Int?,val origin: ObservationOrigin,val clockSource: String) {
+    val segment: Int?,val frames: Int?,val origin: ObservationOrigin,val clockSource: ClockSource) {
     fun metadata(): Map<String,Any?> = mapOf("schema" to AUDIO_SCHEMA,"sessionId" to key.sessionId,"requestId" to key.requestId,
-        "generation" to key.generation,"sequence" to sequence,"elapsedNs" to elapsedNs,"clock" to clockSource,
+        "generation" to key.generation,"sequence" to sequence,"elapsedNs" to elapsedNs,"clock" to clockSource.name,
         "stage" to stage.name,"segment" to segment,"frames" to frames,"origin" to origin.name,
         "humanAudibilityVerified" to false,"nativeUnloadVerified" to false,"phoneticAlignmentVerified" to false)
     override fun toString()="AudioEvent(sequence=$sequence,stage=$stage,segment=$segment,frames=$frames,origin=$origin)"
 }
 /** Trusted producer observations, not an IPC decoder or native attestation. No lock spans rendering/audio. */
 class AudioTimeline(val key: AudioKey,val segments: Int,val origin: ObservationOrigin,
-    private val clock: ()->Long=System::nanoTime,private val clockSource: String="System.nanoTime/process-relative") {
+    private val clock: ()->Long=System::nanoTime,private val clockSource: ClockSource=ClockSource.SYSTEM_NANO_TIME_PROCESS_RELATIVE) {
     private val began=clock();private var last=began;private var sequence=0L
     private val events=java.util.ArrayDeque<AudioEvent>()
     @Volatile var dropped=0;private set
