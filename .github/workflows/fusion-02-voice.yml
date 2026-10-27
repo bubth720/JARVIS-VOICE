@@ -1,11 +1,11 @@
 name: FUSION-02 VOICE isolated protocol
 on:
   push:
-    branches: ['feat/fusion-02-voice-timeline']
+    branches: ['feat/fusion-02-voice-timeline', 'codex/prefusion-20261026-lot1']
     paths-ignore: ['docs/fusion-02/**']
   pull_request:
-    branches: ['feat/voice-final-01']
-    paths: ['voiceFusion02/**', 'voiceFinalStudio/**', 'voiceBridgePilot/**', 'scripts/fusion-02/**', '.github/workflows/fusion-02-voice.yml', 'settings.gradle.kts']
+    branches: ['feat/voice-final-01', 'mission/prefusion-gates-20261026']
+    paths: ['docs/prefusion/**', 'tools/check-prefusion.py', 'tests/prefusion/**', 'voiceFusion02/**', 'voiceFinalStudio/**', 'voiceBridgePilot/**', 'scripts/fusion-02/**', '.github/workflows/fusion-02-voice.yml', 'settings.gradle.kts']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,16 +22,17 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
-      - run: python3 scripts/fusion-02/check_scope.py
+      - run: python3 tools/check-prefusion.py
+      - run: python3 -m unittest discover -s tests/prefusion -v
       - run: ./gradlew :voiceFusion02:test :voiceFusion02:run :voiceFinalSdk:test :voiceFinalRuntime:test :voice04Runtime:test :voiceSdk:test :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test :voiceBridgeContract:test :voiceBridgeHarness:test :app:testDebugUnitTest :voiceBridgePilot:testDebugUnitTest -PincludeVoicePilot=true --no-daemon --max-workers=2
-      - run: python3 scripts/fusion-02/collect_tests.py --output docs/fusion-02/evidence/CI-JVM.json
+      - run: python3 scripts/fusion-02/collect_tests.py --output build/prefusion/CI-JVM.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fusion02-voice-jvm-evidence
+          name: prefusion-voice-jvm-evidence
           path: |
             */build/test-results/**/*.xml
-            docs/fusion-02/evidence/CI-JVM.json
+            build/prefusion/CI-JVM.json
   audio:
     needs: unit
     strategy:
@@ -60,7 +61,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fusion02-voice-audio-api${{ matrix.api }}
+          name: prefusion-voice-audio-api${{ matrix.api }}
           path: voiceFinalStudio/build/fusion-02-proof/**
   build:
     needs: [unit, audio]
@@ -77,7 +78,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fusion02-voice-build-evidence
+          name: prefusion-voice-build-evidence
           path: |
             voiceFinalStudio/build/fusion-02-apk-audit.json
             voiceFinalStudio/build/reports/lint-results-debug.*
