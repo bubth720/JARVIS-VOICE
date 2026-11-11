@@ -100,7 +100,7 @@ class StudioActivity: AppCompatActivity() {
         else if(controller.state.screen!=StudioScreen.SPEAK) controller.navigate(StudioScreen.SPEAK)
         else { controller.stop();super.onBackPressed() }
     }
-    override fun onStart() { super.onStart();if(ready) { controller.observe(this) { rebuild -> if(!isFinishing) { if(rebuild) render();status() } };render();status() } }
-    override fun onStop() { if(ready) { controller.flush();if(!isChangingConfigurations && controller.busy) controller.stop() };super.onStop() }
+    override fun onStart() { super.onStart();if(ready) { controller.setQuickUiVisible(true);controller.observe(this) { rebuild -> if(!isFinishing) { if(rebuild) render();status() } };render();status() } }
+    override fun onStop() { if(ready) { controller.setQuickUiVisible(false);controller.flush();if(!isChangingConfigurations && controller.busy) controller.stop() };super.onStop() }
     override fun onDestroy() { if(ready) controller.unobserve(this);super.onDestroy() }
 }
