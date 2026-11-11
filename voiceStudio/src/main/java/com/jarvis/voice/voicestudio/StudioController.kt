@@ -135,7 +135,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             val m=OperationMetrics(context);measure=m
             try { m.start { token.cancel();player.get()?.stop() };token.check();if(heavy) admission();message=action(token);token.check() }
             catch(t: Throwable) { message=if(token.isCancelled()) "Annulé ou protection mémoire/thermique déclenchée. Les éléments validés restent conservés." else safeError(t) }
-            finally { cleanup();m.close();metrics=m.summary();measure=null;cancel=null;busy=false;emit(true) }
+            finally { requestQuickStop();cleanup();m.close();metrics=m.summary();measure=null;cancel=null;busy=false;emit(true) }
         }
         return true
     }
@@ -454,6 +454,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun replayProfile(slot: String) { val id=library.activeConfirmed().identityId;run("Réécoute du profil $slot…") { c -> val t=profiles(id);play(t.load(slot,vault,c),c);audition=("profile$slot") to t.metadata(slot);"Profil $slot réécouté sans modèle." } }
     private fun play(pcm: FloatArray,c: CancellationToken,focus: AudioFocusController?=null): AudioReceipt {
         if(sdkSessions.isQuarantined) throw SpeechRejected(SpeechRefusal.ENGINE_FAILED)
+        drainQuickBeforeFinal()
         audition=null;val stats=PcmStatistics.measure(pcm);require(stats.samples>0 && stats.nonFinite==0)
         val prefix=diagnostics
         val audio=PcmPlayer(context,c,{ detail -> diagnostics=prefix+"\n"+stats.summary()+"\n"+detail;emit() },{focus?.granted();message="Lecture commencée — progression mesurée.";emit()})
