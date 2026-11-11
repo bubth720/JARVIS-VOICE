@@ -1,7 +1,7 @@
 name: VOICE Expressive V3 Android laboratory
 on:
   push:
-    branches: [feat/voice-expressive-v3-android]
+    branches: [feat/voice-expressive-v3-android, 'claude/repos-folders-analysis-sr65sg']
   pull_request:
     paths:
       - 'studioRuntime/**'
