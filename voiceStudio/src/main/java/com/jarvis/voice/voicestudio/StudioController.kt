@@ -49,6 +49,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     @Volatile private var quickOperation:String?=null
     private var previousQuickMs:Long?=null
     @Volatile var quickOptedIn=false;private set
+    @Volatile private var quickUiVisible=false
     // Transient opt-in only. Existing admission/worker and PcmPlayer remain the resource owners.
     @Volatile var sdkEnabled=false; private set
     private val sdkSession=AtomicReference<SpeechSession?>()
@@ -96,7 +97,14 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun text(value: String) { synchronized(lock) { state=state.copy(text=value) };main.removeCallbacks(persist);main.postDelayed(persist,300) }
     private val persist=Runnable { synchronized(lock) { store.save(state) } }
     fun flush() { main.removeCallbacks(persist);synchronized(lock) { store.save(state) } }
-    fun navigate(screen: StudioScreen) { update { it.copy(screen=screen) };emit(true) }
+    fun setQuickUiVisible(visible:Boolean) {
+        quickUiVisible=visible
+        if(!visible) requestQuickStop()
+    }
+    fun navigate(screen: StudioScreen) {
+        if(screen!=StudioScreen.SPEAK) requestQuickStop()
+        update { it.copy(screen=screen) };emit(true)
+    }
     fun draft(change: (WizardDraft)->WizardDraft) { update { it.copy(wizard=change(it.wizard)) } }
     fun error(t: Throwable) { message=safeError(t);emit() }
     fun notice(text: String) { message=text;emit() }
@@ -212,7 +220,7 @@ class StudioController(private val context: Context,private val backend: StudioB
                 val validProfile=runCatching { library.activeConfirmed()==profile }.getOrDefault(false)
                 val available=quickStore.exists(QuickReactionPhrase.SPEECH)
                 val permitted=QuickReactionTiming.shouldPlay(
-                    now-started,previousQuickMs?.let { now-it },busy && quickOperation==marker,
+                    now-started,previousQuickMs?.let { now-it },busy && quickOperation==marker && quickUiVisible && state.screen==StudioScreen.SPEAK,
                     quickOptedIn,validProfile,!DeviceMetrics.isThermallySevere(context),
                     available,false,quickTask?.isDone==false || quickPlayer.get()!=null
                 )
