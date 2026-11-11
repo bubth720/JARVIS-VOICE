@@ -47,6 +47,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     private var quickTask: Future<*>?=null
     private var quickCancel: CancellationToken?=null
     @Volatile private var quickOperation:String?=null
+    @Volatile private var quickFinalReady=false
     private var previousQuickMs:Long?=null
     @Volatile var quickOptedIn=false;private set
     @Volatile private var quickUiVisible=false
@@ -222,7 +223,7 @@ class StudioController(private val context: Context,private val backend: StudioB
                 val permitted=QuickReactionTiming.shouldPlay(
                     now-started,previousQuickMs?.let { now-it },busy && quickOperation==marker && quickUiVisible && state.screen==StudioScreen.SPEAK,
                     quickOptedIn,validProfile,!DeviceMetrics.isThermallySevere(context),
-                    available,false,quickTask?.isDone==false || quickPlayer.get()!=null
+                    available,quickFinalReady,quickTask?.isDone==false || quickPlayer.get()!=null
                 )
                 if(permitted) {
                     val token=CancellationToken();quickCancel=token
@@ -376,6 +377,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun generate(slot: String?=null) {
         val p=library.activeConfirmed();require(hasModel()) { "Modèle absent. Importer le ZIP FP32 existant dans Réglages avancés." }
         val s=state.settings;val text=state.text;val plan=StudioRendering.plan(state,p,slot=="A")
+        quickFinalReady=false
         val admitted=run("JARVIS prépare la phrase complète…",true) { c ->
             audition=null;require(library.activeConfirmed()==p)
             val target=if(slot==null) single(p.identityId) else expressions(p.identityId);val side=slot ?: "A"
@@ -383,7 +385,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             val voice=vault.binding().resolve(p.identityId,p.id,c)
             val prosody=backend.prepare(pack,plan)
             diagnostics=prosody.summary();emit()
-            val rendered=backend.render(pack,voice,prosody,c);c.check()
+            val rendered=backend.render(pack,voice,prosody,c);quickFinalReady=true;c.check()
             target.save(side,p.identityId,p,text,s.seed,s.sampling(),rendered.pcm,c,plan.intent.name,prosody.pauseMs)
             measure?.summary()?.let { target.performance(side,it,c) }
             diagnostics="Génération réussie ; EOS ${rendered.metrics.all { it.eosReached }} ; rendu ${rendered.wallMs.toLong()} ms ; phrases ${rendered.metrics.size}\n"+prosody.summary()+"\n"+PcmStatistics.measure(rendered.pcm).summary();message="Génération réussie. Audio conservé ; lecture en préparation.";emit()
