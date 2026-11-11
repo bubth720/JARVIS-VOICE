@@ -25,6 +25,21 @@ class SpeakScreen(private val a: StudioActivity) {
         sdk.isEnabled=!c.busy
         sdk.setOnCheckedChangeListener { _,enabled -> a.guard { c.enableSdk(enabled) } }
         u.text(options,"Désactivé par défaut. Même moteur, même profil et protections Studio. PCM complet différé ; aucun streaming natif garanti, aucune réécoute enregistrée par ce parcours.",14f,true)
+        if(a.packageName=="com.jarvis.voice.studio.expressivev3") {
+            u.text(options,"LABORATOIRE V3 · réaction pré-générée avec cette même voix. Le calcul Pocket et celui du LLM ne sont pas accélérés. Aucun accès à CORE.",14f,true)
+            val enabled=u.toggle(options,"Réaction rapide pendant ma synthèse (autorisation temporaire)",c.quickOptedIn)
+            enabled.isEnabled=voice!=null && c.hasModel() && !c.busy
+            enabled.setOnCheckedChangeListener { _,on -> a.guard { c.optInQuickFeedback(on) } }
+            u.button(options,"Préparer et écouter « Je prépare ma réponse. »") {
+                a.guard { c.prepareQuickPhrase() }
+            }.isEnabled=voice!=null && c.hasModel() && !c.busy
+            u.button(options,"Effacer les réactions chiffrées") {
+                a.confirm("Effacer les réactions ?", "Les courts audios pré-générés seront effacés. Votre voix B et vos archives restent intactes.") {
+                    c.clearQuickPhrases()
+                }
+            }
+            u.text(options,"Après 1,2 s d'attente encore active, un clip déjà préparé peut être lu. Cette phrase ne promet aucun délai précis. La réponse finale attend l'arrêt confirmé du clip.",12f,true)
+        }
         val pause=u.toggle(options,"Pauses entre phrases",c.state.settings.pauses,R.id.pause_switch)
         val durations=u.spinner(options,"Silence entre phrases (ms)",listOf("0","250","500","1000","1500"),listOf(0,250,500,1000,1500).indexOf(c.state.settings.pauseMs))
         u.text(options,"Option explicite : écrire 2 ou 3 phrases complètes, une par ligne. Pas de découpage automatique. Désactiver si le texte est ambigu.",14f,true)

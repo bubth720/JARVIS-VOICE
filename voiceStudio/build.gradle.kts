@@ -6,11 +6,14 @@ android {
     namespace = "com.jarvis.voice.voicestudio"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.jarvis.voice.voicestudio005j"
+        // A separate laboratory package; never overwrites the signed 005J app.
+        applicationId = if(providers.gradleProperty("voiceExpressivePilot").orNull=="true")
+            "com.jarvis.voice.studio.expressivev3" else "com.jarvis.voice.voicestudio005j"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.6.0-mission005j-experimental"
+        versionName = if(providers.gradleProperty("voiceExpressivePilot").orNull=="true")
+            "0.7.0-expressive-v3-laboratory" else "0.6.0-mission005j-experimental"
         testInstrumentationRunner = "com.jarvis.voice.voicestudio.StudioTestRunner"
         ndk { abiFilters += providers.gradleProperty("prototypeTestAbi").getOrElse("arm64-v8a") }
     }
