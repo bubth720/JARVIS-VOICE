@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import com.jarvis.voice.identity.*
 import com.jarvis.voice.identity.VoiceProfile
 import com.jarvis.voice.expression.*
@@ -13,6 +14,9 @@ import com.jarvis.voice.sdk.*
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.Executors
+import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicReference
 
 /** Application-scoped queue, not an Activity. One heavy model, one ORT thread, no remote transport. */
@@ -34,6 +38,17 @@ class StudioController(private val context: Context,private val backend: StudioB
     private var observerOwner: Any?=null
     private var cancel: CancellationToken?=null
     private val player=AtomicReference<PcmPlayer?>()
+    // V3 laboratory only: a small cached PCM clip can play while this ONE heavy worker
+    // generates the final phrase. No second native model, external service or CORE claim.
+    private val quickStore=StudioQuickClipStore(context)
+    private val quickWorker=Executors.newSingleThreadExecutor()
+    private val quickGate=Any()
+    private val quickPlayer=AtomicReference<PcmPlayer?>()
+    private var quickTask: Future<*>?=null
+    private var quickCancel: CancellationToken?=null
+    @Volatile private var quickOperation:String?=null
+    private var previousQuickMs:Long?=null
+    @Volatile var quickOptedIn=false;private set
     // Transient opt-in only. Existing admission/worker and PcmPlayer remain the resource owners.
     @Volatile var sdkEnabled=false; private set
     private val sdkSession=AtomicReference<SpeechSession?>()
@@ -124,7 +139,110 @@ class StudioController(private val context: Context,private val backend: StudioB
         }
         return true
     }
-    fun stop() { sdkSession.get()?.requestStop();cancel?.cancel();player.get()?.stop();notice("Arrêt demandé. Lecture coupée ; annulation native en cours.") }
+    fun stop() {
+        sdkSession.get()?.requestStop();cancel?.cancel();player.get()?.stop()
+        requestQuickStop()
+        notice("Arrêt demandé. Lecture coupée ; annulation native en cours.")
+    }
+    /** Opt-in is VOLATILE: deliberately not restored after application restart. */
+    fun optInQuickFeedback(enabled:Boolean) {
+        check(!busy) { "Arrêter le travail avant de changer cette préférence." }
+        quickOptedIn=enabled
+        if(!enabled) requestQuickStop()
+        notice(if(enabled) "Réaction rapide autorisée. Préparer d'abord un extrait local avec cette voix ; ne réduit pas le calcul Pocket."
+            else "Réactions rapides désactivées. Aucune phrase d'attente automatique.")
+    }
+    fun prepareQuickPhrase(kind: QuickReactionPhrase=QuickReactionPhrase.SPEECH) {
+        val profile=library.activeConfirmed()
+        require(hasModel()) { "Importer d'abord le pack FP32 existant." }
+        val settings=state.settings
+        val snapshot=state.copy(text=kind.spoken,settings=settings.copy(
+            pauses=false,intent=VoiceExpressionIntent.NEUTRAL))
+        val plan=StudioRendering.plan(snapshot,profile)
+        run("Préparation locale chiffrée de la réaction…",true) { token ->
+            require(library.activeConfirmed()==profile)
+            val voice=vault.binding().resolve(profile.identityId,profile.id,token)
+            val result=backend.render(pack,voice,backend.prepare(pack,plan),token)
+            token.check()
+            require(result.metrics.all { it.eosReached }) { "La phrase n'a pas été entièrement générée." }
+            require(result.pcm.size in 2400..72000) { "Réaction trop longue : trois secondes au maximum." }
+            play(result.pcm,token) // The user hears the clip before it is stored.
+            token.check();require(library.activeConfirmed()==profile)
+            quickStore.save(kind,profile,settings,result.pcm)
+            result.pcm.fill(0f)
+            "Réaction locale prête et chiffrée pour le profil actuel. Elle ne sera jouée qu'après votre activation."
+        }
+    }
+    fun clearQuickPhrases() {
+        check(!busy) { "Arrêter la génération avant d'effacer les clips." }
+        requestQuickStop();quickStore.clear()
+        quickOptedIn=false
+        notice("Réactions locales chiffrées effacées. Le profil vocal et les archives restent intacts.")
+    }
+    private fun requestQuickStop() {
+        synchronized(quickGate) {
+            quickOperation=null
+            quickCancel?.cancel()
+            quickPlayer.get()?.stop()
+        }
+    }
+    /** Must be called on the heavy worker BEFORE final PCM enters AudioTrack. */
+    private fun drainQuickBeforeFinal() {
+        val pending:Future<*>?
+        synchronized(quickGate) {
+            quickOperation=null;quickCancel?.cancel();quickPlayer.get()?.stop()
+            pending=quickTask
+        }
+        if(pending!=null) try {
+            pending.get(2500,TimeUnit.MILLISECONDS)
+        } catch(_: TimeoutException) {
+            throw IllegalStateException("Réaction encore active : lecture finale bloquée pour éviter deux voix.")
+        } catch(_: java.util.concurrent.ExecutionException) {
+            // Playback worker always closes AudioTrack in finally; the Future is complete.
+        }
+    }
+    private fun scheduleQuickOnCurrentGeneration(profile:VoiceProfile,settings:StudioSettings) {
+        if(!quickOptedIn) return
+        val marker=java.util.UUID.randomUUID().toString()
+        synchronized(quickGate) { quickOperation=marker }
+        val started=SystemClock.elapsedRealtime()
+        main.postDelayed({
+            synchronized(quickGate) {
+                val now=SystemClock.elapsedRealtime()
+                val validProfile=runCatching { library.activeConfirmed()==profile }.getOrDefault(false)
+                val available=quickStore.exists(QuickReactionPhrase.SPEECH)
+                val permitted=QuickReactionTiming.shouldPlay(
+                    now-started,previousQuickMs?.let { now-it },busy && quickOperation==marker,
+                    quickOptedIn,validProfile,!DeviceMetrics.isThermallySevere(context),
+                    available,false,quickTask?.isDone==false || quickPlayer.get()!=null
+                )
+                if(permitted) {
+                    val token=CancellationToken();quickCancel=token
+                    quickTask=quickWorker.submit {
+                        var pcm:FloatArray?=null
+                        try {
+                            if(token.isCancelled()) return@submit
+                            val rendered=quickStore.load(QuickReactionPhrase.SPEECH,profile,settings)
+                                ?:return@submit
+                            pcm=rendered
+                            token.check()
+                            val audio=PcmPlayer(context,token,onStarted={
+                                message="JARVIS prépare sa réponse… (réaction mise en cache)";emit()
+                            })
+                            quickPlayer.set(audio)
+                            audio.use { it.write(rendered);it.drain() }
+                        } catch(_: Throwable) {
+                            // No fallback TTS, no false playback success, no sensitive diagnostics.
+                        } finally {
+                            quickPlayer.getAndSet(null)?.close()
+                            pcm?.fill(0f)
+                        }
+                    }
+                    previousQuickMs=now
+                }
+            }
+        },QuickReactionTiming.WAIT_MS)
+    }
     fun enableSdk(enabled: Boolean) {
         check(!busy) { "Attendre la fin de l’opération avant de changer de lecteur." }
         sdkEnabled=enabled
@@ -212,7 +330,11 @@ class StudioController(private val context: Context,private val backend: StudioB
         }
     }
     fun activate(id: VoiceIdentityId,pid: String,neutral: Boolean=false) {
-        run("Confirmation du profil choisi…") { c -> library.activate(id,pid,c,neutral);audition=null;"Voix activée explicitement. Elle reste identique pour tous les essais d’intention." }
+        run("Confirmation du profil choisi…") { c ->
+            library.activate(id,pid,c,neutral)
+            quickStore.clear();quickOptedIn=false;audition=null
+            "Voix activée explicitement. Les réactions pré-générées de l'ancienne sélection ont été effacées."
+        }
     }
     fun restore(uri: Uri,password: CharArray,legal: Boolean) {
         requireLocal(uri)
@@ -246,7 +368,7 @@ class StudioController(private val context: Context,private val backend: StudioB
     fun generate(slot: String?=null) {
         val p=library.activeConfirmed();require(hasModel()) { "Modèle absent. Importer le ZIP FP32 existant dans Réglages avancés." }
         val s=state.settings;val text=state.text;val plan=StudioRendering.plan(state,p,slot=="A")
-        run("JARVIS prépare la phrase complète…",true) { c ->
+        val admitted=run("JARVIS prépare la phrase complète…",true) { c ->
             audition=null;require(library.activeConfirmed()==p)
             val target=if(slot==null) single(p.identityId) else expressions(p.identityId);val side=slot ?: "A"
             if(slot=="B") target.requireB(p.identityId,p,target.context(p.identityId,text,s.seed,s.sampling()),c)
@@ -257,9 +379,12 @@ class StudioController(private val context: Context,private val backend: StudioB
             target.save(side,p.identityId,p,text,s.seed,s.sampling(),rendered.pcm,c,plan.intent.name,prosody.pauseMs)
             measure?.summary()?.let { target.performance(side,it,c) }
             diagnostics="Génération réussie ; EOS ${rendered.metrics.all { it.eosReached }} ; rendu ${rendered.wallMs.toLong()} ms ; phrases ${rendered.metrics.size}\n"+prosody.summary()+"\n"+PcmStatistics.measure(rendered.pcm).summary();message="Génération réussie. Audio conservé ; lecture en préparation.";emit()
+            drainQuickBeforeFinal()
             play(rendered.pcm,c);audition=(slot ?: "main") to target.metadata(side)
             "Lecture terminée. Réécouter est disponible sans recalcul du modèle."
         }
+        // Waiting feedback only for the primary visible Speak action, NEVER background A/B.
+        if(admitted && slot==null) scheduleQuickOnCurrentGeneration(p,s)
     }
     fun generateStyleComparison(slot: String) {
         require(slot in setOf("A","B"))
@@ -345,7 +470,7 @@ class StudioController(private val context: Context,private val backend: StudioB
             "Notes d’écoute conservées localement ; aucune qualité inventée."
         }
     }
-    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé dans 005J seulement." } }
-    fun clearAudio(id: VoiceIdentityId) { run("Effacement des seules réécoutes de cette voix…") { expressions(id).delete();single(id).delete();profiles(id).delete();styleComparisons(id).delete();audition=null;"Audios effacés ; profils et références conservés." } }
-    fun removeIdentity(id: VoiceIdentityId) { run("Suppression de cette voix 005J…") { c -> check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Voix supprimée de 005J seulement. Les anciennes applications restent intactes." } }
+    fun removeProfile(id: VoiceIdentityId,pid: String) { run("Suppression du seul profil confirmé…") { c -> quickStore.clear();quickOptedIn=false;expressions(id).deleteProfile(id,pid,c);single(id).deleteProfile(id,pid,c);profiles(id).deleteProfile(id,pid,c);styleComparisons(id).deleteProfile(id,pid,c);library.choice.forget(id,pid);vault.removeProfile(id,pid,true,c);audition=null;"Profil supprimé ; réactions associées effacées." } }
+    fun clearAudio(id: VoiceIdentityId) { run("Effacement des seules réécoutes de cette voix…") { quickStore.clear();quickOptedIn=false;expressions(id).delete();single(id).delete();profiles(id).delete();styleComparisons(id).delete();audition=null;"Audios et réactions effacés ; profils et références conservés." } }
+    fun removeIdentity(id: VoiceIdentityId) { run("Suppression de cette voix…") { c -> quickStore.clear();quickOptedIn=false;check(audioRoot(id).deleteRecursively());library.choice.forget(id);vault.removeIdentity(id,true,c);audition=null;"Identité locale et réactions associées supprimées ; les autres applications restent intactes." } }
 }
