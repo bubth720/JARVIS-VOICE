@@ -61,7 +61,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: ./gradlew -PvoiceExpressivePilot=true -Pandroid.testInstrumentationRunnerArguments.class=com.jarvis.voice.voicestudio.StudioQuickClipTests :voiceStudio:connectedDebugAndroidTest --no-daemon --max-workers=2
+          script: ./gradlew -PvoiceExpressivePilot=true -PprototypeTestAbi=x86_64 -Pandroid.testInstrumentationRunnerArguments.class=com.jarvis.voice.voicestudio.StudioQuickClipTests :voiceStudio:connectedDebugAndroidTest --no-daemon --max-workers=2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
