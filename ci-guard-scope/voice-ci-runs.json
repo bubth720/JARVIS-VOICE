@@ -1,0 +1,29 @@
+{
+  "mission": "VOICE-00",
+  "before": {
+    "sha": "92d07453260553466c92196454b56929b7494b2f",
+    "branch": "feat/voice-expressive-v3-android",
+    "runs": [
+      {"workflow": "VOICE SDK and expression styles", "run": 43009384631, "conclusion": "failure"},
+      {"workflow": "Voice Studio 005J", "run": 43009384629, "conclusion": "failure"},
+      {"workflow": "Android", "run": 43009384822, "conclusion": "success"},
+      {"workflow": "VOICE Expressive V3 Android laboratory", "run": 43009384722, "conclusion": "success"}
+    ]
+  },
+  "after": {
+    "sha": "1a54da86337394ab702ae35c45c57574cef130cb",
+    "branch": "claude/repos-folders-analysis-sr65sg",
+    "event": "push",
+    "runs": [
+      {"workflow": "VOICE SDK and expression styles", "run": 43082419213, "conclusion": "success"},
+      {"workflow": "Voice Studio 005J", "run": 43082419222, "conclusion": "success"},
+      {"workflow": "Android", "run": 43082419271, "conclusion": "success"},
+      {"workflow": "VOICE Expressive V3 Android laboratory", "run": 43082419678, "conclusion": "success"}
+    ]
+  },
+  "localTests": {
+    "voice_v3_successor.py": "PASS",
+    "test_voice_v3_successor.py": "6/6 PASS (1 clean + 5 negative mutations rejected)"
+  },
+  "notRun": ["Gradle/lint/emulator locally (CI only)", "PR #27 signal (fix not ported to feat/voice-expressive-v3-android)"]
+}
