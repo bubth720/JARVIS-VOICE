@@ -48,7 +48,7 @@ internal class StudioQuickClipStore(context: Context) {
         }
         require(folder.isDirectory || folder.mkdirs()) { "Stockage local indisponible." }
         val raw=ByteBuffer.allocate(4+pcm.size*4).order(ByteOrder.LITTLE_ENDIAN)
-            .putInt(pcm.size).also { bb -> pcm.forEach(bb::putFloat) }.array()
+            .putInt(pcm.size).also { bb -> pcm.forEach { bb.putFloat(it) } }.array()
         val cipher=Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE,key())
         cipher.updateAAD(binding(kind,p,s))
@@ -67,6 +67,7 @@ internal class StudioQuickClipStore(context: Context) {
             } finally { tmp.delete() }
         } finally { raw.fill(0) }
     }
+    fun exists(kind: QuickReactionPhrase): Boolean = file(kind).isFile
     @Synchronized fun load(kind: QuickReactionPhrase,p: VoiceProfile,s: StudioSettings): FloatArray? {
         val stored=file(kind)
         if(!stored.isFile || stored.length() !in 34..290000) return null
