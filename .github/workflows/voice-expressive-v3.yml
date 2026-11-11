@@ -28,7 +28,7 @@ jobs:
       - name: JVM gates / Android laboratory APK / lint
         run: ./gradlew -PvoiceExpressivePilot=true :studioRuntime:test :voiceStudio:assembleDebug :voiceStudio:assembleDebugAndroidTest :voiceStudio:lintDebug --no-daemon --max-workers=2
       - name: Audit standalone APK; no private weights, no internet permission
-        run: python scripts/pocket/verify_experimental_apk.py voiceStudio/build/outputs/apk/debug/voiceStudio-debug.apk --application-id com.jarvis.voice.studio.expressivev3 --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voiceStudio/build/expressive-v3-audit.json
+        run: python scripts/voice-exp-v3/verify_expressive_apk.py voiceStudio/build/outputs/apk/debug/voiceStudio-debug.apk --application-id com.jarvis.voice.studio.expressivev3 --build-tools "$ANDROID_HOME/build-tools/35.0.0" --report voiceStudio/build/expressive-v3-audit.json
       - uses: actions/upload-artifact@v4
         with:
           name: voice-expressive-v3-apk-laboratory
