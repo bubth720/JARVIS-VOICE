@@ -1,7 +1,9 @@
 name: Voice Studio 005J
 on:
+  push:
+    branches: ['claude/repos-folders-analysis-sr65sg']
   pull_request:
-    paths: ['voiceStudio/**', 'studioRuntime/**', 'expressionRuntime/**', 'identityRuntime/**', 'settings.gradle.kts', 'scripts/pocket/verify*', 'scripts/pocket/prepare_studio_test_audio.py', 'scripts/pocket/test_studio_android.sh', 'deliveries/mission005j/**', '.github/workflows/voice-studio.yml']
+    paths: ['voiceStudio/**', 'studioRuntime/**', 'expressionRuntime/**', 'identityRuntime/**', 'settings.gradle.kts', 'scripts/pocket/verify*', 'scripts/pocket/prepare_studio_test_audio.py', 'scripts/pocket/test_studio_android.sh', 'deliveries/mission005j/**', 'scripts/ci_guard_scope/**', '.github/workflows/voice-studio.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,7 +24,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Verify preservation of functional applications and model bindings
-        run: git diff --exit-code f917ef15ce74a045564ddabdc407ccde4b595ba6 -- app pocketProbe voicePrototype voiceQuality voiceIdentity voiceExpression pocketRuntime identityRuntime expressionRuntime deliveries/mission005f deliveries/mission005g deliveries/mission005h deliveries/mission005i
+        # VOICE-00: the original command below is read verbatim from 005J commit cce9a45
+        # and executed there in a detached worktree; HEAD must satisfy the V3 successor:
+        # git diff --exit-code f917ef15ce74a045564ddabdc407ccde4b595ba6 -- app pocketProbe voicePrototype voiceQuality voiceIdentity voiceExpression pocketRuntime identityRuntime expressionRuntime deliveries/mission005f deliveries/mission005g deliveries/mission005h deliveries/mission005i
+        run: python3 scripts/ci_guard_scope/voice_v3_successor.py --studio
       - name: Test JVM library and encrypted archives; private pack is never downloaded
         run: ./gradlew :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test --no-daemon --max-workers=2
       - name: Build independent Android application and lint

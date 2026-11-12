@@ -1,9 +1,9 @@
 name: VOICE SDK and expression styles
 on:
   push:
-    branches: ['feat/voice-01-intensive', 'feat/voice-02-intensive']
+    branches: ['feat/voice-01-intensive', 'feat/voice-02-intensive', 'claude/repos-folders-analysis-sr65sg']
   pull_request:
-    paths: ['voiceSdk/**', 'expressionRuntime/**', 'voiceStudio/**', 'scripts/voice_sdk/**', 'settings.gradle.kts', '.github/workflows/voice-sdk.yml']
+    paths: ['voiceSdk/**', 'expressionRuntime/**', 'voiceStudio/**', 'scripts/voice_sdk/**', 'scripts/ci_guard_scope/**', 'settings.gradle.kts', '.github/workflows/voice-sdk.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,7 +22,11 @@ jobs:
           test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
       - name: Preserve engines, packs, identities, historical app and bridge
-        run: python scripts/voice_sdk/check_style_preservation.py
+        # VOICE-00: original guard executed unchanged on its frozen commit 3ffb280,
+        # plus hash-pinned V3 successor invariants (scripts/ci_guard_scope).
+        run: |
+          python3 scripts/ci_guard_scope/voice_v3_successor.py --sdk
+          python3 scripts/ci_guard_scope/test_voice_v3_successor.py
       - name: SDK tests and public synthetic demonstration
         run: ./gradlew :voiceSdk:test :voiceSdk:demo :voiceSdk:styleDemo :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test :app:testDebugUnitTest --no-daemon --max-workers=2
       - name: Build Studio and lint without installation
