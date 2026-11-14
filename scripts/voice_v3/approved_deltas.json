@@ -1,0 +1,125 @@
+{
+ "schema": "jarvis.voice.approved-deltas/1",
+ "note": "Exact deltas to historical VOICE guards, approved by the owner on 14/11/2026 (AUDIT-GLOBAL-01 A-003). Each entry = a later, documented mission that legitimately changed a path frozen by an OLDER guard. Any other change, or any different content, is still refused.",
+ "guards": {
+  "voice-sdk": {
+   "base": "99d4073426896c992141bc010a69bb2690e03e71",
+   "paths": [
+    "app",
+    "pocketRuntime",
+    "identityRuntime",
+    "studioRuntime",
+    "voiceBridgeContract",
+    "voiceBridgeHarness",
+    "voiceBridgePilot",
+    "voiceBridgePilotClient",
+    "deliveries",
+    "voiceSdk/src/main/kotlin/com/jarvis/voice/sdk/SpeechSession.kt",
+    "voiceSdk/src/main/kotlin/com/jarvis/voice/sdk/VaultQualitySpeechEngine.kt",
+    "voiceSdk/src/main/kotlin/com/jarvis/voice/sdk/PcmFrameQueue.kt",
+    "voiceStudio/src/main/AndroidManifest.xml",
+    "voiceStudio/build.gradle.kts",
+    "voiceStudio/src/main/java/com/jarvis/voice/voicestudio/PcmPlayer.kt",
+    "voiceStudio/src/main/java/com/jarvis/voice/voicestudio/DeviceMetrics.kt",
+    "voiceStudio/src/main/java/com/jarvis/voice/voicestudio/OperationMetrics.kt",
+    "build.gradle.kts",
+    "settings.gradle.kts",
+    "gradle.properties"
+   ],
+   "approved": [
+    {
+     "path": "pocketRuntime/src/main/kotlin/com/jarvis/voice/pocket/PocketEngine.kt",
+     "status": "M",
+     "blob": "6b84f624bb4fd8790518b29a2813875ddf3669f2",
+     "introducedBy": "b474445 feat(voice04): isolate speed laboratory and measure real generation/playback stages"
+    },
+    {
+     "path": "settings.gradle.kts",
+     "status": "M",
+     "blob": "c8e9e4f1b0ef9772492fdf15881acea6c1cd72d0",
+     "introducedBy": "a41d82a feat(voice): add isolated FUSION-02 audio timeline and guarded proxy"
+    },
+    {
+     "path": "studioRuntime/src/main/kotlin/com/jarvis/voice/studio/QuickReactionTiming.kt",
+     "status": "A",
+     "blob": "89dafc49297336c76392956683b578dc2312df83",
+     "introducedBy": "ad27149 feat(voice): add bounded explicit waiting-feedback policy"
+    },
+    {
+     "path": "studioRuntime/src/test/kotlin/com/jarvis/voice/studio/QuickReactionTimingTest.kt",
+     "status": "A",
+     "blob": "148eb49cf79c50cbd907232352db90fd0f89363e",
+     "introducedBy": "b16d959 test(voice): cover 14 fast-reaction safety gates"
+    },
+    {
+     "path": "voiceBridgePilot/build.gradle.kts",
+     "status": "M",
+     "blob": "ac1d0f52f4d1d68fb89a34328895ba198fecec1d",
+     "introducedBy": "a41d82a feat(voice): add isolated FUSION-02 audio timeline and guarded proxy"
+    },
+    {
+     "path": "voiceBridgePilot/src/test/java/com/jarvis/voice/bridgepilot/Fusion02ProposalTests.kt",
+     "status": "A",
+     "blob": "680382841c2d46c868d84154f9ba50d1d9f36dbf",
+     "introducedBy": "a41d82a feat(voice): add isolated FUSION-02 audio timeline and guarded proxy"
+    },
+    {
+     "path": "voiceStudio/build.gradle.kts",
+     "status": "M",
+     "blob": "1c613c126c17a407a9b756fe3c569631d722e9e2",
+     "introducedBy": "b818597 feat(voice): add opt-in encrypted reaction controls to independent Android lab"
+    }
+   ]
+  },
+  "voice-studio": {
+   "base": "f917ef15ce74a045564ddabdc407ccde4b595ba6",
+   "paths": [
+    "app",
+    "pocketProbe",
+    "voicePrototype",
+    "voiceQuality",
+    "voiceIdentity",
+    "voiceExpression",
+    "pocketRuntime",
+    "identityRuntime",
+    "expressionRuntime",
+    "deliveries/mission005f",
+    "deliveries/mission005g",
+    "deliveries/mission005h",
+    "deliveries/mission005i"
+   ],
+   "approved": [
+    {
+     "path": "expressionRuntime/src/main/kotlin/com/jarvis/voice/expression/AudibleComparisonStore.kt",
+     "status": "A",
+     "blob": "7646dcc96a85f1a5b49b3416394559889c650598",
+     "introducedBy": "3ffb280 feat(voice): add bounded software expression styles and PCM timelines"
+    },
+    {
+     "path": "expressionRuntime/src/main/kotlin/com/jarvis/voice/expression/ExpressionStyleProfiles.kt",
+     "status": "A",
+     "blob": "ef09a3fab74693e1e0873507b96f2e693b4069ea",
+     "introducedBy": "3ffb280 feat(voice): add bounded software expression styles and PCM timelines"
+    },
+    {
+     "path": "expressionRuntime/src/main/kotlin/com/jarvis/voice/expression/ExpressionTimeline.kt",
+     "status": "A",
+     "blob": "7c159e79578684c3356a27dd381e3977d1d1e823",
+     "introducedBy": "3ffb280 feat(voice): add bounded software expression styles and PCM timelines"
+    },
+    {
+     "path": "expressionRuntime/src/test/kotlin/com/jarvis/voice/expression/ExpressionStyleTests.kt",
+     "status": "A",
+     "blob": "d717c82379620932f7b3160d651a9910a37fb4d7",
+     "introducedBy": "3ffb280 feat(voice): add bounded software expression styles and PCM timelines"
+    },
+    {
+     "path": "pocketRuntime/src/main/kotlin/com/jarvis/voice/pocket/PocketEngine.kt",
+     "status": "M",
+     "blob": "6b84f624bb4fd8790518b29a2813875ddf3669f2",
+     "introducedBy": "b474445 feat(voice04): isolate speed laboratory and measure real generation/playback stages"
+    }
+   ]
+  }
+ }
+}

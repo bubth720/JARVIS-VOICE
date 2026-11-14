@@ -22,7 +22,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Verify preservation of functional applications and model bindings
-        run: git diff --exit-code f917ef15ce74a045564ddabdc407ccde4b595ba6 -- app pocketProbe voicePrototype voiceQuality voiceIdentity voiceExpression pocketRuntime identityRuntime expressionRuntime deliveries/mission005f deliveries/mission005g deliveries/mission005h deliveries/mission005i
+        run: python3 scripts/voice_v3/check_with_approved_deltas.py voice-studio   # same base and paths; exact approved deltas (A-003)
       - name: Test JVM library and encrypted archives; private pack is never downloaded
         run: ./gradlew :studioRuntime:test :expressionRuntime:test :identityRuntime:test :pocketRuntime:test --no-daemon --max-workers=2
       - name: Build independent Android application and lint
